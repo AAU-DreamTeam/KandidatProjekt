@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -83,6 +84,7 @@ class MainActivity : AppCompatActivity() {
         for (block in blocks) {
             val lines = block.lines
             nBlocks++
+            Log.i("Block: ", block.text);
             for (line in lines) {
                 val elements = line.elements
                 nLines++
