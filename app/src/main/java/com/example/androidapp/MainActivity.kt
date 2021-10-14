@@ -11,17 +11,17 @@ import android.util.Log
 import android.widget.*
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.button.MaterialButtonToggleGroup
 import com.google.mlkit.vision.common.InputImage
-import com.google.mlkit.vision.text.Text
-import com.google.mlkit.vision.text.Text.TextBlock
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 import java.io.File
 import java.io.IOException
+import androidx.fragment.app.activityViewModels
 
 
 class MainActivity : AppCompatActivity() {
@@ -30,6 +30,7 @@ class MainActivity : AppCompatActivity() {
         private const val CAMERA = 2
     }
 
+    private val viewModel: ImageTextViewModel by viewModels()
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
     private lateinit var fragmentFL: FrameLayout
     private lateinit var textFragment: TextFragment
@@ -61,7 +62,7 @@ class MainActivity : AppCompatActivity() {
             if (result.resultCode == RESULT_OK) {
                 val bitmap = BitmapFactory.decodeFile(imagePath)
                 val rotation = getCameraPhotoOrientation(imagePath)
-                imageFragment.setImage(bitmap)
+                viewModel.selectImage(bitmap)
                 //imgView.setImageBitmap(bitmap)
                 //imgView.rotation = rotation.toFloat()
                 runTextRecognition(bitmap)
@@ -97,8 +98,8 @@ class MainActivity : AppCompatActivity() {
 
         val recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
         recognizer.process(image)
-                .addOnSuccessListener { texts ->
-                    textFragment.setText(texts)
+                .addOnSuccessListener { text ->
+                    viewModel.selectText(text)
                 }
                 .addOnFailureListener { e -> // Task failed with an exception
                     e.printStackTrace()
