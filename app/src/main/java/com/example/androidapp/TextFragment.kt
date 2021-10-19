@@ -27,9 +27,7 @@ class TextFragment : Fragment(R.layout.fragment_text) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         viewModel.text.observe(viewLifecycleOwner, { text ->
-            for (block in text.textBlocks) {
-                textView.append(block.text)
-            }
+            textView.append(text)
         })
     }
 
