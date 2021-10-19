@@ -36,7 +36,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var imageFragment: ImageFragment
     private lateinit var toggleButton : MaterialButtonToggleGroup
     private lateinit var scanButton : MaterialButton
-    //private lateinit var imagePath : String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
