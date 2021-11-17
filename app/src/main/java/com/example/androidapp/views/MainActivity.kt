@@ -11,10 +11,10 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
-import com.example.androidapp.ImageFragment
+import com.example.androidapp.views.fragments.ImageFragment
 import com.example.androidapp.ImageTextViewModel
 import com.example.androidapp.R
-import com.example.androidapp.TextFragment
+import com.example.androidapp.views.fragments.TextFragment
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.button.MaterialButtonToggleGroup
 import java.io.File

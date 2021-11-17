@@ -1,16 +1,14 @@
-package com.example.androidapp
+package com.example.androidapp.views.fragments
 
-import android.graphics.Bitmap
-import android.media.ExifInterface
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.fragment.app.activityViewModels
-import java.io.File
+import com.example.androidapp.ImageTextViewModel
+import com.example.androidapp.R
 
 class ImageFragment : Fragment() {
     private val viewModel: ImageTextViewModel by activityViewModels()

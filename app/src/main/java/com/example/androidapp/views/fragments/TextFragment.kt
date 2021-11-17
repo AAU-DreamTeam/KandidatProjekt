@@ -1,16 +1,15 @@
-package com.example.androidapp
+package com.example.androidapp.views.fragments
 
-import android.graphics.Bitmap
 import android.os.Bundle
 import android.text.method.ScrollingMovementMethod
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.activityViewModels
-import com.google.mlkit.vision.text.Text
+import com.example.androidapp.ImageTextViewModel
+import com.example.androidapp.R
 
 class TextFragment : Fragment(R.layout.fragment_text) {
     private val viewModel: ImageTextViewModel by activityViewModels()
