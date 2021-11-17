@@ -11,12 +11,19 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
+import androidx.viewpager2.widget.ViewPager2
 import com.example.androidapp.views.fragments.ImageFragment
 import com.example.androidapp.ImageTextViewModel
 import com.example.androidapp.R
+import com.example.androidapp.views.adapters.MainViewPagerAdapter
+import com.example.androidapp.views.fragments.DataFragment
+import com.example.androidapp.views.fragments.EmissionFragment
 import com.example.androidapp.views.fragments.TextFragment
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.button.MaterialButtonToggleGroup
+import com.google.android.material.tabs.TabItem
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import java.io.File
 import java.io.IOException
 
@@ -28,62 +35,42 @@ class MainActivity : AppCompatActivity() {
     }
 
     private val viewModel: ImageTextViewModel by viewModels()
-    private lateinit var resultLauncher: ActivityResultLauncher<Intent>
-    private lateinit var fragmentFL: FrameLayout
-    private lateinit var textFragment: TextFragment
-    private lateinit var imageFragment: ImageFragment
-    private lateinit var toggleButton : MaterialButtonToggleGroup
-    private lateinit var scanButton : MaterialButton
+    private lateinit var tabLayout: TabLayout
+    private lateinit var viewPager: ViewPager2
+    private lateinit var viewPagerAdapter: MainViewPagerAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        fragmentFL = findViewById(R.id.fragment_fl)
-        scanButton = findViewById(R.id.btn_scan)
-        toggleButton = findViewById(R.id.toggleButton)
-        textFragment = TextFragment()
-        imageFragment = ImageFragment()
+        tabLayout = findViewById(R.id.tabLayout)
+        viewPager = findViewById(R.id.viewPager)
+        viewPagerAdapter = MainViewPagerAdapter(supportFragmentManager, lifecycle)
+        viewPager.adapter = viewPagerAdapter
 
-        toggleButton.addOnButtonCheckedListener { toggleButton, checkedId, isChecked ->
-            if(isChecked) {
-                when(checkedId) {
-                    R.id.btn_txt -> supportFragmentManager.beginTransaction().replace(fragmentFL.id, textFragment).commit()
-                    R.id.btn_img -> supportFragmentManager.beginTransaction().replace(fragmentFL.id, imageFragment).commit()
-                }
-            } else if (toggleButton.checkedButtonId == View.NO_ID) {
-                toggleButton.check(checkedId)
-            }
-        }
+        tabLayout.addTab(tabLayout.newTab().setText("FORBRUG"))
+        tabLayout.addTab(tabLayout.newTab().setText("DATA"))
 
-        resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == RESULT_OK) {
-                viewModel.fetchImageAndText()
-            }
-        }
+        tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
 
-        scanButton.setOnClickListener{
-            val fileName = "image"
-            val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-            val storageDirectory = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-            var imageFile : File
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                viewPager.currentItem = tab!!.position
 
-            try {
-                imageFile = File.createTempFile(fileName, ".jpg", storageDirectory)
-                viewModel.setImagePath(imageFile.absolutePath)
-                val imageUri = FileProvider.getUriForFile(this, "com.example.androidapp.fileprovider", imageFile)
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri)
-            } catch (e: IOException) {
-                e.printStackTrace()
             }
 
-            if (intent.resolveActivity(packageManager) != null) {
-                resultLauncher.launch(intent)
-            } else {
-                Toast.makeText(this, "No app supports this action", Toast.LENGTH_SHORT).show()
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+                // Handle tab reselect
             }
-        }
 
-        supportFragmentManager.beginTransaction().replace(fragmentFL.id, imageFragment).commit()
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+                // Handle tab unselect
+            }
+        })
+
+        viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                tabLayout.selectTab(tabLayout.getTabAt(position))
+            }
+        })
     }
 }

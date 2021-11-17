@@ -5,9 +5,7 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper;
 
-public class DBManager: SQLiteOpenHelper {
-
-    constructor(context: Context?) : super(context, "FoodEmission.db", null, 1)
+public class DBManager(context: Context?) : SQLiteOpenHelper(context, "FoodEmission.db", null, 1) {
 
     override fun onCreate(db: SQLiteDatabase) {
         createTables(db)
