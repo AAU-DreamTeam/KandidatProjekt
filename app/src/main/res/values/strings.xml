@@ -3,7 +3,29 @@
     <string name="str_btn_scan">Scan receipt</string>
     <string name="str_btn_next">Next</string>
     <string name="str_btn_prev">Previous</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="co2">KG CO<sub><small>2</small></sub></string>
+
+    <string-array name="storeItems">
+        <item>THEA</item>
+        <item>WHY</item>
+        <item>ARE</item>
+        <item>YOU</item>
+        <item>SUCH</item>
+        <item>A</item>
+        <item>NICE</item>
+        <item>PERSON!</item>
+
+    </string-array>
+
+    <string-array name="description">
+        <item>BINGODAZE</item>
+        <item>BINGODAZE</item>
+        <item>BINGODAZE</item>
+        <item>BINGODAZE</item>
+        <item>BINGODAZE</item>
+        <item>BINGODAZE</item>
+        <item>BINGODAZE</item>
+        <item>BINGODAZE!</item>
+
+    </string-array>
+
 </resources>
