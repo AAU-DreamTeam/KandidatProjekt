@@ -94,12 +94,12 @@
             android:orientation="vertical">
             <!-- new textview "button" -->
             <TextView
-                android:id="@+id/textViewOptions"
+                android:id="@+id/textViewCountryOption"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentTop="true"
-                android:text="Country"
+
                 android:textAppearance="?android:textAppearanceLarge" />
 
 <!-- Exposed dropdown menu -->
