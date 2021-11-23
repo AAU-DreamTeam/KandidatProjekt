@@ -1,4 +1,4 @@
-package com.example.androidapp.views
+package com.example.androidapp.views.adapters
 
 import android.view.LayoutInflater
 import android.view.View
@@ -13,7 +13,7 @@ class RecyclerAdapter:RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
     private var title = arrayOf("Chapter 1", "Chapter 2", "Chapter 3", "Chapter 4")
 
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val v = LayoutInflater.from(parent.context).inflate(R.layout.card_layout,parent,false)
         return ViewHolder(v)
     }
@@ -22,7 +22,7 @@ class RecyclerAdapter:RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
         return title.size
     }
 
-    override fun onBindViewHolder(holder: RecyclerAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.itemTitle.text = title[position]
 
     }

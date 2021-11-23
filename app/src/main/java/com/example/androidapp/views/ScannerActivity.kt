@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.androidapp.R
+import com.example.androidapp.views.adapters.RecyclerAdapter
 import kotlinx.android.synthetic.main.activity_scanner.*
 
 
