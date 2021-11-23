@@ -11,50 +11,84 @@
         android:id="@+id/fragment_fl"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/toggleButton"
+        app:layout_constraintBottom_toTopOf="@+id/toggleButtonContainer"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/month_navigator" />
+        app:layout_constraintTop_toBottomOf="@+id/month_navigator" >
+    </FrameLayout>
 
-    <com.google.android.material.button.MaterialButtonToggleGroup
-        android:id="@+id/toggleButton"
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/toggleButtonContainer"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
-        app:checkedButton="@id/btn_overview"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:singleSelection="true">
+        app:layout_constraintBottom_toBottomOf="parent">
 
-        <Button
-            android:id="@+id/btn_overview"
-            style="?attr/materialButtonOutlinedStyle"
-            android:layout_width="120dp"
+        <com.google.android.material.button.MaterialButtonToggleGroup
+            android:id="@+id/toggleButton"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="OVERBLIK"
-            android:textColor="@color/black"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:theme="@style/AppTheme"
-            app:strokeWidth="5dp" />
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            app:checkedButton="@id/btn_overview"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:singleSelection="true">
 
-        <Button
-            android:id="@+id/btn_list"
-            style="?attr/materialButtonOutlinedStyle"
-            android:layout_width="120dp"
-            android:layout_height="wrap_content"
-            android:text=" LISTE "
-            android:textColor="@color/black"
-            android:textSize="16sp"
-            android:textStyle="bold"
+            <Button
+                android:id="@+id/btn_overview"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="120dp"
+                android:layout_height="55dp"
+                android:text="OVERBLIK"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:theme="@style/AppTheme"
+                app:strokeWidth="5dp" />
+
+            <Button
+                android:id="@+id/btn_list"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="120dp"
+                android:layout_height="55dp"
+                android:text=" LISTE "
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:theme="@style/AppTheme"
+                app:strokeWidth="5dp" />
+        </com.google.android.material.button.MaterialButtonToggleGroup>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_scan"
+            android:layout_width="wrap_content"
+            android:layout_height="45dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_margin="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
             android:theme="@style/AppTheme"
-            app:strokeWidth="5dp" />
-    </com.google.android.material.button.MaterialButtonToggleGroup>
+
+            app:icon="@drawable/ic_document_scanner_black_24dp"
+            app:iconPadding="0dp"
+            app:iconSize="40dp"
+            app:iconTint="@color/black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/month_navigator"
