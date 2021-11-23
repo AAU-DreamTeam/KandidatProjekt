@@ -45,9 +45,12 @@ class MainActivity : AppCompatActivity() {
 
         tabLayout = findViewById(R.id.tabLayout)
         viewPager = findViewById(R.id.viewPager)
-        viewPagerAdapter = MainViewPagerAdapter(supportFragmentManager, lifecycle)
-        viewPager.adapter = viewPagerAdapter
 
+        setUpTabs()
+        setUpViewPager()
+    }
+
+    private fun setUpTabs(){
         tabLayout.addTab(tabLayout.newTab().setText("FORBRUG"))
         tabLayout.addTab(tabLayout.newTab().setText("DATA"))
 
@@ -55,7 +58,6 @@ class MainActivity : AppCompatActivity() {
 
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 viewPager.currentItem = tab!!.position
-
             }
 
             override fun onTabReselected(tab: TabLayout.Tab?) {
@@ -66,6 +68,11 @@ class MainActivity : AppCompatActivity() {
                 // Handle tab unselect
             }
         })
+    }
+
+    private fun setUpViewPager(){
+        viewPagerAdapter = MainViewPagerAdapter(supportFragmentManager, lifecycle)
+        viewPager.adapter = viewPagerAdapter
 
         viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
