@@ -1,0 +1,35 @@
+package com.example.androidapp.views
+
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
+import com.example.androidapp.R
+
+class RecyclerAdapter:RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
+
+
+    private var title = arrayOf("Chapter 1", "Chapter 2", "Chapter 3", "Chapter 4")
+
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerAdapter.ViewHolder {
+        val v = LayoutInflater.from(parent.context).inflate(R.layout.card_layout,parent,false)
+        return ViewHolder(v)
+    }
+
+    override fun getItemCount(): Int {
+        return title.size
+    }
+
+    override fun onBindViewHolder(holder: RecyclerAdapter.ViewHolder, position: Int) {
+        holder.itemTitle.text = title[position]
+
+    }
+
+    inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
+        var itemTitle: TextView = itemView.findViewById(R.id.card_title)
+
+    }
+
+}
