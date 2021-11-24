@@ -35,7 +35,7 @@ class OverviewFragment : Fragment() {
 
 
         viewModel.totalEmission.observe(viewLifecycleOwner, { emission ->
-            val emissionString = "$emission KG CO2"
+            val emissionString = "%.2f KG CO2".format(emission)
             totalEmissionTV.text = emissionString
         })
 

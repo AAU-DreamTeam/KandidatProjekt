@@ -35,6 +35,14 @@ class EmissionViewModel: ViewModel()  {
         _year.value = currentYear()
 
         _purchaseList.value = PurchaseRepository(context).getAllFromMonth(month.value!!, year.value!!)
+
+        var emissionSum  = 0.0
+
+        purchaseList.value!!.forEach{
+            emissionSum += it.emission
+        }
+        
+        _totalEmission.value = emissionSum
     }
 
     private fun currentMonth() : Int{
