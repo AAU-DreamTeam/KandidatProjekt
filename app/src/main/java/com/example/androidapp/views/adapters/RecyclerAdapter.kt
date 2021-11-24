@@ -35,7 +35,7 @@ class RecyclerAdapter:RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
     }
 
     inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
-        var itemTitle: TextView = itemView.findViewById(R.id.weight_text)
+        var itemTitle: TextView = itemView.findViewById(R.id.card_title)
         val countryButton: TextView = itemView.findViewById(R.id.textViewCountryOption)
         //var country: TextView = itemView.findViewById(R.id.textViewCountryOption)
 
@@ -44,6 +44,15 @@ class RecyclerAdapter:RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
                 showPopupMenu(it)
             }
         }
+/*
+        private fun setupDropdownMenu(){
+            //val items = listOf("Option 1", "Option 2", "Option 3", "Option 4")
+            val countries = resources.getStringArray(R.array.countries)
+            val adapter = ArrayAdapter(this, R.layout.dropdown_item, countries)
+            val autoCompleteTextView = findViewById<AutoCompleteTextView>(R.id.autoCompleteTextView)
+            autoCompleteTextView.setAdapter(adapter)
+        }
+*/
 
         private fun showPopupMenu(view: View) {
             val popupMenu = PopupMenu(view.context, view)

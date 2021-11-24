@@ -19,51 +19,120 @@
         android:id="@+id/relativeLayout"
         android:padding="16dp">
 
+        <!-- title -->
         <LinearLayout
             android:id="@+id/title_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/btn_layout"
+            app:layout_constraintTop_toTopOf="parent"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/card_title"
                 android:layout_width="match_parent"
-                android:layout_height="20dp"
-                android:layout_marginLeft="16dp"
-                android:textSize="16sp"
-                android:text="Titel på store items"
+                android:layout_height="wrap_content"
+                android:textSize="25sp"
+android:text="titel"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
         </LinearLayout>
 
+        <!-- weight -->
+        <LinearLayout
+            android:id="@+id/weight_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/title_layout"
+            android:orientation="horizontal"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp">
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/weight_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:text="Vægt:"
+
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/filledTextField"
+                android:layout_width="245dp"
+                android:layout_height="wrap_content"
+                android:hint="Indsæt kg"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                app:layout_constraintLeft_toLeftOf="@id/weight_text"
+                app:layout_constraintTop_toTopOf="parent"
+                >
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:inputType="number"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/kg_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:layout_marginLeft="16dp"
+                    android:textSize="16sp"
+                    android:text="Kg"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+
+
+        </LinearLayout>
+
+        <!-- toggle  -->
         <LinearLayout
             android:id="@+id/btn_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/title_layout"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/weight_text"
-                android:layout_width="139dp"
-                android:layout_height="35dp"
-                android:layout_marginLeft="16dp"
-                android:textSize="16sp"
-
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/weight_layout"
+            app:layout_constraintBottom_toTopOf="@id/country_layout"
+            android:orientation="vertical"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp">
 
             <com.google.android.material.button.MaterialButtonToggleGroup
                 android:id="@+id/toggleButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingStart="10dp"
-                android:paddingLeft="10dp"
-                app:layout_constraintStart_toEndOf="@+id/weight_text"
+
+                app:layout_constraintStart_toEndOf="@+id/kg_text"
                 app:layout_constraintTop_toTopOf="parent"
                 >
 
@@ -85,45 +154,40 @@
 
         </LinearLayout>
 
+        <!-- country -->
         <LinearLayout
             android:id="@+id/country_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/btn_layout"
-            android:orientation="vertical">
-            <!-- new textview "button" -->
-            <TextView
-                android:id="@+id/textViewCountryOption"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentTop="true"
-                android:text="Country"
-                android:textAppearance="?android:textAppearanceLarge" />
+            android:orientation="horizontal">
 
-<!-- Exposed dropdown menu -->
-<!--
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/country_menu"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Hvilket land varen er fra">
-
-                <AutoCompleteTextView
-                    android:id="@+id/autoCompleteTextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:inputType="none"
-                    android:text="Vælg land"
+                <TextView
+                    android:id="@+id/country_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                   android:textColor="@color/black"
+                    android:textSize="16dp"
+                    android:text="Oprindelsesland:"
 
                     />
 
-            </com.google.android.material.textfield.TextInputLayout>
 
--->
+            <Button
+                android:id="@+id/textViewCountryOption"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:text="Vælg land"
+                android:textSize="16dp"
+                app:backgroundTint="@color/white"
+                android:textColor="@color/black"/>
+
+
+
+
 
 
         </LinearLayout>
