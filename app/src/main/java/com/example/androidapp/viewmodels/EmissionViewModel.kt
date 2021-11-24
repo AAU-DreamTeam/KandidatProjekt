@@ -34,7 +34,7 @@ class EmissionViewModel: ViewModel()  {
         _month.value = MONTH.values()[currentMonth()]
         _year.value = currentYear()
 
-        _purchaseList.value = PurchaseRepository(context).getAllFromMonth(month.value!!, year.value!!)
+        _purchaseList.value = PurchaseRepository(context).getAllFromMonth(year.value!!, month.value!!)
 
         var emissionSum  = 0.0
 

@@ -2,6 +2,7 @@ package com.example.androidapp.data
 
 import android.content.ContentValues
 import android.content.Context
+import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper;
 import com.example.androidapp.data.models.Country
@@ -38,7 +39,7 @@ public class DBManager(context: Context?) : SQLiteOpenHelper(context, "FoodEmiss
         val createStoreItemTableStmnt = "CREATE TABLE storeItem(id INTEGER PRIMARY KEY AUTOINCREMENT, productID INTEGER NOT NULL, countryID INTEGER NOT NULL, receiptText TEXT NOT NULL, organic BOOLEAN NOT NULL CHECK(organic IN (0, 1)), packaged BOOLEAN NOT NULL CHECK(packaged IN (0, 1)), weight REAL NOT NULL, store TEXT NOT NULL, FOREIGN KEY(productID) REFERENCES product(id), FOREIGN KEY(countryID) REFERENCES country(id));"
         db.execSQL(createStoreItemTableStmnt)
 
-        val createPurchaseTableStmnt = "CREATE TABLE purchase(id INTEGER PRIMARY KEY AUTOINCREMENT, storeItemID INTEGER NOT NULL, quantity INTEGER NOT NULL, timestamp TEXT NOT NULL, FOREIGN KEY(storeItemID) REFERENCES storeItem(id));"
+        val createPurchaseTableStmnt = "CREATE TABLE purchase(id INTEGER PRIMARY KEY AUTOINCREMENT, storeItemID INTEGER NOT NULL, timestamp TEXT NOT NULL, weight INTEGER NOT NULL, FOREIGN KEY(storeItemID) REFERENCES storeItem(id));"
         db.execSQL(createPurchaseTableStmnt)
     }
 
@@ -118,24 +119,24 @@ public class DBManager(context: Context?) : SQLiteOpenHelper(context, "FoodEmiss
     }
 
     private fun insertPurchaseData(db: SQLiteDatabase){
-        insertPurchase(db,1, 2, "2021-11-01 14:30:00")
-        insertPurchase(db,2, 3, "2021-11-01 14:30:00")
-        insertPurchase(db,3, 1, "2021-11-05 14:30:00")
-        insertPurchase(db,4, 7, "2021-11-10 14:30:00")
-        insertPurchase(db,5, 3, "2021-11-13 14:30:00")
-        insertPurchase(db,6, 5, "2021-11-15 14:30:00")
-        insertPurchase(db,7, 1, "2021-11-16 14:30:00")
-        insertPurchase(db,8, 3, "2021-11-20 14:30:00")
-        insertPurchase(db,9, 2, "2021-11-21 14:30:00")
-        insertPurchase(db,10, 5, "2021-11-23 14:30:00")
+        insertPurchase(db,1, 2 * 0.045, "2021-11-01 14:30:00")
+        insertPurchase(db,2, 3 * 0.065, "2021-11-01 14:30:00")
+        insertPurchase(db,3, 1 * 0.045, "2021-11-05 14:30:00")
+        insertPurchase(db,4, 7 * 0.045, "2021-11-10 14:30:00")
+        insertPurchase(db,5, 3 * 0.065, "2021-11-13 14:30:00")
+        insertPurchase(db,6, 5 * 0.045, "2021-11-15 14:30:00")
+        insertPurchase(db,7, 1 * 0.065, "2021-11-16 14:30:00")
+        insertPurchase(db,8, 3 * 0.045, "2021-11-20 14:30:00")
+        insertPurchase(db,9, 2 * 0.045, "2021-11-21 14:30:00")
+        insertPurchase(db,10, 5 * 0.065, "2021-11-23 14:30:00")
 
     }
 
-    fun insertPurchase(db: SQLiteDatabase, storeItemID: Int, quantity: Int, timestamp: String): Long {
+    fun insertPurchase(db: SQLiteDatabase, storeItemID: Int, weight: Double, timestamp: String): Long {
         val contentValues = ContentValues()
 
         contentValues.put("storeItemID", storeItemID)
-        contentValues.put("quantity", quantity)
+        contentValues.put("weight", weight)
         contentValues.put("timestamp", timestamp)
 
         return db.insert("purchase", null, contentValues)
@@ -143,26 +144,12 @@ public class DBManager(context: Context?) : SQLiteOpenHelper(context, "FoodEmiss
 
     //id INTEGER PRIMARY KEY AUTOINCREMENT, productID INTEGER NOT NULL, countryID INTEGER NOT NULL, receiptText TEXT NOT NULL, organic BOOLEAN NOT NULL CHECK(organic IN (0, 1)), packaged BOOLEAN NOT NULL CHECK(packaged IN (0, 1)), weight REAL NOT NULL, store TEXT NOT NULL, FOREIGN KEY(productID) REFERENCES product(id), FOREIGN KEY(countryID) REFERENCES country(id)
 
-    fun fetchAllPurchasesFromMonth(month: MONTH, year: String): List<Purchase> {
-        val db = readableDatabase
-        val purchases : MutableList<Purchase> = mutableListOf()
-        val query = "SELECT storeItem.organic, storeItem.packaged, storeItem.weight, product.name, product.cultivation, product.iluc, product.processing, product.packaging, product.retail, product.GHCultivated, country.name, country.transportEmission, country.GHPenalty, SUM(purchase.quantity) FROM purchase INNER JOIN storeItem ON purchase.storeItemID = storeItem.id INNER JOIN product ON storeItem.productID = product.id INNER JOIN country ON storeItem.countryID = country.id WHERE strftime('%Y', purchase.timestamp) = '$year' AND strftime('%m', purchase.timestamp) = '${month.position}' GROUP BY product.name, country.name, storeItem.organic, storeItem.packaged, storeItem.weight ORDER BY product.name, country.name, storeItem.organic, storeItem.packaged, storeItem.weight;"
-
-
-        val cursor = db.rawQuery(query, null)
-
-        if (cursor.moveToFirst()) {
-            do {
-                val country = Country(cursor.getString(10), cursor.getDouble(11), cursor.getInt(12) != 0)
-                val product = Product(cursor.getString(3), cursor.getDouble(4), cursor.getDouble(5), cursor.getDouble(6), cursor.getDouble(7), cursor.getDouble(8), cursor.getInt(9) != 0)
-                val storeItem = StoreItem(product, country, cursor.getInt(0) != 0, cursor.getInt(1) != 0, cursor.getDouble(2))
-                purchases.add(Purchase(storeItem, cursor.getInt(13)))
-            } while (cursor.moveToNext())
-        }
-
+    fun <T> select(query: String, producer: (cursor: Cursor) -> T): T {
+        val cursor = readableDatabase.rawQuery(query, null)
+        val result = producer(cursor)
         cursor.close()
 
-        return purchases
+        return result
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
