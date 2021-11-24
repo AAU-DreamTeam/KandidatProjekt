@@ -6,9 +6,10 @@
     <string name="du_har_koebt">Du har købt</string>
     <string name="dette_har_udledt">Dette har udledt</string>
     <string name="du_har_udledt">Du har udledt</string>
-    <string name="co2postfix">kg CO2 </string>
     <string name="dette_kan_reduceres_med"> Dette kan reduceres med </string>
     <string name="til_en_udledning_paa"> Til en udledning på </string>
+    <string name="alternativer"> Alternativer </string>
+    <string name="co2postfix">kg CO2 </string>
 
     <string-array name="storeItems">
         <item>THEA</item>
