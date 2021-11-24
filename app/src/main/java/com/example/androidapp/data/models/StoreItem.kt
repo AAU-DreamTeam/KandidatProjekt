@@ -9,6 +9,7 @@ class StoreItem (_product: Product, _country: Country, _organic: Boolean, _packa
     val emissionPerKg = calcEmission()
     val emissionPerItem = emissionPerKg * weight
 
+
     private fun calcEmission(): Double {
         val packagingEmission = if (packaged) product.packaging else 0.0
 
@@ -16,5 +17,9 @@ class StoreItem (_product: Product, _country: Country, _organic: Boolean, _packa
         cultivationEmission = if (country.ghPenalty) cultivationEmission * 7.5 else cultivationEmission
 
         return product.iluc + product.processing + product.retail + packagingEmission + cultivationEmission + country.transportEmission
+    }
+
+    override fun toString(): String {
+        return "${product.name}, ${country.name}${if (organic) ", Øko" else ""}${if (!packaged) ", Løs" else ""}"
     }
 }

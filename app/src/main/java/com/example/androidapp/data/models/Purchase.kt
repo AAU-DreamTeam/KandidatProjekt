@@ -6,4 +6,7 @@ class Purchase(_storeItem: StoreItem, _quantity : Int){
     val storeItem = _storeItem
     val quantity = _quantity
     val emission = storeItem.emissionPerItem * quantity
+    override fun toString(): String {
+        return "${"%.3f".format(quantity * storeItem.weight)} kg, $storeItem"
+    }
 }

@@ -3,6 +3,12 @@
     <string name="str_btn_scan">Scan receipt</string>
     <string name="str_btn_next">Next</string>
     <string name="str_btn_prev">Previous</string>
+    <string name="du_har_koebt">Du har købt</string>
+    <string name="dette_har_udledt">Dette har udledt</string>
+    <string name="du_har_udledt">Du har udledt</string>
+    <string name="co2postfix">kg CO2 </string>
+    <string name="dette_kan_reduceres_med"> Dette kan reduceres med </string>
+    <string name="til_en_udledning_paa"> Til en udledning på </string>
 
     <string-array name="storeItems">
         <item>THEA</item>
