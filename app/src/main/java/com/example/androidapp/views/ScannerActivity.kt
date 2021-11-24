@@ -31,44 +31,7 @@ class ScannerActivity : AppCompatActivity() {
 
        setupRecyclerView()
 
-        btn_save.setOnClickListener {
-           showPopupMenu()
-       }
-
         //setupDropdownMenu()
-
-    }
-
-
-    private fun showPopupMenu() {
-        val popupMenu = PopupMenu(this, btn_save)
-        popupMenu.inflate(R.menu.popup_menu)
-        popupMenu.show();
-
-        popupMenu.setOnMenuItemClickListener(PopupMenu.OnMenuItemClickListener { item: MenuItem ->
-
-            when (item.itemId) {
-
-                R.id.action_item1 -> {
-                    Toast.makeText(this, "action item2 clicked", Toast.LENGTH_SHORT).show()
-                }
-
-                R.id.action_item2 -> {
-                    Toast.makeText(this, "action item2 clicked", Toast.LENGTH_SHORT).show()
-                }
-                R.id.action_item3 -> {
-                    Toast.makeText(this, "action item3 clicked", Toast.LENGTH_SHORT).show()
-                }
-
-                R.id.action_item4 -> {
-                    Toast.makeText(this, "action item4 clicked", Toast.LENGTH_SHORT).show()
-                }
-
-
-            }
-
-            true
-        })
 
     }
 

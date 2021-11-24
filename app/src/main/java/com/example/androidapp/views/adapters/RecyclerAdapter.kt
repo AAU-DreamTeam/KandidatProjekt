@@ -1,11 +1,17 @@
 package com.example.androidapp.views.adapters
 
+import android.util.Log
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.PopupMenu
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.androidapp.R
+import kotlinx.android.synthetic.main.card_layout.*
 
 class RecyclerAdapter:RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
 
@@ -30,11 +36,46 @@ class RecyclerAdapter:RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
 
     inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
         var itemTitle: TextView = itemView.findViewById(R.id.weight_text)
+        val countryButton: TextView = itemView.findViewById(R.id.textViewCountryOption)
         //var country: TextView = itemView.findViewById(R.id.textViewCountryOption)
 
-        
+        init {
+            countryButton.setOnClickListener {
+                showPopupMenu(it)
+            }
+        }
+
+        private fun showPopupMenu(view: View) {
+            val popupMenu = PopupMenu(view.context, view)
+            popupMenu.inflate(R.menu.popup_menu)
+            popupMenu.show();
+
+            popupMenu.setOnMenuItemClickListener{
+                countryButton.text = it.title
+                /*when (it.itemId) {
+                    R.id.action_item1 -> {
+                        Toast.makeText(view.context, "action item2 clicked: ${it.title}", Toast.LENGTH_SHORT).show()
+
+                    }
+
+                    R.id.action_item2 -> {
+                        Toast.makeText(view.context, "action item2 clicked: ${it.title}", Toast.LENGTH_SHORT).show()
+                        countryButton.text = it.title
+                    }
+                    R.id.action_item3 -> {
+                        Toast.makeText(view.context, "action item3 clicked: ${it.title}", Toast.LENGTH_SHORT).show()
+                        countryButton.text = it.title
+                    }
+
+                    R.id.action_item4 -> {
+                        Toast.makeText(view.context, "action item4 clicked: ${it.title}", Toast.LENGTH_SHORT).show()
+                        countryButton.text = it.title
+                    }
+                    else -> Log.i("Else", "Reached")
+                }*/
+                true
+            }
+        }
+
     }
-
-
-
 }
