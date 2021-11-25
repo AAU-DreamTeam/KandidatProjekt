@@ -1,7 +1,5 @@
 package com.example.androidapp.views.fragments
 
-import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -41,7 +39,7 @@ class EmissionFragment : Fragment() {
 
         setUpScanButton()
         setUpToggleButton()
-        viewModel.onStartUp(requireContext())
+        viewModel.loadData(requireContext())
 
         childFragmentManager.beginTransaction().replace(fragmentFL.id, overviewFragment).commit()
 

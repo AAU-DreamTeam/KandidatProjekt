@@ -1,12 +1,13 @@
 package com.example.androidapp.viewmodels
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.androidapp.data.PurchaseRepository
+import com.example.androidapp.repositories.PurchaseRepository
 import com.example.androidapp.data.models.Purchase
+import com.example.androidapp.data.models.StoreItem
+import com.example.androidapp.repositories.StoreItemRepository
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -30,18 +31,37 @@ class EmissionViewModel: ViewModel()  {
     private val _emissionReduction = MutableLiveData<Int>()
     val emissionReduction: LiveData<Int> get() = _emissionReduction
 
-    fun onStartUp(context: Context){
+    fun loadData(context: Context){
         _month.value = MONTH.values()[currentMonth()]
         _year.value = currentYear()
 
-        _purchaseList.value = PurchaseRepository(context).getAllFromMonth(year.value!!, month.value!!)
+        _purchaseList.value = PurchaseRepository(context).loadAllFromYearAndMonth(year.value!!, month.value!!)
 
+        calcTotalEmission()
+        calcTotalEmissionAlt(PurchaseRepository(context).loadAlternativeEmissions(_purchaseList.value!!))
+    }
+
+    fun loadAlternatives(context: Context, purchaseId: Int): MutableList<StoreItem> {
+        return StoreItemRepository(context).loadAlternatives(_purchaseList.value!![purchaseId].storeItem)
+    }
+
+    private fun calcTotalEmissionAlt(emissions: List<Double>){
+        var emissionSum  = 0.0
+
+        emissions.forEach{
+            emissionSum += it
+        }
+
+        _totalEmissionAlt.value = emissionSum
+    }
+
+    private fun calcTotalEmission(){
         var emissionSum  = 0.0
 
         purchaseList.value!!.forEach{
             emissionSum += it.emission
         }
-        
+
         _totalEmission.value = emissionSum
     }
 

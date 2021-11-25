@@ -29,12 +29,6 @@ import java.io.IOException
 
 
 class MainActivity : AppCompatActivity() {
-    companion object {
-        private const val CAMERA_PERMISSION_CODE = 1
-        private const val CAMERA = 2
-    }
-
-    private val viewModel: ImageTextViewModel by viewModels()
     private lateinit var tabLayout: TabLayout
     private lateinit var viewPager: ViewPager2
     private lateinit var viewPagerAdapter: MainViewPagerAdapter

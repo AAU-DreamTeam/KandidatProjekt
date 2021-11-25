@@ -12,6 +12,10 @@ class Purchase(val id: Int,
     val emission : Double by lazy {storeItem.emissionPerKg * weight}
 
     override fun toString(): String {
-        return "${"%.3f".format(weight * storeItem.weight)} kg, $storeItem"
+        return "${"%.3f".format(weight)} kg, $storeItem"
+    }
+
+    fun weightToString(): String {
+        return "${"%.3f".format(weight)} kg"
     }
 }

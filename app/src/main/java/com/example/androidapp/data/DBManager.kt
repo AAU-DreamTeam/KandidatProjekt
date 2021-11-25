@@ -9,6 +9,7 @@ import com.example.androidapp.data.models.Country
 import com.example.androidapp.data.models.Product
 import com.example.androidapp.data.models.Purchase
 import com.example.androidapp.data.models.StoreItem
+import com.example.androidapp.data.models.daos.CountryDao
 import com.example.androidapp.viewmodels.MONTH
 import java.text.DateFormat
 import java.text.SimpleDateFormat
@@ -120,7 +121,7 @@ public class DBManager(context: Context?) : SQLiteOpenHelper(context, "FoodEmiss
 
     private fun insertPurchaseData(db: SQLiteDatabase){
         insertPurchase(db,1, 2 * 0.045, "2021-11-01 14:30:00")
-        insertPurchase(db,2, 3 * 0.065, "2021-11-01 14:30:00")
+        /*insertPurchase(db,2, 3 * 0.065, "2021-11-01 14:30:00")
         insertPurchase(db,3, 1 * 0.045, "2021-11-05 14:30:00")
         insertPurchase(db,4, 7 * 0.045, "2021-11-10 14:30:00")
         insertPurchase(db,5, 3 * 0.065, "2021-11-13 14:30:00")
@@ -128,7 +129,7 @@ public class DBManager(context: Context?) : SQLiteOpenHelper(context, "FoodEmiss
         insertPurchase(db,7, 1 * 0.065, "2021-11-16 14:30:00")
         insertPurchase(db,8, 3 * 0.045, "2021-11-20 14:30:00")
         insertPurchase(db,9, 2 * 0.045, "2021-11-21 14:30:00")
-        insertPurchase(db,10, 5 * 0.065, "2021-11-23 14:30:00")
+        insertPurchase(db,10, 5 * 0.065, "2021-11-23 14:30:00")*/
 
     }
 
@@ -145,7 +146,8 @@ public class DBManager(context: Context?) : SQLiteOpenHelper(context, "FoodEmiss
     //id INTEGER PRIMARY KEY AUTOINCREMENT, productID INTEGER NOT NULL, countryID INTEGER NOT NULL, receiptText TEXT NOT NULL, organic BOOLEAN NOT NULL CHECK(organic IN (0, 1)), packaged BOOLEAN NOT NULL CHECK(packaged IN (0, 1)), weight REAL NOT NULL, store TEXT NOT NULL, FOREIGN KEY(productID) REFERENCES product(id), FOREIGN KEY(countryID) REFERENCES country(id)
 
     fun <T> selectMultiple(query: String, producer: (cursor: Cursor) -> T): MutableList<T> {
-        val cursor = readableDatabase.rawQuery(query, null)
+        val db = readableDatabase
+        val cursor = db.rawQuery(query, null)
         val results: MutableList<T> = mutableListOf()
 
         if (cursor.moveToFirst()) {
