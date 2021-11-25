@@ -8,7 +8,7 @@ import com.example.androidapp.data.models.daos.StoreItemDao
 class StoreItemRepository(context: Context){
     private val storeItemDao = StoreItemDao(context)
 
-    fun loadAlternatives(storeItem: StoreItem): MutableList<StoreItem> {
+    fun loadAlternatives(storeItem: StoreItem): List<StoreItem> {
         return storeItemDao.getAlternatives(storeItem)
     }
 }

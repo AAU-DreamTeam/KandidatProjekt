@@ -121,7 +121,7 @@ public class DBManager(context: Context?) : SQLiteOpenHelper(context, "FoodEmiss
 
     private fun insertPurchaseData(db: SQLiteDatabase){
         insertPurchase(db,1, 2 * 0.045, "2021-11-01 14:30:00")
-        /*insertPurchase(db,2, 3 * 0.065, "2021-11-01 14:30:00")
+       /* insertPurchase(db,2, 3 * 0.065, "2021-11-01 14:30:00")
         insertPurchase(db,3, 1 * 0.045, "2021-11-05 14:30:00")
         insertPurchase(db,4, 7 * 0.045, "2021-11-10 14:30:00")
         insertPurchase(db,5, 3 * 0.065, "2021-11-13 14:30:00")
@@ -145,9 +145,10 @@ public class DBManager(context: Context?) : SQLiteOpenHelper(context, "FoodEmiss
 
     //id INTEGER PRIMARY KEY AUTOINCREMENT, productID INTEGER NOT NULL, countryID INTEGER NOT NULL, receiptText TEXT NOT NULL, organic BOOLEAN NOT NULL CHECK(organic IN (0, 1)), packaged BOOLEAN NOT NULL CHECK(packaged IN (0, 1)), weight REAL NOT NULL, store TEXT NOT NULL, FOREIGN KEY(productID) REFERENCES product(id), FOREIGN KEY(countryID) REFERENCES country(id)
 
-    fun <T> selectMultiple(query: String, producer: (cursor: Cursor) -> T): MutableList<T> {
+    fun <T> selectMultiple(query: String, producer: (cursor: Cursor) -> T): List<T> {
         val db = readableDatabase
         val cursor = db.rawQuery(query, null)
+
         val results: MutableList<T> = mutableListOf()
 
         if (cursor.moveToFirst()) {
@@ -155,10 +156,17 @@ public class DBManager(context: Context?) : SQLiteOpenHelper(context, "FoodEmiss
                 results.add(producer(cursor))
             } while (cursor.moveToNext())
         }
-
         cursor.close()
 
         return results
+    }
+
+    fun select(query: String, producer: (cursor: Cursor) -> (Any)) {
+        val db = readableDatabase
+        val cursor = db.rawQuery(query, null)
+
+        producer(cursor)
+        cursor.close()
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {

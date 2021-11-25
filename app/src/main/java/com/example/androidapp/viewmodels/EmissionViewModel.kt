@@ -41,7 +41,7 @@ class EmissionViewModel: ViewModel()  {
         calcTotalEmissionAlt(PurchaseRepository(context).loadAlternativeEmissions(_purchaseList.value!!))
     }
 
-    fun loadAlternatives(context: Context, purchaseId: Int): MutableList<StoreItem> {
+    fun loadAlternatives(context: Context, purchaseId: Int): List<StoreItem> {
         return StoreItemRepository(context).loadAlternatives(_purchaseList.value!![purchaseId].storeItem)
     }
 

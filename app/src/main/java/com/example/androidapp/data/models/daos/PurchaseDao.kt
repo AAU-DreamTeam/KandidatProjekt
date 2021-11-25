@@ -6,16 +6,16 @@ import com.example.androidapp.data.DBManager
 import com.example.androidapp.data.EmissionCalculator
 import com.example.androidapp.data.models.Purchase
 import com.example.androidapp.viewmodels.MONTH
-import kotlin.text.StringBuilder
 
 class PurchaseDao(context: Context) {
     private val dbManager = DBManager(context)
 
-    fun loadAllFromYearAndMonth(year: String, month: MONTH): MutableList<Purchase> {
+    fun loadAllFromYearAndMonth(year: String, month: MONTH): List<Purchase> {
+        val results = mutableListOf<Purchase>()
         val query =
                 "SELECT $COLUMN_ID, " +                //0
                        "$COLUMN_TIMESTAMP, " +         //1
-                       "SUM($COLUMN_WEIGHT), " +       //2
+                       "$COLUMN_WEIGHT, " +       //2
                        "${StoreItemDao.COLUMN_ID}, " +               //3
                        "${StoreItemDao.COLUMN_RECEIPT_TEXT}, " +      //4
                        "${StoreItemDao.COLUMN_ORGANIC}, " +          //5
@@ -39,41 +39,48 @@ class PurchaseDao(context: Context) {
                 "INNER JOIN ${ProductDao.TABLE} ON ${StoreItemDao.COLUMN_PRODUCT_ID} = ${ProductDao.COLUMN_ID} " +
                 "INNER JOIN ${CountryDao.TABLE} ON ${StoreItemDao.COLUMN_COUNTRY_ID} = ${CountryDao.COLUMN_ID} " +
                 "WHERE strftime('%Y', $COLUMN_TIMESTAMP) = '$year' AND strftime('%m', $COLUMN_TIMESTAMP) = '${month.position}' " +
-                "GROUP BY ${ProductDao.COLUMN_ID}, ${CountryDao.COLUMN_ID}, ${StoreItemDao.COLUMN_ORGANIC}, ${StoreItemDao.COLUMN_PACKAGED};"
+                "ORDER BY ${ProductDao.COLUMN_ID}, ${StoreItemDao.COLUMN_ORGANIC}, ${StoreItemDao.COLUMN_PACKAGED}, ${CountryDao.COLUMN_ID};"
 
-        return dbManager.selectMultiple(query){
-            producePurchase(it)
+        dbManager.select(query){
+            var index = 0
+
+            if (it.moveToFirst()) {
+                do {
+                    val purchase = producePurchase(it)
+
+                    if (index != 0 && results[index - 1].storeItem == purchase.storeItem) {
+                        results[index - 1].weight += purchase.weight
+                    } else {
+                        results.add(purchase)
+                        index++
+                    }
+                } while (it.moveToNext())
+            }
+            results
         }
+
+        return results
     }
 
     fun getAlternativeEmissions(purchases: List<Purchase>): List<Double> {
-        val productIds = StringBuilder("(")
-        var first = true
+        val emissions = mutableListOf<Double>()
 
-        purchases.forEach(){
-            if (!first) {
-                productIds.append(", ")
-            } else {
-                first = false
+        for (purchase in purchases) {
+            val query =
+                    "SELECT MIN(${EmissionCalculator.sqlEmissionFormula()})" +
+                            "FROM $TABLE " +
+                            "INNER JOIN ${StoreItemDao.TABLE} ON $COLUMN_STORE_ITEM_ID = ${StoreItemDao.COLUMN_ID} " +
+                            "INNER JOIN ${ProductDao.TABLE} ON ${StoreItemDao.COLUMN_PRODUCT_ID} = ${ProductDao.COLUMN_ID} " +
+                            "INNER JOIN ${CountryDao.TABLE} ON ${StoreItemDao.COLUMN_COUNTRY_ID} = ${CountryDao.COLUMN_ID} " +
+                            "WHERE ${ProductDao.COLUMN_ID} = ${purchase.storeItem.product.id};"
+            dbManager.select(query) {
+                if (it.moveToFirst()) {
+                    emissions.add(purchase.weight * it.getDouble(0))
+                }
             }
-
-            productIds.append("${it.storeItem.product.id}")
         }
 
-        productIds.append(")")
-
-        val query =
-                "SELECT MIN(${COLUMN_WEIGHT} * ${EmissionCalculator.sqlEmissionFormula()})" +
-                        "FROM $TABLE " +
-                        "INNER JOIN ${StoreItemDao.TABLE} ON $COLUMN_STORE_ITEM_ID = ${StoreItemDao.COLUMN_ID} " +
-                        "INNER JOIN ${ProductDao.TABLE} ON ${StoreItemDao.COLUMN_PRODUCT_ID} = ${ProductDao.COLUMN_ID} " +
-                        "INNER JOIN ${CountryDao.TABLE} ON ${StoreItemDao.COLUMN_COUNTRY_ID} = ${CountryDao.COLUMN_ID} " +
-                        "WHERE ${ProductDao.COLUMN_ID} IN $productIds" +
-                        "GROUP BY ${COLUMN_ID};"
-
-        return dbManager.selectMultiple(query) {
-            it.getDouble(0)
-        }
+        return emissions
     }
 
     companion object {

@@ -5,7 +5,7 @@ import java.util.*
 class Purchase(val id: Int,
                val storeItem: StoreItem,
                val timestamp: String,
-               val weight: Double){
+               var weight: Double){
 
     constructor(storeItem: StoreItem, timestamp: String, quantity: Int): this(0, storeItem, timestamp, storeItem.weight * quantity)
 

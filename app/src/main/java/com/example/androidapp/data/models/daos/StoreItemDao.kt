@@ -1,18 +1,29 @@
 package com.example.androidapp.data.models.daos
 
 import android.content.Context
+import android.content.pm.ChangedPackages
 import android.database.Cursor
 import com.example.androidapp.data.DBManager
 import com.example.androidapp.data.EmissionCalculator
-import com.example.androidapp.data.models.Country
-import com.example.androidapp.data.models.Product
-import com.example.androidapp.data.models.Purchase
 import com.example.androidapp.data.models.StoreItem
 
 class StoreItemDao(context: Context) {
     private val dbManager: DBManager = DBManager(context)
 
-    fun getAlternatives(storeItem: StoreItem) : MutableList<StoreItem> {
+    fun getAlternatives(storeItem: StoreItem) : List<StoreItem> {
+        val alternatives = mutableListOf<StoreItem>()
+
+        getAlternative(alternatives, storeItem, true, true)
+        getAlternative(alternatives, storeItem, true, false)
+        getAlternative(alternatives, storeItem, false, true)
+        getAlternative(alternatives, storeItem, false, false)
+
+        return alternatives
+    }
+
+    private fun getAlternative(alternatives: MutableList<StoreItem>, storeItem: StoreItem, organic: Boolean, packaged: Boolean) {
+        val organicInt = if (organic) 1 else 0
+        val packagedInt = if (packaged) 1 else 0
         val query =
                 "SELECT ${COLUMN_ID}, " +               // 0
                         "${COLUMN_RECEIPT_TEXT}, " +     // 1
@@ -32,15 +43,18 @@ class StoreItemDao(context: Context) {
                         "${CountryDao.COLUMN_NAME}, " +              // 15
                         "${CountryDao.COLUMN_TRANSPORT_EMISSION}, " + // 16
                         "${CountryDao.COLUMN_GHPENALTY}, " +          // 17
-                        "MIN(${EmissionCalculator.sqlEmissionFormula()}) " +
-                "FROM $TABLE " +
-                "INNER JOIN ${ProductDao.TABLE} ON $COLUMN_PRODUCT_ID = ${ProductDao.COLUMN_ID} " +
-                "INNER JOIN ${CountryDao.TABLE} ON $COLUMN_COUNTRY_ID = ${CountryDao.COLUMN_ID} " +
-                "WHERE $COLUMN_PRODUCT_ID = ${storeItem.product.id} " +
-                "GROUP BY $COLUMN_ORGANIC, $COLUMN_PACKAGED;"
+                        "${EmissionCalculator.sqlEmissionFormula()} AS emission " +
+                        "FROM $TABLE " +
+                        "INNER JOIN ${ProductDao.TABLE} ON $COLUMN_PRODUCT_ID = ${ProductDao.COLUMN_ID} " +
+                        "INNER JOIN ${CountryDao.TABLE} ON $COLUMN_COUNTRY_ID = ${CountryDao.COLUMN_ID} " +
+                        "WHERE $COLUMN_PRODUCT_ID = ${storeItem.product.id} AND $COLUMN_PACKAGED = $packagedInt AND $COLUMN_ORGANIC = $organicInt " +
+                        "ORDER BY emission " +
+                        "LIMIT 1;"
 
-        return dbManager.selectMultiple(query) {
-            produceStoreItem(it)
+        dbManager.select(query) {
+            if (it.moveToFirst()) {
+                alternatives.add(produceStoreItem(it))
+            }
         }
     }
 

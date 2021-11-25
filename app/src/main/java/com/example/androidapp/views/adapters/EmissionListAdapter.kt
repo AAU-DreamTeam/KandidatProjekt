@@ -16,7 +16,7 @@ import com.example.androidapp.data.models.StoreItem
 import kotlinx.android.synthetic.main.emission_list_item.view.*
 import kotlinx.android.synthetic.main.fragment_list.*
 
-class EmissionListAdapter(val context: Context, var purchases: List<Purchase>, val onShowAlternatives: (position: Int) -> MutableList<StoreItem>):  RecyclerView.Adapter<EmissionListAdapter.ViewHolder>(){
+class EmissionListAdapter(val context: Context, var purchases: List<Purchase>, val onShowAlternatives: (position: Int) -> List<StoreItem>):  RecyclerView.Adapter<EmissionListAdapter.ViewHolder>(){
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
                 LayoutInflater.from(context).inflate(
