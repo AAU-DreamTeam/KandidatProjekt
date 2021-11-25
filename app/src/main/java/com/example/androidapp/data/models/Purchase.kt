@@ -2,9 +2,12 @@ package com.example.androidapp.data.models
 
 import java.util.*
 
-class Purchase(val id: Int = 0, val storeItem: StoreItem, val timestamp: String, val quantity: Int, val weight: Double = storeItem.weight * quantity){
+class Purchase(val id: Int,
+               val storeItem: StoreItem,
+               val timestamp: String,
+               val weight: Double){
 
-    constructor(id: Int = 0, storeItem: StoreItem, timestamp: String, weight: Double): this(id, storeItem, timestamp, -1, weight)
+    constructor(storeItem: StoreItem, timestamp: String, quantity: Int): this(0, storeItem, timestamp, storeItem.weight * quantity)
 
     val emission : Double by lazy {storeItem.emissionPerKg * weight}
 

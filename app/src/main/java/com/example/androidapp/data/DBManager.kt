@@ -144,12 +144,19 @@ public class DBManager(context: Context?) : SQLiteOpenHelper(context, "FoodEmiss
 
     //id INTEGER PRIMARY KEY AUTOINCREMENT, productID INTEGER NOT NULL, countryID INTEGER NOT NULL, receiptText TEXT NOT NULL, organic BOOLEAN NOT NULL CHECK(organic IN (0, 1)), packaged BOOLEAN NOT NULL CHECK(packaged IN (0, 1)), weight REAL NOT NULL, store TEXT NOT NULL, FOREIGN KEY(productID) REFERENCES product(id), FOREIGN KEY(countryID) REFERENCES country(id)
 
-    fun <T> select(query: String, producer: (cursor: Cursor) -> T): T {
+    fun <T> selectMultiple(query: String, producer: (cursor: Cursor) -> T): MutableList<T> {
         val cursor = readableDatabase.rawQuery(query, null)
-        val result = producer(cursor)
+        val results: MutableList<T> = mutableListOf()
+
+        if (cursor.moveToFirst()) {
+            do {
+                results.add(producer(cursor))
+            } while (cursor.moveToNext())
+        }
+
         cursor.close()
 
-        return result
+        return results
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {

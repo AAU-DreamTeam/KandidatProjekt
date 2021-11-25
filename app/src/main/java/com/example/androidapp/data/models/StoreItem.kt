@@ -8,9 +8,8 @@ class StoreItem (val id: Int = 0,
                  val packaged: Boolean,
                  val weight: Double,
                  val store: String){
-    val emissionPerKg = calcEmission()
-    val emissionPerItem = emissionPerKg * weight
 
+    val emissionPerKg = calcEmission()
 
     private fun calcEmission(): Double {
         val packagingEmission = if (packaged) product.packaging else 0.0
