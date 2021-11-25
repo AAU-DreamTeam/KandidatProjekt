@@ -3,26 +3,11 @@
     <string name="str_btn_scan">Scan receipt</string>
     <string name="str_btn_next">Next</string>
     <string name="str_btn_prev">Previous</string>
+    <string name="antal_text_field">Antal:</string>
+    <string name="loes_toggle_text">Løs</string>
+    <string name="oeko_toggle_text">Øko</string>
+    <string name="oprindelsesland_btn_text">Oprindelsesland</string>
 
-
-    <string-array name="storeItems">
-        <item>THEA</item>
-        <item>WHY</item>
-        <item>ARE</item>
-        <item>YOU</item>
-        <item>SUCH</item>
-        <item>A</item>
-        <item>NICE</item>
-        <item>PERSON!</item>
-
-    </string-array>
-
-    <string-array name="countries">
-        <item>Denmark</item>
-        <item>Spain</item>
-        <item>UK</item>
-
-    </string-array>
 
 </resources>
 

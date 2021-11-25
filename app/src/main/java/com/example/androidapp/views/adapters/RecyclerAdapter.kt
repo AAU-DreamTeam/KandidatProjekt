@@ -11,13 +11,14 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.androidapp.R
+import com.google.android.material.button.MaterialButtonToggleGroup
 import kotlinx.android.synthetic.main.card_layout.*
 
 class RecyclerAdapter:RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
 
 
     private var title = arrayOf("Chapter 1", "Chapter 2", "Chapter 3", "Chapter 4")
-    //private var listOfCountries = arrayOf("Spain","Italy","UK", "DK")
+
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -31,28 +32,28 @@ class RecyclerAdapter:RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.itemTitle.text = title[position]
-        //holder.country.text = listOfCountries[position]
     }
 
     inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
         var itemTitle: TextView = itemView.findViewById(R.id.card_title)
         val countryButton: TextView = itemView.findViewById(R.id.textViewCountryOption)
-        //var country: TextView = itemView.findViewById(R.id.textViewCountryOption)
+        val toggleButton: MaterialButtonToggleGroup = itemView.findViewById(R.id.toggleButton)
 
         init {
             countryButton.setOnClickListener {
                 showPopupMenu(it)
             }
+            toggleButton.addOnButtonCheckedListener { toggleButton, checkedId, isChecked ->
+                toggleBtnListener()
+            }
+
+
         }
-/*
-        private fun setupDropdownMenu(){
-            //val items = listOf("Option 1", "Option 2", "Option 3", "Option 4")
-            val countries = resources.getStringArray(R.array.countries)
-            val adapter = ArrayAdapter(this, R.layout.dropdown_item, countries)
-            val autoCompleteTextView = findViewById<AutoCompleteTextView>(R.id.autoCompleteTextView)
-            autoCompleteTextView.setAdapter(adapter)
+
+
+        private fun toggleBtnListener() {
+            // TODO: handle toggle buttom listener
         }
-*/
 
         private fun showPopupMenu(view: View) {
             val popupMenu = PopupMenu(view.context, view)

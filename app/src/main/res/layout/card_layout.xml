@@ -8,16 +8,15 @@
     android:layout_margin="5dp"
     app:cardCornerRadius="10dp"
     app:contentPadding="4dp"
-    app:cardBackgroundColor="#35D764"
+    app:cardBackgroundColor="@color/colorPrimary"
     tools:context=".views.ScannerActivity">
 
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"
         >
-
 
         <!-- Første søjle -->
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -36,28 +35,21 @@
                 android:paddingLeft="10dp">
 
 
-                <!--antal -->
-                <TextView
-                    android:id="@+id/amount_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="15sp"
-                    android:text="Antal:"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
 
                 <!--antal felt -->
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/amount_field"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:minWidth="80dp"
                     android:paddingTop="10dp"
+                    android:hint="@string/antal_text_field"
+                    android:textColorHint="@color/black"
                     >
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:inputType="number"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -65,7 +57,6 @@
             </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
 
         <!-- x tekst 2. søjle -->
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -83,13 +74,12 @@
                 android:text="X"
                 android:textSize="20sp"
                 android:textStyle="bold"
+                android:textColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-
 
         <!-- 3 søjle -->
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -112,7 +102,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="25sp"
-                    android:text="Cocktail tomat"
+                    android:textColor="@color/black"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -135,17 +125,6 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/weight_text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:text="Vægt:"
-
-                        android:textSize="16sp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"/>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -156,9 +135,8 @@
                     android:minWidth="130dp"
                     android:layout_height="wrap_content"
                     android:hint="Indsæt gram"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginLeft="16dp"
-                    app:layout_constraintLeft_toLeftOf="@id/weight_text"
+                    android:textColorHint="@color/black"
+                    app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     >
 
@@ -182,14 +160,12 @@
                         android:layout_marginLeft="16dp"
                         android:textSize="16sp"
                         android:text="Gram"
+                        android:textColor="@color/black"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toStartOf="parent"/>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
 
 
 
@@ -221,14 +197,16 @@
                         style="?attr/materialButtonOutlinedStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Øko" />
+                        android:text="@string/oeko_toggle_text"
+                        android:textColor="@color/black" />
 
                     <Button
                         android:id="@+id/btn_løs"
                         style="?attr/materialButtonOutlinedStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Løs" />
+                        android:text="@string/loes_toggle_text"
+                        android:textColor="@color/black" />
 
                 </com.google.android.material.button.MaterialButtonToggleGroup>
 
@@ -243,25 +221,13 @@
                 app:layout_constraintTop_toBottomOf="@id/btn_layout"
                 android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/country_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/black"
-                    android:textSize="16dp"
-                    android:text="Oprindelsesland:"   />
-
 
                 <Button
                     android:id="@+id/textViewCountryOption"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginRight="16dp"
-                    android:text="Vælg land"
-                    android:textSize="16dp"
+                    android:text="@string/oprindelsesland_btn_text"
+                    android:textSize="16sp"
                     app:backgroundTint="@color/white"
                     android:textColor="@color/black"/>
 
@@ -270,13 +236,7 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-
     </LinearLayout>
-
-
-
-
 
 </androidx.cardview.widget.CardView>
 

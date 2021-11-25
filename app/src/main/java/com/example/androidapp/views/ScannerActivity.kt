@@ -1,6 +1,7 @@
 package com.example.androidapp.views
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
@@ -32,6 +33,14 @@ class ScannerActivity : AppCompatActivity() {
        setupRecyclerView()
 
 
+        btn_cancel.setOnClickListener{
+            finish()
+            //Toast.makeText(applicationContext,"hello",Toast.LENGTH_LONG).show()
+        }
+
+        btn_save.setOnClickListener {
+
+        }
 
     }
 
