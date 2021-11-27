@@ -5,12 +5,11 @@ import android.database.Cursor
 import com.example.androidapp.data.DBManager
 import com.example.androidapp.data.EmissionCalculator
 import com.example.androidapp.data.models.Purchase
-import com.example.androidapp.viewmodels.MONTH
 
 class PurchaseDao(context: Context) {
     private val dbManager = DBManager(context)
 
-    fun loadAllFromYearAndMonth(year: String, month: MONTH): List<Purchase> {
+    fun loadAllFromYearAndMonth(year: String, month: String): List<Purchase> {
         val results = mutableListOf<Purchase>()
         val query =
                 "SELECT $COLUMN_ID, " +                //0
@@ -38,7 +37,7 @@ class PurchaseDao(context: Context) {
                 "INNER JOIN ${StoreItemDao.TABLE} ON $COLUMN_STORE_ITEM_ID = ${StoreItemDao.COLUMN_ID} " +
                 "INNER JOIN ${ProductDao.TABLE} ON ${StoreItemDao.COLUMN_PRODUCT_ID} = ${ProductDao.COLUMN_ID} " +
                 "INNER JOIN ${CountryDao.TABLE} ON ${StoreItemDao.COLUMN_COUNTRY_ID} = ${CountryDao.COLUMN_ID} " +
-                "WHERE strftime('%Y', $COLUMN_TIMESTAMP) = '$year' AND strftime('%m', $COLUMN_TIMESTAMP) = '${month.position}' " +
+                "WHERE strftime('%Y', $COLUMN_TIMESTAMP) = '$year' AND strftime('%m', $COLUMN_TIMESTAMP) = '$month' " +
                 "ORDER BY ${ProductDao.COLUMN_ID}, ${StoreItemDao.COLUMN_ORGANIC}, ${StoreItemDao.COLUMN_PACKAGED}, ${CountryDao.COLUMN_ID};"
 
         dbManager.select(query){
@@ -62,17 +61,17 @@ class PurchaseDao(context: Context) {
         return results
     }
 
-    fun getAlternativeEmissions(purchases: List<Purchase>): List<Double> {
+    fun loadAlternativeEmissions(purchases: List<Purchase>): List<Double> {
         val emissions = mutableListOf<Double>()
 
         for (purchase in purchases) {
             val query =
-                    "SELECT MIN(${EmissionCalculator.sqlEmissionFormula()})" +
-                            "FROM $TABLE " +
-                            "INNER JOIN ${StoreItemDao.TABLE} ON $COLUMN_STORE_ITEM_ID = ${StoreItemDao.COLUMN_ID} " +
+                    "SELECT MIN(${EmissionCalculator.sqlEmissionFormula()}) " +
+                            "FROM ${StoreItemDao.TABLE} " +
                             "INNER JOIN ${ProductDao.TABLE} ON ${StoreItemDao.COLUMN_PRODUCT_ID} = ${ProductDao.COLUMN_ID} " +
                             "INNER JOIN ${CountryDao.TABLE} ON ${StoreItemDao.COLUMN_COUNTRY_ID} = ${CountryDao.COLUMN_ID} " +
                             "WHERE ${ProductDao.COLUMN_ID} = ${purchase.storeItem.product.id};"
+
             dbManager.select(query) {
                 if (it.moveToFirst()) {
                     emissions.add(purchase.weight * it.getDouble(0))
@@ -84,18 +83,18 @@ class PurchaseDao(context: Context) {
     }
 
     companion object {
-        val TABLE = "purchase"
-        val COLUMN_COUNT = 3 // Excluding foreign keys
-        val COLUMN_STORE_ITEM_ID = "$TABLE.storeItemID"
+        const val TABLE = "purchase"
+        private const val COLUMN_COUNT = 3 // Excluding foreign keys
+        const val COLUMN_STORE_ITEM_ID = "$TABLE.storeItemID"
 
-        val COLUMN_ID = "$TABLE.id"
-        val COLUMN_ID_POSITION = 0
+        const val COLUMN_ID = "$TABLE.id"
+        private const val COLUMN_ID_POSITION = 0
 
-        val COLUMN_TIMESTAMP = "$TABLE.timestamp"
-        val COLUMN_TIMESTAMP_POSITION = 1
+        const val COLUMN_TIMESTAMP = "$TABLE.timestamp"
+        private const val COLUMN_TIMESTAMP_POSITION = 1
 
-        val COLUMN_WEIGHT = "$TABLE.weight"
-        val COLUMN_WEIGHT_POSITION = 2
+        const val COLUMN_WEIGHT = "$TABLE.weight"
+        private const val COLUMN_WEIGHT_POSITION = 2
 
         fun producePurchase(cursor: Cursor, startIndex: Int = 0): Purchase{
             val storeItem = StoreItemDao.produceStoreItem(cursor, startIndex + COLUMN_COUNT)

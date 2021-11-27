@@ -83,7 +83,7 @@
                 </LinearLayout>
 
                 <ImageView
-                    android:id="@+id/showAlternatives"
+                    android:id="@+id/iconShowHideAlternatives"
                     android:layout_width="45dp"
                     android:layout_height="45dp"
                     android:layout_margin="5dp"
@@ -116,7 +116,7 @@
                     android:textStyle="bold" />
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/alternativesList"
+                    android:id="@+id/alternativesRV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp" />

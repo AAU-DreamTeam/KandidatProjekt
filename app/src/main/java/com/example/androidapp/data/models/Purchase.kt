@@ -1,7 +1,5 @@
 package com.example.androidapp.data.models
 
-import java.util.*
-
 class Purchase(val id: Int,
                val storeItem: StoreItem,
                val timestamp: String,

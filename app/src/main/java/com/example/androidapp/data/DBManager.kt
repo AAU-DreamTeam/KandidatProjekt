@@ -5,15 +5,6 @@ import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper;
-import com.example.androidapp.data.models.Country
-import com.example.androidapp.data.models.Product
-import com.example.androidapp.data.models.Purchase
-import com.example.androidapp.data.models.StoreItem
-import com.example.androidapp.data.models.daos.CountryDao
-import com.example.androidapp.viewmodels.MONTH
-import java.text.DateFormat
-import java.text.SimpleDateFormat
-import java.util.*
 
 public class DBManager(context: Context?) : SQLiteOpenHelper(context, "FoodEmission.db", null, 1) {
 

@@ -10,15 +10,36 @@ import com.example.androidapp.data.models.StoreItem
 class StoreItemDao(context: Context) {
     private val dbManager: DBManager = DBManager(context)
 
-    fun getAlternatives(storeItem: StoreItem) : List<StoreItem> {
-        val alternatives = mutableListOf<StoreItem>()
+    fun loadAlternatives(storeItem: StoreItem) : List<StoreItem> {
+        val query =
+                "SELECT ${COLUMN_ID}, " +               // 0
+                        "${COLUMN_RECEIPT_TEXT}, " +     // 1
+                        "${COLUMN_ORGANIC}, " +         // 2
+                        "${COLUMN_PACKAGED}, " +        // 3
+                        "${COLUMN_WEIGHT}, " +          // 4
+                        "${COLUMN_STORE}, " +           // 5
+                        "${ProductDao.COLUMN_ID}, " +                // 6
+                        "${ProductDao.COLUMN_NAME}, " +              // 7
+                        "${ProductDao.COLUMN_CULTIVATION}, " +       // 8
+                        "${ProductDao.COLUMN_ILUC}, " +              // 9
+                        "${ProductDao.COLUMN_PROCESSING}, " +        // 10
+                        "${ProductDao.COLUMN_PACKAGING}, " +         // 11
+                        "${ProductDao.COLUMN_RETAIL}, " +            // 12
+                        "${ProductDao.COLUMN_GHCULTIVATED}, " +      // 13
+                        "${CountryDao.COLUMN_ID}, " +                   // 14
+                        "${CountryDao.COLUMN_NAME}, " +                 // 15
+                        "${CountryDao.COLUMN_TRANSPORT_EMISSION}, " +   // 16
+                        "${CountryDao.COLUMN_GHPENALTY}, " +            // 17
+                        "MIN(${EmissionCalculator.sqlEmissionFormula()}) " +
+                        "FROM $TABLE " +
+                        "INNER JOIN ${ProductDao.TABLE} ON $COLUMN_PRODUCT_ID = ${ProductDao.COLUMN_ID} " +
+                        "INNER JOIN ${CountryDao.TABLE} ON $COLUMN_COUNTRY_ID = ${CountryDao.COLUMN_ID} " +
+                        "WHERE $COLUMN_PRODUCT_ID = ${storeItem.product.id} " +
+                        "GROUP BY $COLUMN_ORGANIC, $COLUMN_PACKAGED;"
 
-        getAlternative(alternatives, storeItem, true, true)
-        getAlternative(alternatives, storeItem, true, false)
-        getAlternative(alternatives, storeItem, false, true)
-        getAlternative(alternatives, storeItem, false, false)
-
-        return alternatives
+        return dbManager.selectMultiple(query) {
+            produceStoreItem(it)
+        }
     }
 
     private fun getAlternative(alternatives: MutableList<StoreItem>, storeItem: StoreItem, organic: Boolean, packaged: Boolean) {
