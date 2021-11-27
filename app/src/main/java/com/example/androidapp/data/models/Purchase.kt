@@ -1,9 +1,19 @@
 package com.example.androidapp.data.models
 
-import java.util.*
+class Purchase(val id: Int,
+               val storeItem: StoreItem,
+               val timestamp: String,
+               var weight: Double){
 
-class Purchase(_storeItem: StoreItem, _quantity : Int){
-    val storeItem = _storeItem
-    val quantity = _quantity
-    val emission = storeItem.emissionPerItem * quantity
+    constructor(storeItem: StoreItem, timestamp: String, quantity: Int): this(0, storeItem, timestamp, storeItem.weight * quantity)
+
+    val emission : Double by lazy {storeItem.emissionPerKg * weight}
+
+    override fun toString(): String {
+        return "${"%.3f".format(weight)} kg, $storeItem"
+    }
+
+    fun weightToString(): String {
+        return "${"%.3f".format(weight)} kg"
+    }
 }

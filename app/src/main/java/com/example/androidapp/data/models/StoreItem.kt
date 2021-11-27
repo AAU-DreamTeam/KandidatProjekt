@@ -1,20 +1,41 @@
 package com.example.androidapp.data.models
 
-class StoreItem (_product: Product, _country: Country, _organic: Boolean, _packaged: Boolean, _weight: Double){
-    val product = _product
-    val country = _country
-    val organic = _organic
-    val packaged = _packaged
-    val weight = _weight
-    val emissionPerKg = calcEmission()
-    val emissionPerItem = emissionPerKg * weight
+import com.example.androidapp.data.EmissionCalculator
 
-    private fun calcEmission(): Double {
-        val packagingEmission = if (packaged) product.packaging else 0.0
+class StoreItem (val id: Int = 0,
+                 val product: Product,
+                 val country: Country,
+                 val receiptText: String,
+                 val organic: Boolean,
+                 val packaged: Boolean,
+                 val weight: Double,
+                 val store: String){
 
-        var cultivationEmission = if (organic) 1.21 * product.cultivation else product.cultivation
-        cultivationEmission = if (country.ghPenalty) cultivationEmission * 7.5 else cultivationEmission
+    val emissionPerKg by lazy { EmissionCalculator.calcEmission(this) }
 
-        return product.iluc + product.processing + product.retail + packagingEmission + cultivationEmission + country.transportEmission
+    override fun toString(): String {
+        return "${product.name}, ${country.name}${if (organic) ", Øko" else ""}${if (!packaged) ", Løs" else ""}"
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as StoreItem
+
+        if (product.id != other.product.id) return false
+        if (country.id != other.country.id) return false
+        if (organic != other.organic) return false
+        if (packaged != other.packaged) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = product.hashCode()
+        result = 31 * result + country.hashCode()
+        result = 31 * result + organic.hashCode()
+        result = 31 * result + packaged.hashCode()
+        return result
     }
 }

@@ -1,7 +1,5 @@
 package com.example.androidapp.views.fragments
 
-import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -26,6 +24,8 @@ class EmissionFragment : Fragment() {
     private lateinit var listFragment: ListFragment
     private lateinit var fragmentFL: FrameLayout
     private lateinit var scanButton: MaterialButton
+    private lateinit var prevButton: MaterialButton
+    private lateinit var nextButton: MaterialButton
     private lateinit var monthTV: TextView
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -37,11 +37,15 @@ class EmissionFragment : Fragment() {
         toggleButton = rootView.findViewById(R.id.toggleButton)
         fragmentFL = rootView.findViewById(R.id.fragment_fl)
         scanButton = rootView.findViewById(R.id.btn_scan)
+        prevButton = rootView.findViewById(R.id.btn_prev)
+        nextButton = rootView.findViewById(R.id.btn_next)
         monthTV = rootView.findViewById(R.id.monthTV)
 
         setUpScanButton()
         setUpToggleButton()
-        viewModel.onStartUp(requireContext())
+        setUpMonthButtons()
+
+        viewModel.loadData(requireContext())
 
         childFragmentManager.beginTransaction().replace(fragmentFL.id, overviewFragment).commit()
 
@@ -52,7 +56,7 @@ class EmissionFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.month.observe(viewLifecycleOwner, { month ->
-            monthTV.text = month.name
+            monthTV.text = month
         })
     }
 
@@ -72,12 +76,21 @@ class EmissionFragment : Fragment() {
     private fun setUpScanButton() {
         val resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == AppCompatActivity.RESULT_OK) {
-                //TODO: Call ViewModel
+                viewModel.loadData(requireContext())
             }
         }
         scanButton.setOnClickListener{
-            val intent = Intent(activity, ScannerActivity::class.java)
-            resultLauncher.launch(intent)
+            resultLauncher.launch(Intent(activity, ScannerActivity::class.java))
+        }
+    }
+
+    private fun setUpMonthButtons(){
+        prevButton.setOnClickListener {
+            viewModel.loadPrev(requireContext())
+        }
+
+        nextButton.setOnClickListener {
+            viewModel.loadNext(requireContext())
         }
     }
 }

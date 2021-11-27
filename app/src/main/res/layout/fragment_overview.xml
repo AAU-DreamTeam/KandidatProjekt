@@ -35,7 +35,7 @@
                     style="@style/CardTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="DU HAR UDLEDT"
+                    android:text="@string/du_har_udledt"
                     android:textSize="18sp" />
 
                 <TextView
@@ -70,7 +70,7 @@
                     style="@style/CardTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="DETTE KAN REDUCERES MED"
+                    android:text="@string/dette_kan_reduceres_med"
                     android:textSize="18sp" />
 
                 <TextView
@@ -85,7 +85,7 @@
                     style="@style/CardTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="TIL EN UDLEDNING PÅ"
+                    android:text="@string/til_en_udledning_paa"
                     android:textSize="18sp" />
 
                 <TextView
