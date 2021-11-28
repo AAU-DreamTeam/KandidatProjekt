@@ -5,6 +5,9 @@ import android.database.Cursor
 import com.example.androidapp.data.DBManager
 import com.example.androidapp.data.EmissionCalculator
 import com.example.androidapp.data.models.Purchase
+import java.text.SimpleDateFormat
+import java.time.Instant.now
+import java.util.*
 
 class PurchaseDao(context: Context) {
     private val dbManager = DBManager(context)
@@ -14,7 +17,7 @@ class PurchaseDao(context: Context) {
         val query =
                 "SELECT $COLUMN_ID, " +                //0
                        "$COLUMN_TIMESTAMP, " +         //1
-                       "$COLUMN_WEIGHT, " +       //2
+                       "$COLUMN_QUANTITY, " +       //2
                        "${StoreItemDao.COLUMN_ID}, " +               //3
                        "${StoreItemDao.COLUMN_RECEIPT_TEXT}, " +      //4
                        "${StoreItemDao.COLUMN_ORGANIC}, " +          //5
@@ -43,19 +46,16 @@ class PurchaseDao(context: Context) {
         dbManager.select(query){
             var index = 0
 
-            if (it.moveToFirst()) {
-                do {
-                    val purchase = producePurchase(it)
+            do {
+                val purchase = producePurchase(it)
 
-                    if (index != 0 && results[index - 1].storeItem == purchase.storeItem) {
-                        results[index - 1].weight += purchase.weight
-                    } else {
-                        results.add(purchase)
-                        index++
-                    }
-                } while (it.moveToNext())
-            }
-            results
+                if (index != 0 && results[index - 1].storeItem == purchase.storeItem) {
+                    results[index - 1].weight += purchase.weight
+                } else {
+                    results.add(purchase)
+                    index++
+                }
+            } while (it.moveToNext())
         }
 
         return results
@@ -73,13 +73,19 @@ class PurchaseDao(context: Context) {
                             "WHERE ${ProductDao.COLUMN_ID} = ${purchase.storeItem.product.id};"
 
             dbManager.select(query) {
-                if (it.moveToFirst()) {
-                    emissions.add(purchase.weight * it.getDouble(0))
-                }
+                emissions.add(purchase.weight * it.getDouble(0))
             }
         }
 
         return emissions
+    }
+
+    fun generatePurchase(receiptText: String): Purchase {
+        val storeItem = StoreItemDao(dbManager).generateStoreItem(receiptText)
+        val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+
+        //TODO: Extract quantity
+        return Purchase(storeItem, sdf.format(Calendar.getInstance().time), -1)
     }
 
     companion object {
@@ -93,13 +99,13 @@ class PurchaseDao(context: Context) {
         const val COLUMN_TIMESTAMP = "$TABLE.timestamp"
         private const val COLUMN_TIMESTAMP_POSITION = 1
 
-        const val COLUMN_WEIGHT = "$TABLE.weight"
-        private const val COLUMN_WEIGHT_POSITION = 2
+        const val COLUMN_QUANTITY = "$TABLE.quantity"
+        private const val COLUMN_QUANTITY_POSITION = 2
 
         fun producePurchase(cursor: Cursor, startIndex: Int = 0): Purchase{
             val storeItem = StoreItemDao.produceStoreItem(cursor, startIndex + COLUMN_COUNT)
 
-            return Purchase(cursor.getInt(startIndex + COLUMN_ID_POSITION), storeItem, cursor.getString(startIndex + COLUMN_TIMESTAMP_POSITION), cursor.getDouble(startIndex + COLUMN_WEIGHT_POSITION))
+            return Purchase(cursor.getInt(startIndex + COLUMN_ID_POSITION), storeItem, cursor.getString(startIndex + COLUMN_TIMESTAMP_POSITION), cursor.getInt(startIndex + COLUMN_QUANTITY_POSITION))
         }
     }
 }

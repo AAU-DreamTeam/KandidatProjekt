@@ -10,7 +10,6 @@ import com.example.androidapp.R
 import com.example.androidapp.data.models.Purchase
 import com.example.androidapp.data.models.StoreItem
 import kotlinx.android.synthetic.main.alternative_list_item.view.*
-import kotlinx.android.synthetic.main.emission_list_item.view.*
 
 class AlternativesAdapter(val context: Context, val purchase: Purchase, var alternatives: List<StoreItem>): RecyclerView.Adapter<AlternativesAdapter.ViewHolder>() {
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {

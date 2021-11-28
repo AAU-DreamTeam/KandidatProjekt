@@ -14,6 +14,8 @@ import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 import java.io.File
 
 class ImageTextViewModel : ViewModel(){
+
+
     private val _image = MutableLiveData<Bitmap>()
     val image: LiveData<Bitmap> get() = _image
 

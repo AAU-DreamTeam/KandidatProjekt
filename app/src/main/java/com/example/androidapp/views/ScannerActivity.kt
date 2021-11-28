@@ -1,65 +1,87 @@
 package com.example.androidapp.views
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.MenuItem
-import android.widget.ArrayAdapter
-import android.widget.AutoCompleteTextView
-import android.widget.PopupMenu
+import android.os.Environment
+import android.provider.MediaStore
 import android.widget.Toast
-import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
+import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.androidapp.R
-import com.example.androidapp.views.adapters.RecyclerAdapter
-import com.google.android.material.textfield.TextInputLayout
+import com.example.androidapp.viewmodels.ScannerViewModel
+import com.example.androidapp.views.adapters.ScannerAdapter
 import kotlinx.android.synthetic.main.activity_scanner.*
-import kotlinx.android.synthetic.main.card_layout.*
-
+import java.io.File
+import java.io.IOException
 
 
 class ScannerActivity : AppCompatActivity() {
-
+    private val viewModel: ScannerViewModel by viewModels()
     private var layoutManager: RecyclerView.LayoutManager?=null
-    private var adapter: RecyclerView.Adapter<RecyclerAdapter.ViewHolder>? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scanner)
+        viewModel.loadCountries(this)
+        viewModel.loadProducts(this)
 
-       setupRecyclerView()
-
+        launchPhotoActivity()
 
         btn_cancel.setOnClickListener{
             finish()
-            //Toast.makeText(applicationContext,"hello",Toast.LENGTH_LONG).show()
         }
 
         btn_save.setOnClickListener {
 
         }
-
     }
 
     private fun setupRecyclerView(){
         layoutManager = LinearLayoutManager(this)
         recyclerView.layoutManager = layoutManager
 
-        adapter = RecyclerAdapter()
-        recyclerView.adapter = adapter
+        val scannerAdapter = ScannerAdapter(viewModel.purchases.value!!, viewModel.products.value!!, viewModel.countries.value!!)
+        recyclerView.adapter = scannerAdapter
+
+        viewModel.purchases.observe(this, { list ->
+            recyclerView.adapter = ScannerAdapter(list, viewModel.products.value!!, viewModel.countries.value!!)
+            scannerAdapter.notifyDataSetChanged()
+        })
     }
 
-/*
-    private fun setupDropdownMenu(){
-        //val items = listOf("Option 1", "Option 2", "Option 3", "Option 4")
-        val countries = resources.getStringArray(R.array.countries)
-        val adapter = ArrayAdapter(this, R.layout.dropdown_item, countries)
-        val autoCompleteTextView = findViewById<AutoCompleteTextView>(R.id.autoCompleteTextView)
-        autoCompleteTextView.setAdapter(adapter)
+    private fun launchPhotoActivity() {
+        val resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                viewModel.runTextRecognition(this)
+                setupRecyclerView()
+            }
+        }
+
+        val fileName = "image"
+        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        val storageDirectory = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        val imageFile : File
+
+        try {
+            imageFile = File.createTempFile(fileName, ".jpg", storageDirectory)
+            viewModel.imagePath = imageFile.absolutePath
+            val imageUri = FileProvider.getUriForFile(this, "com.example.androidapp.fileprovider", imageFile)
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri)
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+
+        if (intent.resolveActivity(packageManager) != null) {
+            resultLauncher.launch(intent)
+        } else {
+            Toast.makeText(this, "No app supports this action", Toast.LENGTH_SHORT).show()
+        }
+
     }
-*/
 }
 

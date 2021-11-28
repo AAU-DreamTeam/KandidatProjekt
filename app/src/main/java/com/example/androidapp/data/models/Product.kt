@@ -8,4 +8,6 @@ class Product(val id: Int,
               val processing: Double,
               val packaging: Double,
               val retail: Double,
-              val ghCultivated: Boolean)
+              val ghCultivated: Boolean){
+    constructor(): this(0, "", 0.0, 0.0, 0.0, 0.0, 0.0, false)
+}

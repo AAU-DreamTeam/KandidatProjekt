@@ -6,7 +6,13 @@
     <string name="antal_text_field">Antal:</string>
     <string name="loes_toggle_text">Løs</string>
     <string name="oeko_toggle_text">Øko</string>
-    <string name="oprindelsesland_btn_text">Oprindelsesland</string>
-
+    <string name="oprindelsesland_btn_text">Land:</string>
+    <string name="du_har_koebt">Du har købt</string>
+    <string name="dette_har_udledt">Dette har udledt</string>
+    <string name="du_har_udledt">Du har udledt</string>
+    <string name="dette_kan_reduceres_med"> Dette kan reduceres med </string>
+    <string name="til_en_udledning_paa"> Til en udledning på </string>
+    <string name="alternativer"> Alternativer </string>
+    <string name="choose_product_text"> Produkt: </string>
 
 </resources>

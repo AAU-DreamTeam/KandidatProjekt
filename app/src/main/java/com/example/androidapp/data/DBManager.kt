@@ -5,6 +5,7 @@ import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper;
+import com.example.androidapp.data.models.daos.PurchaseDao
 
 public class DBManager(context: Context?) : SQLiteOpenHelper(context, "FoodEmission.db", null, 1) {
 
@@ -31,7 +32,7 @@ public class DBManager(context: Context?) : SQLiteOpenHelper(context, "FoodEmiss
         val createStoreItemTableStmnt = "CREATE TABLE storeItem(id INTEGER PRIMARY KEY AUTOINCREMENT, productID INTEGER NOT NULL, countryID INTEGER NOT NULL, receiptText TEXT NOT NULL, organic BOOLEAN NOT NULL CHECK(organic IN (0, 1)), packaged BOOLEAN NOT NULL CHECK(packaged IN (0, 1)), weight REAL NOT NULL, store TEXT NOT NULL, FOREIGN KEY(productID) REFERENCES product(id), FOREIGN KEY(countryID) REFERENCES country(id));"
         db.execSQL(createStoreItemTableStmnt)
 
-        val createPurchaseTableStmnt = "CREATE TABLE purchase(id INTEGER PRIMARY KEY AUTOINCREMENT, storeItemID INTEGER NOT NULL, timestamp TEXT NOT NULL, weight INTEGER NOT NULL, FOREIGN KEY(storeItemID) REFERENCES storeItem(id));"
+        val createPurchaseTableStmnt = "CREATE TABLE purchase(id INTEGER PRIMARY KEY AUTOINCREMENT, storeItemID INTEGER NOT NULL, timestamp TEXT NOT NULL, quantity INTEGER NOT NULL, FOREIGN KEY(storeItemID) REFERENCES storeItem(id));"
         db.execSQL(createPurchaseTableStmnt)
     }
 
@@ -111,7 +112,7 @@ public class DBManager(context: Context?) : SQLiteOpenHelper(context, "FoodEmiss
     }
 
     private fun insertPurchaseData(db: SQLiteDatabase){
-        insertPurchase(db,1, 2 * 0.045, "2021-11-01 14:30:00")
+        insertPurchase(db,1, 2, "2021-11-01 14:30:00")
        /* insertPurchase(db,2, 3 * 0.065, "2021-11-01 14:30:00")
         insertPurchase(db,3, 1 * 0.045, "2021-11-05 14:30:00")
         insertPurchase(db,4, 7 * 0.045, "2021-11-10 14:30:00")
@@ -124,14 +125,14 @@ public class DBManager(context: Context?) : SQLiteOpenHelper(context, "FoodEmiss
 
     }
 
-    fun insertPurchase(db: SQLiteDatabase, storeItemID: Int, weight: Double, timestamp: String): Long {
+    fun insertPurchase(db: SQLiteDatabase, storeItemID: Int, quantity: Int, timestamp: String): Long {
         val contentValues = ContentValues()
 
         contentValues.put("storeItemID", storeItemID)
-        contentValues.put("weight", weight)
+        contentValues.put("quantity", quantity)
         contentValues.put("timestamp", timestamp)
 
-        return db.insert("purchase", null, contentValues)
+        return db.insert(PurchaseDao.TABLE, null, contentValues)
     }
 
     //id INTEGER PRIMARY KEY AUTOINCREMENT, productID INTEGER NOT NULL, countryID INTEGER NOT NULL, receiptText TEXT NOT NULL, organic BOOLEAN NOT NULL CHECK(organic IN (0, 1)), packaged BOOLEAN NOT NULL CHECK(packaged IN (0, 1)), weight REAL NOT NULL, store TEXT NOT NULL, FOREIGN KEY(productID) REFERENCES product(id), FOREIGN KEY(countryID) REFERENCES country(id)
@@ -152,11 +153,14 @@ public class DBManager(context: Context?) : SQLiteOpenHelper(context, "FoodEmiss
         return results
     }
 
-    fun select(query: String, producer: (cursor: Cursor) -> (Any)) {
+    fun select(query: String, producer: (cursor: Cursor) -> (Unit)) {
         val db = readableDatabase
         val cursor = db.rawQuery(query, null)
 
-        producer(cursor)
+        if (cursor.moveToFirst()) {
+            producer(cursor)
+        }
+
         cursor.close()
     }
 

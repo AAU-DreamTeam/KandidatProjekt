@@ -2,16 +2,24 @@ package com.example.androidapp.data.models
 
 import com.example.androidapp.data.EmissionCalculator
 
-class StoreItem (val id: Int = 0,
+class StoreItem (val id: Int,
                  val product: Product,
                  val country: Country,
                  val receiptText: String,
                  val organic: Boolean,
                  val packaged: Boolean,
                  val weight: Double,
-                 val store: String){
+                 val store: String = "Føtex"){
 
-    val emissionPerKg by lazy { EmissionCalculator.calcEmission(this) }
+    constructor(product: Product,
+                country: Country,
+                receiptText: String,
+                organic: Boolean,
+                packaged: Boolean,
+                weight: Double,
+                store: String = "Føtex"): this(0, product, country, receiptText, organic, packaged, weight, store)
+    val emissionPerKg = EmissionCalculator.calcEmission(this)
+    val emissionPerItem = weight * emissionPerKg
 
     override fun toString(): String {
         return "${product.name}, ${country.name}${if (organic) ", Øko" else ""}${if (!packaged) ", Løs" else ""}"

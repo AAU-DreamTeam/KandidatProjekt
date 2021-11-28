@@ -4,5 +4,7 @@ class Country(val id: Int,
               val name: String,
               val transportEmission: Double,
               val ghPenalty: Boolean){
+
     constructor(name: String, transportEmission: Double, ghPenalty: Boolean): this(0, name, transportEmission, ghPenalty)
+    constructor(): this(0, "", 0.0, false)
 }

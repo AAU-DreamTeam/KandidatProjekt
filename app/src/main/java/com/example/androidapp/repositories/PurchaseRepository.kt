@@ -14,4 +14,8 @@ class PurchaseRepository(context: Context){
     fun loadAlternativeEmissions(purchases: List<Purchase>): List<Double> {
         return purchaseDao.loadAlternativeEmissions(purchases)
     }
+
+    fun generatePurchase(receiptText: String): Purchase {
+        return purchaseDao.generatePurchase(receiptText)
+    }
 }

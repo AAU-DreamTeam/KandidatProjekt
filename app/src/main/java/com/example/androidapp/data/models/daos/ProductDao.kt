@@ -5,8 +5,38 @@ import android.database.Cursor
 import com.example.androidapp.data.DBManager
 import com.example.androidapp.data.models.Product
 
-class ProductDao(context: Context) {
-    private val dbManager: DBManager = DBManager(context)
+class ProductDao(private val dbManager: DBManager) {
+    constructor(context: Context): this(DBManager(context))
+
+    fun loadProducts(): List<String>{
+        val query = "SELECT $COLUMN_NAME FROM $TABLE;"
+
+        return dbManager.selectMultiple(query) {
+            it.getString(0)
+        }
+    }
+
+    fun extractProduct(receiptText: String): Product {
+        var result = Product()
+        val lowerReceiptText = receiptText.toLowerCase().replace('ø', 'o').replace('å', 'a').replace('æ','e')
+        val query =
+                "SELECT  $COLUMN_ID, " +                // 6
+                        "$COLUMN_NAME, " +              // 7
+                        "$COLUMN_CULTIVATION, " +       // 8
+                        "$COLUMN_ILUC, " +              // 9
+                        "$COLUMN_PROCESSING, " +        // 10
+                        "$COLUMN_PACKAGING, " +         // 11
+                        "$COLUMN_RETAIL, " +            // 12
+                        "$COLUMN_GHCULTIVATED " +      // 13
+                "FROM $TABLE " +
+                "WHERE '$lowerReceiptText' LIKE '%'||REPLACE(REPLACE(REPLACE(LOWER($COLUMN_NAME), 'æ', 'e'), 'ø', 'o'), 'å', 'a')||'%';"
+
+        dbManager.select(query) {
+            result = produceProduct(it)
+        }
+
+        return result
+    }
 
     companion object {
         val TABLE = "product"
