@@ -9,11 +9,11 @@ import org.w3c.dom.Text
 class CountryDao(private val dbManager: DBManager) {
     constructor(context: Context): this(DBManager(context))
 
-    fun loadCountries(): List<String> {
-        val query = "SELECT $COLUMN_NAME FROM $TABLE;"
+    fun loadCountries(): List<Country> {
+        val query = "SELECT * FROM $TABLE;"
 
         return dbManager.selectMultiple(query){
-            it.getString(0)
+            produceCountry(it)
         }
     }
 

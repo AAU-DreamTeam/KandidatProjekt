@@ -79,6 +79,7 @@ class EmissionFragment : Fragment() {
                 viewModel.loadData(requireContext())
             }
         }
+
         scanButton.setOnClickListener{
             resultLauncher.launch(Intent(activity, ScannerActivity::class.java))
         }

@@ -1,11 +1,13 @@
 package com.example.androidapp.data.models
 
 import com.example.androidapp.data.EmissionCalculator
+import java.lang.Exception
+import java.util.*
 
 class StoreItem (val id: Int,
-                 val product: Product,
-                 val country: Country,
-                 var receiptText: String,
+                 var product: Product,
+                 var country: Country,
+                 _receiptText: String,
                  var organic: Boolean,
                  var packaged: Boolean,
                  var weight: Double,
@@ -13,13 +15,22 @@ class StoreItem (val id: Int,
 
     constructor(product: Product,
                 country: Country,
-                receiptText: String,
+                _receiptText: String,
                 organic: Boolean,
                 packaged: Boolean,
                 weight: Double,
-                store: String = "Føtex"): this(0, product, country, receiptText, organic, packaged, weight, store)
+                store: String = "Føtex"): this(0, product, country, _receiptText, organic, packaged, weight, store)
+
+    var receiptText = _receiptText.toLowerCase(Locale.getDefault())
     val emissionPerKg = EmissionCalculator.calcEmission(this)
     val emissionPerItem = weight * emissionPerKg
+
+    fun hasValidWeight(): Boolean {
+        return weight > 0.0
+    }
+    fun isValid(): Boolean{
+        return receiptText.isNotEmpty() && hasValidWeight() && product.isValid() && country.validate()
+    }
 
     override fun toString(): String {
         return "${product.name}, ${country.name}${if (organic) ", Øko" else ""}${if (!packaged) ", Løs" else ""}"

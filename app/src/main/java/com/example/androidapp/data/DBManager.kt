@@ -5,9 +5,11 @@ import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper;
+import com.example.androidapp.data.models.StoreItem
 import com.example.androidapp.data.models.daos.PurchaseDao
 
 class DBManager(context: Context?) : SQLiteOpenHelper(context, "FoodEmission.db", null, 1) {
+    val INVALID_ID = -1L
 
     override fun onCreate(db: SQLiteDatabase) {
         createTables(db)
@@ -97,7 +99,7 @@ class DBManager(context: Context?) : SQLiteOpenHelper(context, "FoodEmission.db"
         insertStoreItem(db, 6, 5,"ÆBLER DANMARK", false, true, 0.065)
     }
 
-    fun insertStoreItem(db: SQLiteDatabase, productID: Int, countryID: Int, receiptText: String, organic: Boolean, packaged: Boolean, weight: Double, store: String = "Føtex"): Long {
+    private fun insertStoreItem(db: SQLiteDatabase, productID: Int, countryID: Int, receiptText: String, organic: Boolean, packaged: Boolean, weight: Double, store: String = "Føtex"): Long {
         val contentValues = ContentValues()
 
         contentValues.put("productID", productID)
@@ -109,6 +111,10 @@ class DBManager(context: Context?) : SQLiteOpenHelper(context, "FoodEmission.db"
         contentValues.put("store", store)
 
         return db.insert("storeItem", null, contentValues)
+    }
+
+    fun insert(table: String, contentValues: ContentValues): Long {
+        return writableDatabase.insert(table, null, contentValues)
     }
 
     private fun insertPurchaseData(db: SQLiteDatabase){
@@ -162,6 +168,24 @@ class DBManager(context: Context?) : SQLiteOpenHelper(context, "FoodEmission.db"
         }
 
         cursor.close()
+    }
+
+    fun begin(){
+        val query = "BEGIN TRANSACTION;"
+
+        writableDatabase.execSQL(query)
+    }
+
+    fun commit(){
+        val query = "COMMIT;"
+
+        writableDatabase.execSQL(query)
+    }
+
+    fun rollback(){
+        val query = "ROLLBACK;"
+
+        writableDatabase.execSQL(query)
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {

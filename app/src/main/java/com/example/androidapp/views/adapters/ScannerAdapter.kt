@@ -7,6 +7,8 @@ import android.widget.*
 import androidx.core.widget.doAfterTextChanged
 import androidx.recyclerview.widget.RecyclerView
 import com.example.androidapp.R
+import com.example.androidapp.data.models.Country
+import com.example.androidapp.data.models.Product
 import com.example.androidapp.data.models.Purchase
 import com.example.androidapp.viewmodels.ScannerViewModel
 import com.google.android.material.button.MaterialButtonToggleGroup
@@ -14,9 +16,12 @@ import com.google.android.material.card.MaterialCardView
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.android.synthetic.main.card_layout_alt.view.*
 
-class ScannerAdapter(var purchases: List<Purchase>, val products: List<String>, val countries: List<String>, val viewModel: ScannerViewModel): RecyclerView.Adapter<ScannerAdapter.ViewHolder>() {
+class ScannerAdapter(var purchases: List<Purchase>,
+                     val products: List<Product>,
+                     val countries: List<Country>,
+                     private val viewModel: ScannerViewModel): RecyclerView.Adapter<ScannerAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val v = LayoutInflater.from(parent.context).inflate(R.layout.card_layout_alt,parent,false)
+        val v = LayoutInflater.from(parent.context).inflate(R.layout.card_layout_alt, parent, false)
         return ViewHolder(v)
     }
 
@@ -27,29 +32,12 @@ class ScannerAdapter(var purchases: List<Purchase>, val products: List<String>, 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val purchase = purchases[position]
 
-        holder.title.setText(purchase.storeItem.receiptText)
-
-        setUpToggleButton(holder, purchase, holder.toggleButton)
-
-        holder.title.doAfterTextChanged {
-            viewModel.onTitleChanged(holder.adapterPosition, it.toString())
-        }
-
-        holder.product.doAfterTextChanged{
-            viewModel.onProductChanged(holder.adapterPosition, it.toString())
-        }
-
-        holder.country.doAfterTextChanged {
-            viewModel.onCountryChanged(holder.adapterPosition, it.toString())
-        }
-
-        holder.amount.doAfterTextChanged {
-            viewModel.onQuantityChanged(holder.adapterPosition, it.toString().toInt())
-        }
-
-        holder.weight.doAfterTextChanged {
-            viewModel.onWeightChanged(holder.adapterPosition, it.toString().toDouble())
-        }
+        setUpTitle(holder, purchase)
+        setUpToggleButton(holder, purchase)
+        setUpProductDropdown(holder)
+        setUpCountryDropdown(holder)
+        setUpAmountField(holder, purchase)
+        setUpWeightField(holder, purchase)
 
         holder.deleteButton.setOnClickListener {
             viewModel.onDeletePurchase(holder.adapterPosition)
@@ -57,19 +45,93 @@ class ScannerAdapter(var purchases: List<Purchase>, val products: List<String>, 
         }
     }
 
-    private fun setUpToggleButton(holder: ViewHolder, purchase: Purchase, toggleButton: MaterialButtonToggleGroup){
+    private fun setUpTitle(holder: ViewHolder, purchase: Purchase){
+        holder.title.setText(purchase.storeItem.receiptText.toUpperCase())
+
+        holder.title.doAfterTextChanged {
+            if (holder.title.text!!.isEmpty()) {
+                holder.title.error = "Indtast tekst"
+            } else {
+                viewModel.onTitleChanged(holder.adapterPosition, it.toString())
+            }
+        }
+    }
+
+    private fun setUpToggleButton(holder: ViewHolder, purchase: Purchase){
         if (purchase.storeItem.organic){
-            toggleButton.check(R.id.btn_organic)
+            holder.toggleButton.check(R.id.btn_organic)
         }
 
         if (!purchase.storeItem.packaged) {
-            toggleButton.check(R.id.btn_packaged)
+            holder.toggleButton.check(R.id.btn_packaged)
         }
 
-        toggleButton.addOnButtonCheckedListener(){ _, checkedId, isChecked ->
+        holder.toggleButton.addOnButtonCheckedListener(){ _, checkedId, isChecked ->
             when(checkedId) {
                 R.id.btn_organic -> viewModel.onOrganicChanged(holder.adapterPosition, isChecked)
                 R.id.btn_packaged -> viewModel.onPackagedChanged(holder.adapterPosition, isChecked)
+            }
+        }
+    }
+
+    private fun setUpProductDropdown(holder: ViewHolder) {
+        if (holder.product.text.isEmpty()) {
+            holder.product.error = "Vælg produkt"
+        }
+
+        holder.product.setOnItemClickListener { parent, _, pos, _ ->
+            val product = parent.getItemAtPosition(pos) as Product
+
+            holder.product.error = null
+
+            holder.product.setText(product.name, false)
+            viewModel.onProductChanged(holder.adapterPosition, product)
+        }
+    }
+
+    private fun setUpCountryDropdown(holder: ViewHolder) {
+        if (holder.country.text.isEmpty()) {
+            holder.country.error = "Vælg land"
+        }
+
+        holder.country.setOnItemClickListener { parent, view, pos, id ->
+            val country = parent.getItemAtPosition(pos) as Country
+
+            holder.country.error = null
+
+            holder.country.setText(country.name, false)
+            viewModel.onCountryChanged(holder.adapterPosition, country)
+        }
+    }
+
+    private fun setUpAmountField(holder: ViewHolder, purchase: Purchase) {
+        if (!purchase.hasValidQuantity()) {
+            holder.amount.error = "Indtast antal"
+        } else {
+            holder.amount.setText(purchase.quantity.toString())
+        }
+
+        holder.amount.doAfterTextChanged {
+            if (holder.amount.text!!.isEmpty()) {
+                holder.amount.error = "Indtast antal"
+            } else {
+                viewModel.onQuantityChanged(holder.adapterPosition, it.toString().toInt())
+            }
+        }
+    }
+
+    private fun setUpWeightField(holder: ViewHolder, purchase: Purchase){
+        if (purchase.storeItem.hasValidWeight()) {
+            holder.weight.setText(purchase.storeItem.weight.toString())
+        } else {
+            holder.weight.error = "Indtast vægt"
+        }
+
+        holder.weight.doAfterTextChanged {
+            if (holder.weight.text!!.isEmpty()) {
+                holder.weight.error = "Indtast vægt"
+            } else {
+                viewModel.onWeightChanged(holder.adapterPosition, it.toString().toDouble())
             }
         }
     }
@@ -85,8 +147,8 @@ class ScannerAdapter(var purchases: List<Purchase>, val products: List<String>, 
         val title: TextInputEditText = itemView.findViewById(R.id.card_title)
 
         init {
-            val productAdapter = ArrayAdapter(itemView.context, R.layout.dropdown_item, products)
-            val countryAdapter = ArrayAdapter(itemView.context, R.layout.dropdown_item, countries)
+            val productAdapter = ProductAdapter(itemView.context, R.layout.dropdown_item, products)
+            val countryAdapter = CountryAdapter(itemView.context, R.layout.dropdown_item, countries)
 
             itemView.productOption.setAdapter(productAdapter)
             itemView.countryOption.setAdapter(countryAdapter)

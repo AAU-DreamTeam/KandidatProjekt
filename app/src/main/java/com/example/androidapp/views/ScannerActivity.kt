@@ -17,12 +17,12 @@ import com.example.androidapp.views.adapters.ScannerAdapter
 import kotlinx.android.synthetic.main.activity_scanner.*
 import java.io.File
 import java.io.IOException
+import java.lang.Exception
 
 
 class ScannerActivity : AppCompatActivity() {
-    private val viewModel: ScannerViewModel by viewModels()
+    private val viewModel = ScannerViewModel()
     private var layoutManager: RecyclerView.LayoutManager?=null
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,7 +37,8 @@ class ScannerActivity : AppCompatActivity() {
         }
 
         btn_save.setOnClickListener {
-
+            //viewModel.onSave(this)
+            finish()
         }
     }
 
@@ -45,9 +46,9 @@ class ScannerActivity : AppCompatActivity() {
         layoutManager = LinearLayoutManager(this)
         recyclerView.layoutManager = layoutManager
 
-        viewModel.purchases.observe(this, { list ->
-            recyclerView.adapter = ScannerAdapter(list, viewModel.products.value!!, viewModel.countries.value!!, viewModel)
-        })
+        viewModel.purchases.observe(this) {
+            recyclerView.adapter = ScannerAdapter(it, viewModel.products.value!!, viewModel.countries.value!!, viewModel)
+        }
     }
 
     private fun launchPhotoActivity() {

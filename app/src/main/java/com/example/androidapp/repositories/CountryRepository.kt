@@ -7,7 +7,7 @@ import com.example.androidapp.data.models.daos.CountryDao
 class CountryRepository(context: Context) {
     private val countryDao = CountryDao(context)
 
-    fun loadCountries(): List<String> {
+    fun loadCountries(): List<Country> {
         return countryDao.loadCountries()
     }
 }

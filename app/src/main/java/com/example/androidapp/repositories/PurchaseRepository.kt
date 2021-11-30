@@ -3,6 +3,7 @@ package com.example.androidapp.repositories
 import android.content.Context
 import com.example.androidapp.data.models.Purchase
 import com.example.androidapp.data.models.daos.PurchaseDao
+import com.google.mlkit.vision.text.Text
 
 class PurchaseRepository(context: Context){
     private val purchaseDao = PurchaseDao(context)
@@ -15,7 +16,11 @@ class PurchaseRepository(context: Context){
         return purchaseDao.loadAlternativeEmissions(purchases)
     }
 
-    fun generatePurchase(receiptText: String): Purchase {
-        return purchaseDao.generatePurchase(receiptText)
+    fun generatePurchases(text: Text): MutableList<Purchase> {
+        return purchaseDao.generatePurchases(text)
+    }
+
+    fun savePurchases(purchases: List<Purchase>) {
+        purchaseDao.savePurchases(purchases)
     }
 }

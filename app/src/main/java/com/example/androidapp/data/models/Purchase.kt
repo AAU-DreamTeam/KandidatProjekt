@@ -9,6 +9,14 @@ class Purchase(val id: Int,
     var weight = storeItem.weight * quantity
     val emission = storeItem.emissionPerKg * weight
 
+    fun isValid(): Boolean {
+        return quantity > 0 && storeItem.isValid()
+    }
+
+    fun hasValidQuantity(): Boolean {
+        return quantity > 0
+    }
+
     override fun toString(): String {
         return "${"%.3f".format(weight)} kg, $storeItem"
     }

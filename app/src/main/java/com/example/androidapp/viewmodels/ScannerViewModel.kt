@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.androidapp.data.models.Country
+import com.example.androidapp.data.models.Product
 import com.example.androidapp.data.models.Purchase
 import com.example.androidapp.repositories.CountryRepository
 import com.example.androidapp.repositories.ProductRepository
@@ -20,11 +21,14 @@ import java.util.*
 class ScannerViewModel: ViewModel() {
     var imagePath: String = ""
 
-    private val _products = MutableLiveData<List<String>>(listOf())
-    val products: LiveData<List<String>> get() = _products
+    private val _saved = MutableLiveData(false)
+    val saved: LiveData<Boolean> get() = _saved
 
-    private val _countries = MutableLiveData<List<String>>(listOf())
-    val countries: LiveData<List<String>> get() = _countries
+    private val _products = MutableLiveData<List<Product>>(listOf())
+    val products: LiveData<List<Product>> get() = _products
+
+    private val _countries = MutableLiveData<List<Country>>(listOf())
+    val countries: LiveData<List<Country>> get() = _countries
 
     private val _purchases = MutableLiveData<MutableList<Purchase>>(mutableListOf())
     val purchases: LiveData<MutableList<Purchase>> get() = _purchases
@@ -52,15 +56,7 @@ class ScannerViewModel: ViewModel() {
     }
 
     private fun textToPurchases(context: Context, text: Text) {
-        val results = mutableListOf<Purchase>()
-
-        for (block in text.textBlocks) {
-            for (line in block.lines) {
-                results.add(PurchaseRepository(context).generatePurchase(line.text.toLowerCase(Locale.getDefault())))
-            }
-        }
-
-        _purchases.value = results
+        _purchases.value = PurchaseRepository(context).generatePurchases(text)
     }
 
     fun onDeletePurchase(index: Int){
@@ -79,12 +75,12 @@ class ScannerViewModel: ViewModel() {
         _purchases.value!![index].storeItem.receiptText = value
     }
 
-    fun onCountryChanged(index: Int, value: String){
-        _purchases.value!![index].storeItem.country.name = value
+    fun onCountryChanged(index: Int, value: Country){
+        _purchases.value!![index].storeItem.country = value
     }
 
-    fun onProductChanged(index: Int, value: String){
-        _purchases.value!![index].storeItem.product.name = value
+    fun onProductChanged(index: Int, value: Product){
+        _purchases.value!![index].storeItem.product = value
     }
 
     fun onQuantityChanged(index: Int, value: Int){
@@ -93,5 +89,9 @@ class ScannerViewModel: ViewModel() {
 
     fun onWeightChanged(index: Int, value: Double){
         _purchases.value!![index].storeItem.weight = value
+    }
+
+    fun onSave(context: Context){
+        PurchaseRepository(context).savePurchases(_purchases.value!!)
     }
 }

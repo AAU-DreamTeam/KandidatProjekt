@@ -8,11 +8,11 @@ import com.example.androidapp.data.models.Product
 class ProductDao(private val dbManager: DBManager) {
     constructor(context: Context): this(DBManager(context))
 
-    fun loadProducts(): List<String>{
-        val query = "SELECT $COLUMN_NAME FROM $TABLE;"
+    fun loadProducts(): List<Product>{
+        val query = "SELECT * FROM $TABLE;"
 
         return dbManager.selectMultiple(query) {
-            it.getString(0)
+            produceProduct(it)
         }
     }
 

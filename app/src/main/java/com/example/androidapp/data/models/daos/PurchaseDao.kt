@@ -1,10 +1,14 @@
 package com.example.androidapp.data.models.daos
 
+import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
 import com.example.androidapp.data.DBManager
 import com.example.androidapp.data.EmissionCalculator
 import com.example.androidapp.data.models.Purchase
+import com.example.androidapp.repositories.PurchaseRepository
+import com.google.mlkit.vision.text.Text
+import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.time.Instant.now
 import java.util.*
@@ -81,12 +85,51 @@ class PurchaseDao(context: Context) {
         return emissions
     }
 
-    fun generatePurchase(receiptText: String): Purchase {
+    fun generatePurchases(text: Text): MutableList<Purchase>{
+        val purchases = mutableListOf<Purchase>()
+
+        for (block in text.textBlocks) {
+            for (line in block.lines) {
+                purchases.add(generatePurchase(line.text.toLowerCase(Locale.getDefault())))
+            }
+        }
+
+        return purchases
+    }
+
+    private fun generatePurchase(receiptText: String): Purchase {
         val storeItem = StoreItemDao(dbManager).generateStoreItem(receiptText)
         val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
 
         //TODO: Extract quantity
-        return Purchase(storeItem, sdf.format(Calendar.getInstance().time), -1)
+        return Purchase(storeItem, sdf.format(Calendar.getInstance().time), 0)
+    }
+
+    fun savePurchases(purchases: List<Purchase>) {
+        validate(purchases)
+
+        for (purchase in purchases) {
+            savePurchase(purchase)
+        }
+    }
+
+    private fun validate(purchases: List<Purchase>) {
+        for (purchase in purchases) {
+            if (!purchase.isValid()) {
+
+            }
+        }
+    }
+
+    private fun savePurchase(purchase: Purchase){
+        val storeItemId = StoreItemDao(dbManager).saveOrLoadStoreItem(purchase.storeItem);
+        val contentValues = ContentValues()
+
+        contentValues.put(COLUMN_STORE_ITEM_ID, storeItemId.toString())
+        contentValues.put(COLUMN_TIMESTAMP, purchase.timestamp)
+        contentValues.put(COLUMN_QUANTITY, purchase.quantity)
+
+        dbManager.insert(TABLE, contentValues)
     }
 
     companion object {
