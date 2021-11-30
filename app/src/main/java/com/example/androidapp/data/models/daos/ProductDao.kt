@@ -18,7 +18,6 @@ class ProductDao(private val dbManager: DBManager) {
 
     fun extractProduct(receiptText: String): Product {
         var result = Product()
-        val lowerReceiptText = receiptText.toLowerCase().replace('ø', 'o').replace('å', 'a').replace('æ','e')
         val query =
                 "SELECT  $COLUMN_ID, " +                // 6
                         "$COLUMN_NAME, " +              // 7
@@ -29,7 +28,7 @@ class ProductDao(private val dbManager: DBManager) {
                         "$COLUMN_RETAIL, " +            // 12
                         "$COLUMN_GHCULTIVATED " +      // 13
                 "FROM $TABLE " +
-                "WHERE '$lowerReceiptText' LIKE '%'||REPLACE(REPLACE(REPLACE(LOWER($COLUMN_NAME), 'æ', 'e'), 'ø', 'o'), 'å', 'a')||'%';"
+                "WHERE '$receiptText' LIKE '%'||$COLUMN_NAME||'%';"
 
         dbManager.select(query) {
             result = produceProduct(it)

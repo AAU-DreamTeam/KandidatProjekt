@@ -107,6 +107,7 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/amount_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="number" />
@@ -138,6 +139,7 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/weight_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="number" />
@@ -177,7 +179,7 @@
                 tools:layout_editor_absoluteX="4dp">
 
                 <Button
-                    android:id="@+id/btn_øko"
+                    android:id="@+id/btn_organic"
                     style="?attr/materialButtonOutlinedStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -185,7 +187,7 @@
                     android:textColor="@color/black" />
 
                 <Button
-                    android:id="@+id/btn_løs"
+                    android:id="@+id/btn_packaged"
                     style="?attr/materialButtonOutlinedStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

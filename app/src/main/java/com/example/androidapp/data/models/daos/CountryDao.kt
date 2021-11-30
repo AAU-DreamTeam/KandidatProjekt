@@ -19,14 +19,13 @@ class CountryDao(private val dbManager: DBManager) {
 
     fun extractCountry(receiptText: String): Country{
         var result = Country()
-        val lowerReceiptText = receiptText.toLowerCase()
         val query =
                 "SELECT $COLUMN_ID, " +                   // 14
                     "$COLUMN_NAME, " +                 // 15
                     "$COLUMN_TRANSPORT_EMISSION, " +   // 16
                     "$COLUMN_GHPENALTY " +            // 17
                 "FROM $TABLE " +
-                "WHERE '$lowerReceiptText' LIKE '%'||LOWER($COLUMN_NAME)||'%';"
+                "WHERE '$receiptText' LIKE '%'||$COLUMN_NAME||'%';"
 
         dbManager.select(query) {
             result = produceCountry(it)

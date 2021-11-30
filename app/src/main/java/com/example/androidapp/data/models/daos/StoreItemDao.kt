@@ -45,6 +45,7 @@ class StoreItemDao(private val dbManager: DBManager) {
 
     fun generateStoreItem(receiptText: String): StoreItem {
         var result: StoreItem? = null
+        val formattedReceiptText = formatReceiptText(receiptText)
         val query =
                 "SELECT ${COLUMN_ID}, " +               // 0
                        "${COLUMN_RECEIPT_TEXT}, " +     // 1
@@ -67,17 +68,21 @@ class StoreItemDao(private val dbManager: DBManager) {
                 "FROM $TABLE " +
                 "INNER JOIN ${ProductDao.TABLE} ON $COLUMN_PRODUCT_ID = ${ProductDao.COLUMN_ID} " +
                 "INNER JOIN ${CountryDao.TABLE} ON $COLUMN_COUNTRY_ID = ${CountryDao.COLUMN_ID} " +
-                "WHERE $COLUMN_RECEIPT_TEXT = '$receiptText';"
+                "WHERE $COLUMN_RECEIPT_TEXT = '$formattedReceiptText';"
 
         dbManager.select(query) {
             result = produceStoreItem(it)
         }
 
         if (result == null) {
-            result = extractStoreItem(receiptText)
+            result = extractStoreItem(formattedReceiptText)
         }
 
         return result as StoreItem
+    }
+
+    private fun formatReceiptText(receiptText: String): String {
+        return receiptText.replace('ø', 'o').replace('å', 'a').replace('æ','e')
     }
 
     private fun extractStoreItem(receiptText: String): StoreItem {
@@ -86,19 +91,21 @@ class StoreItemDao(private val dbManager: DBManager) {
                 CountryDao(dbManager).extractCountry(receiptText),
                 receiptText,
                 isOrganic(receiptText),
-                isNotPackaged(receiptText),
-                0.0
+                isPackaged(receiptText),
+                extractWeight()
         )
     }
 
     private fun isOrganic(receiptText: String): Boolean {
-        val lowerReceiptText = receiptText.toLowerCase()
-        return lowerReceiptText.contains("oko") || lowerReceiptText.contains("øko")
+        return receiptText.contains("oko") || receiptText.contains("øko")
     }
 
-    private fun isNotPackaged(receiptText: String): Boolean {
-        val lowerReceiptText = receiptText.toLowerCase()
-        return lowerReceiptText.contains("los") || lowerReceiptText.contains("løs")
+    private fun isPackaged(receiptText: String): Boolean {
+        return !(receiptText.contains("los") || receiptText.contains("løs"))
+    }
+
+    private fun extractWeight(): Double{
+        return 0.0
     }
 
     companion object{

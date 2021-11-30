@@ -5,10 +5,10 @@ import com.example.androidapp.data.EmissionCalculator
 class StoreItem (val id: Int,
                  val product: Product,
                  val country: Country,
-                 val receiptText: String,
-                 val organic: Boolean,
-                 val packaged: Boolean,
-                 val weight: Double,
+                 var receiptText: String,
+                 var organic: Boolean,
+                 var packaged: Boolean,
+                 var weight: Double,
                  val store: String = "Føtex"){
 
     constructor(product: Product,

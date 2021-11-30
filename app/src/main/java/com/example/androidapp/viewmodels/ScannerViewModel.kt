@@ -15,6 +15,7 @@ import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.Text
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
+import java.util.*
 
 class ScannerViewModel: ViewModel() {
     var imagePath: String = ""
@@ -25,8 +26,8 @@ class ScannerViewModel: ViewModel() {
     private val _countries = MutableLiveData<List<String>>(listOf())
     val countries: LiveData<List<String>> get() = _countries
 
-    private val _purchases = MutableLiveData<List<Purchase>>(listOf())
-    val purchases: LiveData<List<Purchase>> get() = _purchases
+    private val _purchases = MutableLiveData<MutableList<Purchase>>(mutableListOf())
+    val purchases: LiveData<MutableList<Purchase>> get() = _purchases
 
     fun loadProducts(context: Context) {
         _products.value = ProductRepository(context).loadProducts()
@@ -40,6 +41,7 @@ class ScannerViewModel: ViewModel() {
         val image = InputImage.fromBitmap(BitmapFactory.decodeFile(imagePath), 0)
 
         val recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
+
         recognizer.process(image)
                 .addOnSuccessListener { text ->
                     textToPurchases(context, text)
@@ -54,10 +56,42 @@ class ScannerViewModel: ViewModel() {
 
         for (block in text.textBlocks) {
             for (line in block.lines) {
-                results.add(PurchaseRepository(context).generatePurchase(line.text))
+                results.add(PurchaseRepository(context).generatePurchase(line.text.toLowerCase(Locale.getDefault())))
             }
         }
 
         _purchases.value = results
+    }
+
+    fun onDeletePurchase(index: Int){
+        _purchases.value!!.removeAt(index)
+    }
+
+    fun onOrganicChanged(index: Int, value: Boolean) {
+        _purchases.value!![index].storeItem.organic = value
+    }
+
+    fun onPackagedChanged(index: Int, value: Boolean) {
+        _purchases.value!![index].storeItem.packaged = value
+    }
+
+    fun onTitleChanged(index: Int, value: String){
+        _purchases.value!![index].storeItem.receiptText = value
+    }
+
+    fun onCountryChanged(index: Int, value: String){
+        _purchases.value!![index].storeItem.country.name = value
+    }
+
+    fun onProductChanged(index: Int, value: String){
+        _purchases.value!![index].storeItem.product.name = value
+    }
+
+    fun onQuantityChanged(index: Int, value: Int){
+        _purchases.value!![index].quantity = value
+    }
+
+    fun onWeightChanged(index: Int, value: Double){
+        _purchases.value!![index].storeItem.weight = value
     }
 }

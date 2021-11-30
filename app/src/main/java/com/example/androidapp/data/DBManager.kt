@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper;
 import com.example.androidapp.data.models.daos.PurchaseDao
 
-public class DBManager(context: Context?) : SQLiteOpenHelper(context, "FoodEmission.db", null, 1) {
+class DBManager(context: Context?) : SQLiteOpenHelper(context, "FoodEmission.db", null, 1) {
 
     override fun onCreate(db: SQLiteDatabase) {
         createTables(db)

@@ -45,12 +45,8 @@ class ScannerActivity : AppCompatActivity() {
         layoutManager = LinearLayoutManager(this)
         recyclerView.layoutManager = layoutManager
 
-        val scannerAdapter = ScannerAdapter(viewModel.purchases.value!!, viewModel.products.value!!, viewModel.countries.value!!)
-        recyclerView.adapter = scannerAdapter
-
         viewModel.purchases.observe(this, { list ->
-            recyclerView.adapter = ScannerAdapter(list, viewModel.products.value!!, viewModel.countries.value!!)
-            scannerAdapter.notifyDataSetChanged()
+            recyclerView.adapter = ScannerAdapter(list, viewModel.products.value!!, viewModel.countries.value!!, viewModel)
         })
     }
 

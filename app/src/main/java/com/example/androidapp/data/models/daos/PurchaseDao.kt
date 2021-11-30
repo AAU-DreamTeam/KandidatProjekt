@@ -51,6 +51,7 @@ class PurchaseDao(context: Context) {
 
                 if (index != 0 && results[index - 1].storeItem == purchase.storeItem) {
                     results[index - 1].weight += purchase.weight
+                    results[index - 1].quantity += purchase.quantity
                 } else {
                     results.add(purchase)
                     index++
@@ -82,7 +83,7 @@ class PurchaseDao(context: Context) {
 
     fun generatePurchase(receiptText: String): Purchase {
         val storeItem = StoreItemDao(dbManager).generateStoreItem(receiptText)
-        val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+        val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
 
         //TODO: Extract quantity
         return Purchase(storeItem, sdf.format(Calendar.getInstance().time), -1)
