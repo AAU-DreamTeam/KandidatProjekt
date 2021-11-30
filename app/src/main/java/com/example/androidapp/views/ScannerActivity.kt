@@ -37,7 +37,7 @@ class ScannerActivity : AppCompatActivity() {
         }
 
         btn_save.setOnClickListener {
-            //viewModel.onSave(this)
+            viewModel.onSave(this)
             finish()
         }
     }

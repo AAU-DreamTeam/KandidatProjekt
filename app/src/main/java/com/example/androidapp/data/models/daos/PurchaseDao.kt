@@ -89,36 +89,83 @@ class PurchaseDao(context: Context) {
         val purchases = mutableListOf<Purchase>()
 
         for (block in text.textBlocks) {
-            for (line in block.lines) {
-                purchases.add(generatePurchase(line.text.toLowerCase(Locale.getDefault())))
+            var i = 0
+            val limit = block.lines.size
+
+            while (i < limit) {
+                val current = block.lines[i].text.toLowerCase(Locale.getDefault())
+                val next =
+                    if (i + 1 < limit)
+                        block.lines[i + 1].text.toLowerCase(Locale.getDefault())
+                    else ""
+
+                if (endReached(current)) {
+                    return purchases
+                }
+
+                if (isValid(current)) {
+                    val quantity = extractQuantity(next)
+
+                    purchases.add(generatePurchase(current, quantity.toInt()))
+                }
+                i++
             }
         }
 
         return purchases
     }
 
-    private fun generatePurchase(receiptText: String): Purchase {
+    private fun endReached(receiptText: String): Boolean {
+        return receiptText.contains("total")
+    }
+
+    private fun extractQuantity(receiptText: String) : String {
+        val regex = "[0-9]+[x][0-9]+[,][0-9]+".toRegex()
+        val find = regex.find(receiptText.replace(" ", ""))
+
+        return buildString {
+            if (find != null) {
+                for (char in find.value) {
+                    if (!char.isDigit()) {
+                        break
+                    }
+
+                    this.append(char)
+                }
+            } else {
+                this.append(0)
+            }
+        }
+    }
+
+    private fun isValid(receiptText: String): Boolean {
+        return !(receiptText.contains("pant") || receiptText.contains("*") || receiptText.contains("[0-9]+[,][0-9]+".toRegex()) || receiptText.length == 1)
+    }
+
+    private fun generatePurchase(receiptText: String, quantity: Int = 0): Purchase {
         val storeItem = StoreItemDao(dbManager).generateStoreItem(receiptText)
         val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
 
         //TODO: Extract quantity
-        return Purchase(storeItem, sdf.format(Calendar.getInstance().time), 0)
+        return Purchase(storeItem, sdf.format(Calendar.getInstance().time), quantity)
     }
 
     fun savePurchases(purchases: List<Purchase>) {
-        validate(purchases)
-
-        for (purchase in purchases) {
-            savePurchase(purchase)
+        if(validate(purchases)) {
+            for (purchase in purchases) {
+                savePurchase(purchase)
+            }
         }
     }
 
-    private fun validate(purchases: List<Purchase>) {
+    private fun validate(purchases: List<Purchase>): Boolean {
         for (purchase in purchases) {
             if (!purchase.isValid()) {
-
+                return false
             }
         }
+
+        return true
     }
 
     private fun savePurchase(purchase: Purchase){
