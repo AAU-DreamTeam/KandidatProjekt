@@ -28,15 +28,8 @@ class ListFragment : Fragment() {
 
         purchaseList.layoutManager = LinearLayoutManager(requireContext())
 
-        val emissionListAdapter = EmissionListAdapter(requireContext(), viewModel.purchaseList.value!!){
-            viewModel.loadAlternatives(requireContext(), it)
-        }
-
-        purchaseList.adapter = emissionListAdapter
-
-        viewModel.purchaseList.observe(viewLifecycleOwner, { list ->
-            emissionListAdapter.purchases = list
-            emissionListAdapter.notifyDataSetChanged()
+        viewModel.purchases.observe(viewLifecycleOwner, { list ->
+            purchaseList.adapter = EmissionListAdapter(requireContext(), list, viewModel)
         })
     }
 }

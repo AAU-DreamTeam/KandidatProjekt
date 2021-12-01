@@ -88,9 +88,11 @@ class StoreItemDao(private val dbManager: DBManager) {
     }
 
     private fun extractStoreItem(receiptText: String): StoreItem {
+        val product = ProductDao(dbManager).extractProduct(receiptText)
+        val country = CountryDao(dbManager).extractCountry(receiptText)
         return StoreItem(
-                ProductDao(dbManager).extractProduct(receiptText),
-                CountryDao(dbManager).extractCountry(receiptText),
+                product,
+                country,
                 receiptText,
                 isOrganic(receiptText),
                 isPackaged(receiptText),

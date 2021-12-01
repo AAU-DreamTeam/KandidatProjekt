@@ -15,9 +15,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.androidapp.R
 import com.example.androidapp.data.models.Purchase
 import com.example.androidapp.data.models.StoreItem
+import com.example.androidapp.viewmodels.EmissionViewModel
 import kotlinx.android.synthetic.main.emission_list_item.view.*
 
-class EmissionListAdapter(val context: Context, var purchases: List<Purchase>, val getAlternatives: (position: Int) -> List<StoreItem>):  RecyclerView.Adapter<EmissionListAdapter.ViewHolder>(){
+class EmissionListAdapter(val context: Context, var purchases: List<Purchase>, val viewModel: EmissionViewModel):  RecyclerView.Adapter<EmissionListAdapter.ViewHolder>(){
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
                 LayoutInflater.from(context).inflate(
@@ -40,7 +41,7 @@ class EmissionListAdapter(val context: Context, var purchases: List<Purchase>, v
                 holder.showAlternatives()
 
                 if (!holder.alternativesGot) {
-                    holder.setUpAlternatives(context, purchases[position], getAlternatives(position))
+                    holder.setUpAlternatives(context, purchases[position], viewModel.loadAlternatives(context, holder.adapterPosition))
                 }
             }
         }

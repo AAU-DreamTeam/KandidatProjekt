@@ -34,8 +34,8 @@ class ScannerAdapter(var purchases: List<Purchase>,
 
         setUpTitle(holder, purchase)
         setUpToggleButton(holder, purchase)
-        setUpProductDropdown(holder)
-        setUpCountryDropdown(holder)
+        setUpProductDropdown(holder, purchase)
+        setUpCountryDropdown(holder, purchase)
         setUpAmountField(holder, purchase)
         setUpWeightField(holder, purchase)
 
@@ -74,7 +74,9 @@ class ScannerAdapter(var purchases: List<Purchase>,
         }
     }
 
-    private fun setUpProductDropdown(holder: ViewHolder) {
+    private fun setUpProductDropdown(holder: ViewHolder, purchase: Purchase) {
+        holder.product.setText(purchase.storeItem.product.name, false)
+
         if (holder.product.text.isEmpty()) {
             holder.product.error = "Vælg produkt"
         }
@@ -89,7 +91,9 @@ class ScannerAdapter(var purchases: List<Purchase>,
         }
     }
 
-    private fun setUpCountryDropdown(holder: ViewHolder) {
+    private fun setUpCountryDropdown(holder: ViewHolder, purchase: Purchase) {
+        holder.country.setText(purchase.storeItem.country.name, false)
+
         if (holder.country.text.isEmpty()) {
             holder.country.error = "Vælg land"
         }
@@ -131,13 +135,12 @@ class ScannerAdapter(var purchases: List<Purchase>,
             if (holder.weight.text!!.isEmpty()) {
                 holder.weight.error = "Indtast vægt"
             } else {
-                viewModel.onWeightChanged(holder.adapterPosition, it.toString().toDouble())
+                viewModel.onWeightChanged(holder.adapterPosition, it.toString().toDouble()/1000)
             }
         }
     }
 
     inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
-        val card: MaterialCardView = itemView.cardView
         val toggleButton: MaterialButtonToggleGroup = itemView.findViewById(R.id.toggleButton)
         val deleteButton: Button = itemView.findViewById(R.id.btn_delete)
         val country: AutoCompleteTextView = itemView.findViewById(R.id.countryOption)

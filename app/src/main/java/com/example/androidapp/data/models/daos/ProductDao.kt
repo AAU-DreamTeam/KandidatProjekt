@@ -28,7 +28,7 @@ class ProductDao(private val dbManager: DBManager) {
                         "$COLUMN_RETAIL, " +            // 12
                         "$COLUMN_GHCULTIVATED " +      // 13
                 "FROM $TABLE " +
-                "WHERE '$receiptText' LIKE '%'||$COLUMN_NAME||'%';"
+                "WHERE '$receiptText' LIKE '%'||REPLACE(REPLACE(REPLACE(LOWER($COLUMN_NAME), 'å', 'a'), 'æ', 'e'), 'ø', 'o')||'%';"
 
         dbManager.select(query) {
             result = produceProduct(it)

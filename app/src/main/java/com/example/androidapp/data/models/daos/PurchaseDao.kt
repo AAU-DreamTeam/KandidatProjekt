@@ -88,31 +88,46 @@ class PurchaseDao(context: Context) {
     fun generatePurchases(text: Text): MutableList<Purchase>{
         val purchases = mutableListOf<Purchase>()
 
-        for (block in text.textBlocks) {
-            var i = 0
-            val limit = block.lines.size
+        val iterator = text.textBlocks.iterator()
+        var endReached = false
 
-            while (i < limit) {
-                val current = block.lines[i].text.toLowerCase(Locale.getDefault())
-                val next =
-                    if (i + 1 < limit)
-                        block.lines[i + 1].text.toLowerCase(Locale.getDefault())
-                    else ""
-
-                if (endReached(current)) {
-                    return purchases
-                }
-
-                if (isValid(current)) {
-                    val quantity = extractQuantity(next)
-
-                    purchases.add(generatePurchase(current, quantity.toInt()))
-                }
-                i++
-            }
+        while (!endReached && iterator.hasNext()) {
+            endReached = generatePurchasesFromBlockLines(iterator.next().lines, purchases)
         }
 
         return purchases
+    }
+
+    private fun generatePurchasesFromBlockLines(lines: List<Text.Line>, purchases: MutableList<Purchase>): Boolean {
+        var i = 0
+        val limit = lines.size
+
+        while (i < limit) {
+            val (current, next) = getCurrentAndNext(lines, i, limit)
+
+            if (endReached(current)) {
+                return true
+            }
+
+            if (isValid(current)) {
+                val quantity = extractQuantity(next)
+
+                purchases.add(generatePurchase(current, quantity.toInt()))
+            }
+            i++
+        }
+
+        return false
+    }
+
+    private fun getCurrentAndNext(lines: List<Text.Line>, i: Int, limit: Int): Pair<String, String> {
+        val current = lines[i].text.toLowerCase(Locale.getDefault())
+        val next =
+                if (i + 1 < limit)
+                    lines[i + 1].text.toLowerCase(Locale.getDefault())
+                else ""
+
+        return Pair(current, next)
     }
 
     private fun endReached(receiptText: String): Boolean {

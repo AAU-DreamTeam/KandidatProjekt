@@ -23,8 +23,8 @@ class EmissionViewModel: ViewModel()  {
     private val _month = MutableLiveData<String>()
     val month: LiveData<String> get() = _month
 
-    private val _purchaseList = MutableLiveData<List<Purchase>>()
-    val purchaseList: LiveData<List<Purchase>> get() = _purchaseList
+    private val _purchases = MutableLiveData<List<Purchase>>()
+    val purchases: LiveData<List<Purchase>> get() = _purchases
 
     private val _totalEmission = MutableLiveData<Double>()
     val totalEmission: LiveData<Double> get() = _totalEmission
@@ -41,16 +41,16 @@ class EmissionViewModel: ViewModel()  {
         _month.value = MONTH.values()[monthTemp].name
         _year.value = currentYear()
 
-        _purchaseList.value = PurchaseRepository(context).loadAllFromYearAndMonth(year.value!!, String.format("%02d", monthTemp + 1))
+        _purchases.value = PurchaseRepository(context).loadAllFromYearAndMonth(year.value!!, String.format("%02d", monthTemp + 1))
 
         calcTotalEmission()
-        calcTotalEmissionAlt(PurchaseRepository(context).loadAlternativeEmissions(_purchaseList.value!!))
+        calcTotalEmissionAlt(PurchaseRepository(context).loadAlternativeEmissions(_purchases.value!!))
 
         _emissionReduction.value = ((totalEmission.value!! - totalEmissionAlt.value!!)/totalEmission.value!!) * 100
     }
 
     fun loadAlternatives(context: Context, purchaseId: Int): List<StoreItem> {
-        return StoreItemRepository(context).loadAlternatives(_purchaseList.value!![purchaseId].storeItem)
+        return StoreItemRepository(context).loadAlternatives(_purchases.value!![purchaseId].storeItem)
     }
 
     fun loadPrev(context: Context){
@@ -78,7 +78,7 @@ class EmissionViewModel: ViewModel()  {
     private fun calcTotalEmission(){
         var emissionSum  = 0.0
 
-        purchaseList.value!!.forEach{
+        purchases.value!!.forEach{
             emissionSum += it.emission
         }
 
