@@ -35,18 +35,23 @@ class EmissionViewModel: ViewModel()  {
     private val _emissionReduction = MutableLiveData<Double>()
     val emissionReduction: LiveData<Double> get() = _emissionReduction
 
+    private val _data = MutableLiveData<List<StoreItem>>(listOf())
+    val data: LiveData<List<StoreItem>> get() = _data
+
     fun loadData(context: Context){
         val monthTemp = calendar.get(Calendar.MONTH)
 
         _month.value = MONTH.values()[monthTemp].name
-        _year.value = currentYear()
+        _year.value = calendar.get(Calendar.YEAR).toString()
 
         _purchases.value = PurchaseRepository(context).loadAllFromYearAndMonth(year.value!!, String.format("%02d", monthTemp + 1))
 
         calcTotalEmission()
-        calcTotalEmissionAlt(PurchaseRepository(context).loadAlternativeEmissions(_purchases.value!!))
+        _totalEmissionAlt.value = PurchaseRepository(context).loadAlternativeEmission(_purchases.value!!)
 
         _emissionReduction.value = ((totalEmission.value!! - totalEmissionAlt.value!!)/totalEmission.value!!) * 100
+
+        _data.value = StoreItemRepository(context).loadAll()
     }
 
     fun loadAlternatives(context: Context, purchaseId: Int): List<StoreItem> {
@@ -65,16 +70,6 @@ class EmissionViewModel: ViewModel()  {
         loadData(context)
     }
 
-    private fun calcTotalEmissionAlt(emissions: List<Double>){
-        var emissionSum  = 0.0
-
-        emissions.forEach{
-            emissionSum += it
-        }
-
-        _totalEmissionAlt.value = emissionSum
-    }
-
     private fun calcTotalEmission(){
         var emissionSum  = 0.0
 
@@ -85,17 +80,4 @@ class EmissionViewModel: ViewModel()  {
         _totalEmission.value = emissionSum
     }
 
-    private fun currentMonth() : Int{
-        val dateFormat: DateFormat = SimpleDateFormat("MM")
-        val date = Date()
-
-        return dateFormat.format(date).toInt() - 1
-    }
-
-    private fun currentYear() : String {
-        val dateFormat: DateFormat = SimpleDateFormat("yyyy")
-        val date = Date()
-
-        return dateFormat.format(date)
-    }
 }

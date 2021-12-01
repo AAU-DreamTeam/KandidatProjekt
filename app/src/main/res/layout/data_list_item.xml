@@ -35,7 +35,8 @@
                 android:gravity="center_horizontal"
                 android:text="TextView"
                 android:textColor="@color/black"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/emission"
@@ -45,7 +46,8 @@
                 android:gravity="center_horizontal"
                 android:text="TextView"
                 android:textColor="@color/black"
-                android:textSize="18sp" />
+                android:textSize="24sp"
+                android:textStyle="bold" />
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 </LinearLayout>

@@ -7,7 +7,6 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.activity.viewModels
 import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -17,8 +16,6 @@ import com.example.androidapp.views.adapters.ScannerAdapter
 import kotlinx.android.synthetic.main.activity_scanner.*
 import java.io.File
 import java.io.IOException
-import java.lang.Exception
-
 
 class ScannerActivity : AppCompatActivity() {
     private val viewModel = ScannerViewModel()
@@ -37,8 +34,11 @@ class ScannerActivity : AppCompatActivity() {
         }
 
         btn_save.setOnClickListener {
-            //viewModel.onSave(this)
-            finish()
+            if (viewModel.onSave(this)) {
+                finish()
+            } else {
+                Toast.makeText(this, "Kan ikke gemme før alle felter er udfyldt", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 

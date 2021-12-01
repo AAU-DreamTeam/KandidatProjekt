@@ -3,6 +3,8 @@ package com.example.androidapp.viewmodels
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.media.ExifInterface
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -16,13 +18,11 @@ import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.Text
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
+import java.io.File
 import java.util.*
 
 class ScannerViewModel: ViewModel() {
     var imagePath: String = ""
-
-    private val _saved = MutableLiveData(false)
-    val saved: LiveData<Boolean> get() = _saved
 
     private val _products = MutableLiveData<List<Product>>(listOf())
     val products: LiveData<List<Product>> get() = _products
@@ -42,7 +42,7 @@ class ScannerViewModel: ViewModel() {
     }
 
     fun runTextRecognition(context: Context){
-        val image = InputImage.fromBitmap(BitmapFactory.decodeFile(imagePath), 0)
+        val image = InputImage.fromBitmap(BitmapFactory.decodeFile(imagePath), getCameraPhotoOrientation(imagePath))
 
         val recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
 
@@ -53,6 +53,27 @@ class ScannerViewModel: ViewModel() {
                 .addOnFailureListener { e -> // Task failed with an exception
                     e.printStackTrace()
                 }
+    }
+
+    private fun getCameraPhotoOrientation(imagePath: String?): Int {
+        var rotate = 0
+        try {
+            val imageFile = File(imagePath)
+            val exif = ExifInterface(imageFile.absolutePath)
+            val orientation: Int = exif.getAttributeInt(
+                    ExifInterface.TAG_ORIENTATION,
+                    ExifInterface.ORIENTATION_NORMAL)
+            when (orientation) {
+                ExifInterface.ORIENTATION_ROTATE_270 -> rotate = 270
+                ExifInterface.ORIENTATION_ROTATE_180 -> rotate = 180
+                ExifInterface.ORIENTATION_ROTATE_90 -> rotate = 90
+            }
+            Log.i("RotateImage", "Exif orientation: $orientation")
+            Log.i("RotateImage", "Rotate value: $rotate")
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return rotate
     }
 
     private fun textToPurchases(context: Context, text: Text) {
@@ -91,7 +112,7 @@ class ScannerViewModel: ViewModel() {
         _purchases.value!![index].storeItem.weight = value
     }
 
-    fun onSave(context: Context){
-        PurchaseRepository(context).savePurchases(_purchases.value!!)
+    fun onSave(context: Context): Boolean{
+        return PurchaseRepository(context).savePurchases(_purchases.value!!)
     }
 }

@@ -20,10 +20,7 @@ class CountryDao(private val dbManager: DBManager) {
     fun extractCountry(receiptText: String): Country{
         var result = Country()
         val query =
-                "SELECT $COLUMN_ID, " +                   // 14
-                    "$COLUMN_NAME, " +                 // 15
-                    "$COLUMN_TRANSPORT_EMISSION, " +   // 16
-                    "$COLUMN_GHPENALTY " +            // 17
+                "SELECT * " +
                 "FROM $TABLE " +
                 "WHERE '$receiptText' LIKE '%'||$COLUMN_NAME||'%';"
 
@@ -35,27 +32,33 @@ class CountryDao(private val dbManager: DBManager) {
     }
 
     companion object {
-        val TABLE = "country"
-        val COLUMN_COUNT = 4
+        const val TABLE = "country"
+        private const val COLUMN_COUNT = 4
 
-        val COLUMN_ID = "$TABLE.id"
-        val COLUMN_ID_POSITION = 0
+        const val COLUMN_ID = "id"
+        private const val COLUMN_ID_POSITION = 0
 
-        val COLUMN_NAME = "$TABLE.name"
-        val COLUMN_NAME_POSITION = 1
+        const val COLUMN_NAME = "name"
+        private const val COLUMN_NAME_POSITION = 1
 
-        val COLUMN_TRANSPORT_EMISSION = "$TABLE.transportEmission"
-        val COLUMN_TRANSPORT_EMISSION_POSITION = 2
+        const val COLUMN_TRANSPORT_EMISSION = "transportEmission"
+        private const val COLUMN_TRANSPORT_EMISSION_POSITION = 2
 
-        val COLUMN_GHPENALTY = "$TABLE.GHPenalty"
-        val COLUMN_GHPENALTY_POSITION = 3
+        const val COLUMN_GHPENALTY = "GHPenalty"
+        private const val COLUMN_GHPENALTY_POSITION = 3
+
+        const val ALL_COLUMNS =
+                "$TABLE.$COLUMN_ID, " +                   // 14
+                "$TABLE.$COLUMN_NAME, " +                 // 15
+                "$TABLE.$COLUMN_TRANSPORT_EMISSION, " +   // 16
+                "$TABLE.$COLUMN_GHPENALTY"
 
         fun produceCountry(cursor: Cursor, startIndex: Int = 0): Country {
             return Country(
-                    cursor.getInt(startIndex),
-                    cursor.getString(startIndex + 1),
-                    cursor.getDouble(startIndex + 2),
-                    cursor.getInt(startIndex + 3) != 0
+                    cursor.getInt(startIndex + COLUMN_ID_POSITION),
+                    cursor.getString(startIndex + COLUMN_NAME_POSITION),
+                    cursor.getDouble(startIndex + COLUMN_TRANSPORT_EMISSION_POSITION),
+                    cursor.getInt(startIndex + COLUMN_GHPENALTY_POSITION) != 0
             )
         }
     }

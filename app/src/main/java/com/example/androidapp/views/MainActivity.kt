@@ -1,9 +1,13 @@
 package com.example.androidapp.views
 
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.ViewPager2
 import com.example.androidapp.R
+import com.example.androidapp.viewmodels.EmissionViewModel
 import com.example.androidapp.views.adapters.MainAdapter
 import com.google.android.material.tabs.TabLayout
 
@@ -22,6 +26,7 @@ class MainActivity : AppCompatActivity() {
 
         setUpTabs()
         setUpViewPager()
+
     }
 
     private fun setUpTabs(){

@@ -10,6 +10,7 @@ import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.example.androidapp.R
 import com.example.androidapp.viewmodels.EmissionViewModel
@@ -18,7 +19,7 @@ import com.google.android.material.button.MaterialButton
 import com.google.android.material.button.MaterialButtonToggleGroup
 
 class EmissionFragment : Fragment() {
-    private val viewModel: EmissionViewModel by viewModels()
+    private val viewModel: EmissionViewModel by activityViewModels()
     private lateinit var toggleButton : MaterialButtonToggleGroup
     private lateinit var overviewFragment: OverviewFragment
     private lateinit var listFragment: ListFragment
@@ -74,10 +75,8 @@ class EmissionFragment : Fragment() {
     }
 
     private fun setUpScanButton() {
-        val resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == AppCompatActivity.RESULT_OK) {
-                viewModel.loadData(requireContext())
-            }
+        val resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            viewModel.loadData(requireContext())
         }
 
         scanButton.setOnClickListener{

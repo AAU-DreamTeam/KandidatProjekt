@@ -13,32 +13,43 @@ import com.example.androidapp.data.models.StoreItem
 class StoreItemDao(private val dbManager: DBManager) {
     constructor(context: Context): this(DBManager(context))
 
+    fun loadAll(): List<StoreItem> {
+        val results = mutableListOf<StoreItem>()
+        val query =
+                "SELECT $ALL_COLUMNS, " +           // 5
+                        "${ProductDao.ALL_COLUMNS}, " +            // 12
+                        "${CountryDao.ALL_COLUMNS} " +            // 17
+                "FROM $TABLE " +
+                "INNER JOIN ${ProductDao.TABLE} ON $COLUMN_PRODUCT_ID = ${ProductDao.TABLE}.${ProductDao.COLUMN_ID} " +
+                "INNER JOIN ${CountryDao.TABLE} ON $COLUMN_COUNTRY_ID = ${CountryDao.TABLE}.${CountryDao.COLUMN_ID};"
+
+        dbManager.select(query){
+            var index = 0
+
+            do {
+                val storeItem = produceStoreItem(it)
+
+                //if (index == 0 || results[index - 1] != storeItem) {
+                    results.add(storeItem)
+                    index++
+               // }
+            } while (it.moveToNext())
+        }
+
+        return results
+    }
+
     fun loadAlternatives(storeItem: StoreItem) : List<StoreItem> {
         val query =
-                "SELECT ${COLUMN_ID}, " +               // 0
-                        "${COLUMN_RECEIPT_TEXT}, " +     // 1
-                        "${COLUMN_ORGANIC}, " +         // 2
-                        "${COLUMN_PACKAGED}, " +        // 3
-                        "${COLUMN_WEIGHT}, " +          // 4
-                        "${COLUMN_STORE}, " +           // 5
-                        "${ProductDao.COLUMN_ID}, " +                // 6
-                        "${ProductDao.COLUMN_NAME}, " +              // 7
-                        "${ProductDao.COLUMN_CULTIVATION}, " +       // 8
-                        "${ProductDao.COLUMN_ILUC}, " +              // 9
-                        "${ProductDao.COLUMN_PROCESSING}, " +        // 10
-                        "${ProductDao.COLUMN_PACKAGING}, " +         // 11
-                        "${ProductDao.COLUMN_RETAIL}, " +            // 12
-                        "${ProductDao.COLUMN_GHCULTIVATED}, " +      // 13
-                        "${CountryDao.COLUMN_ID}, " +                   // 14
-                        "${CountryDao.COLUMN_NAME}, " +                 // 15
-                        "${CountryDao.COLUMN_TRANSPORT_EMISSION}, " +   // 16
-                        "${CountryDao.COLUMN_GHPENALTY}, " +            // 17
+                "SELECT $ALL_COLUMNS, " +           // 5
+                        "${ProductDao.ALL_COLUMNS}, " +            // 12
+                        "${CountryDao.ALL_COLUMNS}, " +            // 17
                         "MIN(${EmissionCalculator.sqlEmissionFormula()}) " +
-                        "FROM $TABLE " +
-                        "INNER JOIN ${ProductDao.TABLE} ON $COLUMN_PRODUCT_ID = ${ProductDao.COLUMN_ID} " +
-                        "INNER JOIN ${CountryDao.TABLE} ON $COLUMN_COUNTRY_ID = ${CountryDao.COLUMN_ID} " +
-                        "WHERE $COLUMN_PRODUCT_ID = ${storeItem.product.id} " +
-                        "GROUP BY $COLUMN_ORGANIC, $COLUMN_PACKAGED;"
+                "FROM $TABLE " +
+                "INNER JOIN ${ProductDao.TABLE} ON $COLUMN_PRODUCT_ID = ${ProductDao.TABLE}.${ProductDao.COLUMN_ID} " +
+                "INNER JOIN ${CountryDao.TABLE} ON $COLUMN_COUNTRY_ID = ${CountryDao.TABLE}.${CountryDao.COLUMN_ID} " +
+                "WHERE $COLUMN_PRODUCT_ID = ${storeItem.product.id} " +
+                "GROUP BY $COLUMN_ORGANIC, $COLUMN_PACKAGED;"
 
         return dbManager.selectMultiple(query) {
             produceStoreItem(it)
@@ -49,27 +60,12 @@ class StoreItemDao(private val dbManager: DBManager) {
         var result: StoreItem? = null
         val formattedReceiptText = formatReceiptText(receiptText)
         val query =
-                "SELECT ${COLUMN_ID}, " +               // 0
-                       "${COLUMN_RECEIPT_TEXT}, " +     // 1
-                       "${COLUMN_ORGANIC}, " +         // 2
-                       "${COLUMN_PACKAGED}, " +        // 3
-                       "${COLUMN_WEIGHT}, " +          // 4
-                       "${COLUMN_STORE}, " +           // 5
-                       "${ProductDao.COLUMN_ID}, " +                // 6
-                       "${ProductDao.COLUMN_NAME}, " +              // 7
-                       "${ProductDao.COLUMN_CULTIVATION}, " +       // 8
-                       "${ProductDao.COLUMN_ILUC}, " +              // 9
-                       "${ProductDao.COLUMN_PROCESSING}, " +        // 10
-                       "${ProductDao.COLUMN_PACKAGING}, " +         // 11
-                       "${ProductDao.COLUMN_RETAIL}, " +            // 12
-                       "${ProductDao.COLUMN_GHCULTIVATED}, " +      // 13
-                       "${CountryDao.COLUMN_ID}, " +                   // 14
-                       "${CountryDao.COLUMN_NAME}, " +                 // 15
-                       "${CountryDao.COLUMN_TRANSPORT_EMISSION}, " +   // 16
-                       "${CountryDao.COLUMN_GHPENALTY} " +            // 17
+                "SELECT $ALL_COLUMNS, " +           // 5
+                       "${ProductDao.ALL_COLUMNS}, " +            // 12
+                       "${CountryDao.ALL_COLUMNS} " +            // 17
                 "FROM $TABLE " +
-                "INNER JOIN ${ProductDao.TABLE} ON $COLUMN_PRODUCT_ID = ${ProductDao.COLUMN_ID} " +
-                "INNER JOIN ${CountryDao.TABLE} ON $COLUMN_COUNTRY_ID = ${CountryDao.COLUMN_ID} " +
+                "INNER JOIN ${ProductDao.TABLE} ON $COLUMN_PRODUCT_ID = ${ProductDao.TABLE}.${ProductDao.COLUMN_ID} " +
+                "INNER JOIN ${CountryDao.TABLE} ON $COLUMN_COUNTRY_ID = ${CountryDao.TABLE}.${CountryDao.COLUMN_ID} " +
                 "WHERE $COLUMN_RECEIPT_TEXT = '$formattedReceiptText';"
 
         dbManager.select(query) {
@@ -79,6 +75,8 @@ class StoreItemDao(private val dbManager: DBManager) {
         if (result == null) {
             result = extractStoreItem(formattedReceiptText)
         }
+
+        result!!.receiptText = receiptText
 
         return result as StoreItem
     }
@@ -115,15 +113,15 @@ class StoreItemDao(private val dbManager: DBManager) {
     private fun loadId(storeItem: StoreItem): Long{
         var id: Long = dbManager.INVALID_ID
         val query =
-                "SELECT $COLUMN_ID " +
+                "SELECT $TABLE.$COLUMN_ID " +
                 "FROM $TABLE " +
-                "WHERE $COLUMN_PRODUCT_ID = ${storeItem.product.id} AND + "
-                      "$COLUMN_COUNTRY_ID = ${storeItem.country.id} AND + "
-                      "$COLUMN_RECEIPT_TEXT = ${storeItem.receiptText} AND + "
-                      "$COLUMN_ORGANIC = ${storeItem.organic} AND " +         // 2
-                      "$COLUMN_PACKAGED =  ${storeItem.packaged} AND" +        // 3
+                "WHERE $COLUMN_PRODUCT_ID = ${storeItem.product.id} AND " +
+                      "$COLUMN_COUNTRY_ID = ${storeItem.country.id} AND " +
+                      "$COLUMN_RECEIPT_TEXT = '${storeItem.receiptText}' AND " +
+                      "$COLUMN_ORGANIC = ${dbManager.booleanToInt(storeItem.organic)} AND " +         // 2
+                      "$COLUMN_PACKAGED =  ${dbManager.booleanToInt(storeItem.packaged)} AND " +        // 3
                       "$COLUMN_WEIGHT = ${storeItem.weight} AND " +          // 4
-                      "$COLUMN_STORE = ${storeItem.store};"           // 5
+                      "$COLUMN_STORE = '${storeItem.store}';"           // 5
 
         dbManager.select(query){
             id = it.getLong(0)
@@ -133,9 +131,7 @@ class StoreItemDao(private val dbManager: DBManager) {
     }
 
     fun saveOrLoadStoreItem(storeItem: StoreItem): Long {
-        val id = dbManager.INVALID_ID
-
-        loadId(storeItem)
+        val id = loadId(storeItem)
 
         return if (id != dbManager.INVALID_ID) {
             id
@@ -151,6 +147,7 @@ class StoreItemDao(private val dbManager: DBManager) {
         contentValues.put(COLUMN_COUNTRY_ID, storeItem.country.id)
         contentValues.put(COLUMN_RECEIPT_TEXT, formatReceiptText(storeItem.receiptText))
         contentValues.put(COLUMN_ORGANIC, storeItem.organic)
+        contentValues.put(COLUMN_PACKAGED, storeItem.packaged)
         contentValues.put(COLUMN_WEIGHT, storeItem.weight)
         contentValues.put(COLUMN_STORE, storeItem.store)
 
@@ -158,28 +155,36 @@ class StoreItemDao(private val dbManager: DBManager) {
     }
 
     companion object{
-        val TABLE = "storeItem"
-        val COLUMN_COUNT = 6
-        val COLUMN_COUNTRY_ID = "$TABLE.countryID"
-        val COLUMN_PRODUCT_ID = "$TABLE.productID"
+        const val TABLE = "storeItem"
+        const val COLUMN_COUNT = 6
+        const val COLUMN_COUNTRY_ID = "countryID"
+        const val COLUMN_PRODUCT_ID = "productID"
 
-        val COLUMN_ID = "$TABLE.id"
-        val COLUMN_ID_POSITION = 0
+        const val COLUMN_ID = "id"
+        const val COLUMN_ID_POSITION = 0
 
-        val COLUMN_RECEIPT_TEXT = "$TABLE.receiptText"
-        val COLUMN_RECEIPT_TEXT_POSITION = 1
+        const val COLUMN_RECEIPT_TEXT = "receiptText"
+        const val COLUMN_RECEIPT_TEXT_POSITION = 1
 
-        val COLUMN_ORGANIC = "$TABLE.organic"
-        val COLUMN_ORGANIC_POSITION = 2
+        const val COLUMN_ORGANIC = "organic"
+        const val COLUMN_ORGANIC_POSITION = 2
 
-        val COLUMN_PACKAGED = "$TABLE.packaged"
-        val COLUMN_PACKAGED_POSITION = 3
+        const val COLUMN_PACKAGED = "packaged"
+        const val COLUMN_PACKAGED_POSITION = 3
 
-        val COLUMN_WEIGHT = "$TABLE.weight"
-        val COLUMN_WEIGHT_POSITION = 4
+        const val COLUMN_WEIGHT = "weight"
+        const val COLUMN_WEIGHT_POSITION = 4
 
-        val COLUMN_STORE = "$TABLE.store"
-        val COLUMN_STORE_POSITION = 5
+        const val COLUMN_STORE = "store"
+        const val COLUMN_STORE_POSITION = 5
+
+        const val ALL_COLUMNS =
+                "$TABLE.$COLUMN_ID, " +
+                "$TABLE.$COLUMN_RECEIPT_TEXT, " +
+                "$TABLE.$COLUMN_ORGANIC, " +
+                "$TABLE.$COLUMN_PACKAGED, " +
+                "$TABLE.$COLUMN_WEIGHT, " +
+                "$TABLE.$COLUMN_STORE"
 
         fun produceStoreItem(cursor: Cursor, startIndex: Int = 0): StoreItem {
             val product = ProductDao.produceProduct(cursor, startIndex + COLUMN_COUNT)

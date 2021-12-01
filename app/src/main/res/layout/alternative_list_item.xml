@@ -14,8 +14,9 @@
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:gravity="left"
-            android:text="2 kg, Tomat, Øko, Danmark"
+            android:textColor="@color/black"
             android:textSize="14sp"
+            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -35,8 +36,9 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
                 android:gravity="left"
-                android:text="2 kg co2"
-                android:textSize="14sp" />
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/percentage"
@@ -44,8 +46,9 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
                 android:gravity="left"
-                android:text="+ 20 %"
-                android:textSize="14sp" />
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                android:textStyle="bold" />
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>

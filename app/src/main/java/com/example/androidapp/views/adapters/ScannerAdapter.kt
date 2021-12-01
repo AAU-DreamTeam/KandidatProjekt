@@ -46,8 +46,6 @@ class ScannerAdapter(var purchases: List<Purchase>,
     }
 
     private fun setUpTitle(holder: ViewHolder, purchase: Purchase){
-        holder.title.setText(purchase.storeItem.receiptText.toUpperCase())
-
         holder.title.doAfterTextChanged {
             if (holder.title.text!!.isEmpty()) {
                 holder.title.error = "Indtast tekst"
@@ -55,6 +53,8 @@ class ScannerAdapter(var purchases: List<Purchase>,
                 viewModel.onTitleChanged(holder.adapterPosition, it.toString())
             }
         }
+
+        holder.title.setText(purchase.storeItem.receiptText.toUpperCase())
     }
 
     private fun setUpToggleButton(holder: ViewHolder, purchase: Purchase){
@@ -75,16 +75,18 @@ class ScannerAdapter(var purchases: List<Purchase>,
     }
 
     private fun setUpProductDropdown(holder: ViewHolder, purchase: Purchase) {
-        holder.product.setText(purchase.storeItem.product.name, false)
-
-        if (holder.product.text.isEmpty()) {
-            holder.product.error = "Vælg produkt"
+        holder.product.doAfterTextChanged {
+            if (holder.product.text.isEmpty()) {
+                holder.product.error = "Vælg produkt"
+            } else {
+                holder.product.error = null
+            }
         }
+
+        holder.product.setText(purchase.storeItem.product.name, false)
 
         holder.product.setOnItemClickListener { parent, _, pos, _ ->
             val product = parent.getItemAtPosition(pos) as Product
-
-            holder.product.error = null
 
             holder.product.setText(product.name, false)
             viewModel.onProductChanged(holder.adapterPosition, product)
@@ -92,16 +94,18 @@ class ScannerAdapter(var purchases: List<Purchase>,
     }
 
     private fun setUpCountryDropdown(holder: ViewHolder, purchase: Purchase) {
-        holder.country.setText(purchase.storeItem.country.name, false)
-
-        if (holder.country.text.isEmpty()) {
-            holder.country.error = "Vælg land"
+        holder.country.doAfterTextChanged {
+            if (holder.country.text.isEmpty()){
+                holder.country.error = "Vælg land"
+            } else {
+                holder.country.error = null
+            }
         }
+
+        holder.country.setText(purchase.storeItem.country.name, false)
 
         holder.country.setOnItemClickListener { parent, view, pos, id ->
             val country = parent.getItemAtPosition(pos) as Country
-
-            holder.country.error = null
 
             holder.country.setText(country.name, false)
             viewModel.onCountryChanged(holder.adapterPosition, country)
@@ -109,35 +113,29 @@ class ScannerAdapter(var purchases: List<Purchase>,
     }
 
     private fun setUpAmountField(holder: ViewHolder, purchase: Purchase) {
-        if (!purchase.hasValidQuantity()) {
-            holder.amount.error = "Indtast antal"
-        } else {
-            holder.amount.setText(purchase.quantity.toString())
-        }
-
         holder.amount.doAfterTextChanged {
             if (holder.amount.text!!.isEmpty()) {
                 holder.amount.error = "Indtast antal"
             } else {
+                holder.amount.error = null
                 viewModel.onQuantityChanged(holder.adapterPosition, it.toString().toInt())
             }
         }
+
+        holder.amount.setText(purchase.quantityToString())
     }
 
     private fun setUpWeightField(holder: ViewHolder, purchase: Purchase){
-        if (purchase.storeItem.hasValidWeight()) {
-            holder.weight.setText(purchase.storeItem.weight.toString())
-        } else {
-            holder.weight.error = "Indtast vægt"
-        }
-
         holder.weight.doAfterTextChanged {
             if (holder.weight.text!!.isEmpty()) {
                 holder.weight.error = "Indtast vægt"
             } else {
+                holder.weight.error = null
                 viewModel.onWeightChanged(holder.adapterPosition, it.toString().toDouble()/1000)
             }
         }
+
+        holder.weight.setText(purchase.storeItem.weightToString(true))
     }
 
     inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){

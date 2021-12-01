@@ -22,14 +22,17 @@ class StoreItem (val id: Int,
                 store: String = "Føtex"): this(0, product, country, _receiptText, organic, packaged, weight, store)
 
     var receiptText = _receiptText.toLowerCase(Locale.getDefault())
-    val emissionPerKg = EmissionCalculator.calcEmission(this)
-    val emissionPerItem = weight * emissionPerKg
+    val emissionPerKg: Double get() = EmissionCalculator.calcEmission(this)
 
     fun hasValidWeight(): Boolean {
         return weight > 0.0
     }
     fun isValid(): Boolean{
         return receiptText.isNotEmpty() && hasValidWeight() && product.isValid() && country.validate()
+    }
+
+    fun weightToString(inGrams: Boolean = false): String {
+        return if (hasValidWeight()) (if (inGrams) (weight * 1000).toInt().toString() else weight.toString()) else ""
     }
 
     override fun toString(): String {

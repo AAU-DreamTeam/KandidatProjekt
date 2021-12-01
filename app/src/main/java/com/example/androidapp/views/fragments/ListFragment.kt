@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.androidapp.R
@@ -13,7 +14,7 @@ import com.example.androidapp.views.adapters.EmissionListAdapter
 import kotlinx.android.synthetic.main.fragment_list.*
 
 class ListFragment : Fragment() {
-    private val viewModel: EmissionViewModel by viewModels({requireParentFragment()})
+    private val viewModel: EmissionViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

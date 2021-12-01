@@ -9,13 +9,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.text.HtmlCompat
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.example.androidapp.R
 import com.example.androidapp.viewmodels.EmissionViewModel
 import kotlinx.android.synthetic.main.emission_list_item.*
 
 class OverviewFragment : Fragment() {
-    private val viewModel: EmissionViewModel by viewModels({requireParentFragment()})
+    private val viewModel: EmissionViewModel by activityViewModels()
     private lateinit var totalEmissionTV: TextView
     private lateinit var totalEmissionAltTV: TextView
     private lateinit var emissionReductionTV: TextView

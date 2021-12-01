@@ -16,7 +16,7 @@ class DBManager(context: Context?) : SQLiteOpenHelper(context, "FoodEmission.db"
         insertProductData(db)
         insertCountryData(db)
         insertStoreItemData(db)
-        insertPurchaseData(db)
+        //insertPurchaseData(db)
     }
 
     private fun createTables(db: SQLiteDatabase) {
@@ -88,15 +88,18 @@ class DBManager(context: Context?) : SQLiteOpenHelper(context, "FoodEmission.db"
 
     private fun insertStoreItemData(db: SQLiteDatabase){
         insertStoreItem(db, 1, 3,"TOMATER ØKO LØSE SPANIEN", true, false, 0.045)
-        insertStoreItem(db, 1, 3,"TOMATER ØKO LØSE SPANIEN", true, false, 0.065)
-        insertStoreItem(db, 1, 5,"TOMATER ØKO LØSE DANMARK", true, false, 0.045)
-        insertStoreItem(db, 1, 5,"TOMATER ØKO LØSE DK", true, false, 0.045)
-        insertStoreItem(db, 1, 5,"TOMATER DANMARK", false, true, 0.065)
-        insertStoreItem(db, 6, 1,"ÆBLER ØKO LØSE ITALIEN", true, false, 0.045)
+        insertStoreItem(db, 1, 3,"TOMATER ØKO SPANIEN", true, true, 0.5)
+        insertStoreItem(db, 1, 3,"TOMATER SPANIEN", false, true, 0.5)
+        insertStoreItem(db, 1, 3,"TOMATER LØSE SPANIEN", false, false, 0.045)
+        /*insertStoreItem(db, 1, 5,"TOMATER ØKO LØSE DANMARK", true, false, 0.045)
+        insertStoreItem(db, 1, 5,"TOMATER ØKO DANMARK", true, true, 0.5)
+        insertStoreItem(db, 1, 5,"TOMATER DANMARK", false, true, 0.5)
+        insertStoreItem(db, 1, 5,"TOMATER LØSE DANMARK", false, false, 0.045)*/
+        /*insertStoreItem(db, 6, 1,"ÆBLER ØKO LØSE ITALIEN", true, false, 0.045)
         insertStoreItem(db, 6, 1,"ÆBLER ØKO LØSE ITALIEN", true, false, 0.065)
         insertStoreItem(db, 6, 5,"ÆBLER ØKO LØSE DANMARK", true, false, 0.045)
         insertStoreItem(db, 6, 5,"ÆBLER ØKO LØSE DK", true, false, 0.045)
-        insertStoreItem(db, 6, 5,"ÆBLER DANMARK", false, true, 0.065)
+        insertStoreItem(db, 6, 5,"ÆBLER DANMARK", false, true, 0.065)*/
     }
 
     private fun insertStoreItem(db: SQLiteDatabase, productID: Int, countryID: Int, receiptText: String, organic: Boolean, packaged: Boolean, weight: Double, store: String = "Føtex"): Long {
@@ -170,22 +173,8 @@ class DBManager(context: Context?) : SQLiteOpenHelper(context, "FoodEmission.db"
         cursor.close()
     }
 
-    fun begin(){
-        val query = "BEGIN TRANSACTION;"
-
-        writableDatabase.execSQL(query)
-    }
-
-    fun commit(){
-        val query = "COMMIT;"
-
-        writableDatabase.execSQL(query)
-    }
-
-    fun rollback(){
-        val query = "ROLLBACK;"
-
-        writableDatabase.execSQL(query)
+    fun booleanToInt(boolean: Boolean): Int {
+        return if (boolean) 1 else 0
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {

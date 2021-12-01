@@ -30,8 +30,9 @@ class DataAdapter(val context: Context, var data: List<StoreItem>): RecyclerView
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val storeItem = data[position]
         val tempEmission = HtmlCompat.fromHtml("%.3f ".format(storeItem.emissionPerKg) + "kg CO<sub><small><small>2</small></small></sub> pr. kg", HtmlCompat.FROM_HTML_MODE_LEGACY)
+        val tempName = "$storeItem, ${(storeItem.weight * 1000).toInt()} g pr. stk."
 
-        holder.name.text = storeItem.toString()
+        holder.name.text = tempName
         holder.emission.text = tempEmission
     }
 

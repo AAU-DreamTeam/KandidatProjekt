@@ -7,21 +7,29 @@ class Purchase(val id: Int,
     constructor(storeItem: StoreItem, timestamp: String, quantity: Int): this(0, storeItem, timestamp, quantity)
 
     var weight = storeItem.weight * quantity
-    val emission = storeItem.emissionPerKg * weight
+    val emission: Double get() =  storeItem.emissionPerKg * weight
 
     fun isValid(): Boolean {
         return quantity > 0 && storeItem.isValid()
     }
 
-    fun hasValidQuantity(): Boolean {
+    private fun hasValidQuantity(): Boolean {
         return quantity > 0
+    }
+
+    fun quantityToString(): String {
+        return if (hasValidQuantity()) quantity.toString() else ""
     }
 
     override fun toString(): String {
         return "${"%.3f".format(weight)} kg, $storeItem"
     }
 
-    fun weightToString(): String {
+    fun weightToStringKg(): String {
         return "${"%.3f".format(weight)} kg"
+    }
+
+    fun weightToStringG(): String {
+        return "${(weight * 1000).toInt()} g"
     }
 }

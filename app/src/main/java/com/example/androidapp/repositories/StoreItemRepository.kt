@@ -10,4 +10,8 @@ class StoreItemRepository(context: Context){
     fun loadAlternatives(storeItem: StoreItem): List<StoreItem> {
         return storeItemDao.loadAlternatives(storeItem)
     }
+
+    fun loadAll(): List<StoreItem>{
+        return storeItemDao.loadAll()
+    }
 }

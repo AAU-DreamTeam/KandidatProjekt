@@ -12,15 +12,15 @@ class PurchaseRepository(context: Context){
         return purchaseDao.loadAllFromYearAndMonth(year, month)
     }
 
-    fun loadAlternativeEmissions(purchases: List<Purchase>): List<Double> {
-        return purchaseDao.loadAlternativeEmissions(purchases)
+    fun loadAlternativeEmission(purchases: List<Purchase>): Double {
+        return purchaseDao.loadAlternativeEmission(purchases)
     }
 
     fun generatePurchases(text: Text): MutableList<Purchase> {
         return purchaseDao.generatePurchases(text)
     }
 
-    fun savePurchases(purchases: List<Purchase>) {
-        purchaseDao.savePurchases(purchases)
+    fun savePurchases(purchases: List<Purchase>): Boolean {
+        return purchaseDao.savePurchases(purchases)
     }
 }
