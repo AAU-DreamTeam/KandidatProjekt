@@ -11,7 +11,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Androidapp">
-        <activity android:name=".views.ScannerActivity"></activity>
+        <activity
+            android:name=".views.ScannerActivity"
+            android:theme="@style/AppTheme" />
 
 
         <meta-data

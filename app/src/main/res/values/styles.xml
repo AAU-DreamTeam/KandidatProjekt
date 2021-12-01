@@ -23,8 +23,8 @@
     </style>
     <style name="Card" parent="">
         <item name="cardBackgroundColor">@color/colorPrimary</item>
-        <item name="contentPaddingBottom">40dp</item>
-        <item name="contentPaddingTop">40dp</item>
+        <item name="contentPaddingBottom">20dp</item>
+        <item name="contentPaddingTop">20dp</item>
         <item name="cardCornerRadius"> 10dp </item>
     </style>
 
