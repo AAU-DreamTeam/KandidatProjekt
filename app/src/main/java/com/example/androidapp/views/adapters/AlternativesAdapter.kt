@@ -31,8 +31,8 @@ class AlternativesAdapter(val context: Context, val purchase: Purchase, var alte
         val storeItem = alternatives[position]
         val emissionAlt = purchase.weight * storeItem.emissionPerKg
         val tempPurchase = "${purchase.weightToStringKg()}, $storeItem"
-        val tempEmission = HtmlCompat.fromHtml("%.3f ".format(emissionAlt) + "kg CO<sub><small><small>2</small></small></sub>", HtmlCompat.FROM_HTML_MODE_LEGACY)
-        val tempPercentage = "${if (emissionAlt > purchase.emission) "+" else ""} ${"%.3f ".format(((emissionAlt - purchase.emission)/purchase.emission)*100)} %"
+        val tempEmission = HtmlCompat.fromHtml("%.3f ".format(emissionAlt).replace('.',',') + "kg CO<sub><small><small>2</small></small></sub>", HtmlCompat.FROM_HTML_MODE_LEGACY)
+        val tempPercentage = "${if (emissionAlt > purchase.emission) "+" else ""}${"%.3f ".format(((emissionAlt - purchase.emission)/purchase.emission)*100).replace('.', ',')} %"
         holder.purchaseAlt.text = tempPurchase
         holder.emissionAlt.text = tempEmission
         holder.percentage.text = tempPercentage

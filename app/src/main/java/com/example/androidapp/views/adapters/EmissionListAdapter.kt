@@ -29,7 +29,7 @@ class EmissionListAdapter(val context: Context, var purchases: List<Purchase>, v
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val emission = HtmlCompat.fromHtml("%.3f ".format(purchases[position].emission) + "kg CO<sub><small><small>2</small></small></sub>", HtmlCompat.FROM_HTML_MODE_LEGACY)
+        val emission = HtmlCompat.fromHtml("%.3f ".format(purchases[position].emission).replace('.', ',') + "kg CO<sub><small><small>2</small></small></sub>", HtmlCompat.FROM_HTML_MODE_LEGACY)
 
         holder.purchase.text = purchases[position].toString()
         holder.emission.text = emission

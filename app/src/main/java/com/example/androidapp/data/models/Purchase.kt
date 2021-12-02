@@ -22,7 +22,7 @@ class Purchase(val id: Int,
     }
 
     override fun toString(): String {
-        return "${"%.3f".format(weight)} kg, $storeItem"
+        return "${"%.3f".format(weight).replace('.', ',')} kg, $storeItem"
     }
 
     fun weightToStringKg(): String {

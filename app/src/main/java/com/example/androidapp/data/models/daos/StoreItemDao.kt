@@ -21,7 +21,8 @@ class StoreItemDao(private val dbManager: DBManager) {
                         "${CountryDao.ALL_COLUMNS} " +            // 17
                 "FROM $TABLE " +
                 "INNER JOIN ${ProductDao.TABLE} ON $COLUMN_PRODUCT_ID = ${ProductDao.TABLE}.${ProductDao.COLUMN_ID} " +
-                "INNER JOIN ${CountryDao.TABLE} ON $COLUMN_COUNTRY_ID = ${CountryDao.TABLE}.${CountryDao.COLUMN_ID};"
+                "INNER JOIN ${CountryDao.TABLE} ON $COLUMN_COUNTRY_ID = ${CountryDao.TABLE}.${CountryDao.COLUMN_ID} " +
+                "ORDER BY ${ProductDao.TABLE}.${ProductDao.COLUMN_NAME}, $TABLE.$COLUMN_ORGANIC, $TABLE.$COLUMN_PACKAGED, ${CountryDao.TABLE}.${CountryDao.COLUMN_NAME};"
 
         dbManager.select(query){
             var index = 0

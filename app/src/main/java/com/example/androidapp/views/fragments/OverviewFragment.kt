@@ -37,19 +37,19 @@ class OverviewFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.totalEmission.observe(viewLifecycleOwner, { emission ->
-            val emissionString = HtmlCompat.fromHtml("%.3f ".format(emission) + "kg CO<sub><small><small>2</small></small></sub>", HtmlCompat.FROM_HTML_MODE_LEGACY)
+            val emissionString = HtmlCompat.fromHtml("%.3f ".format(emission).replace('.', ',') + "kg CO<sub><small><small>2</small></small></sub>", HtmlCompat.FROM_HTML_MODE_LEGACY)
             totalEmissionTV.text = emissionString
         })
 
         viewModel.totalEmissionAlt.observe(viewLifecycleOwner, { emission ->
-            val emissionString = HtmlCompat.fromHtml("%.3f ".format(emission) + "kg CO<sub><small><small>2</small></small></sub>", HtmlCompat.FROM_HTML_MODE_LEGACY)
+            val emissionString = HtmlCompat.fromHtml("%.3f ".format(emission).replace('.', ',') + "kg CO<sub><small><small>2</small></small></sub>", HtmlCompat.FROM_HTML_MODE_LEGACY)
             totalEmissionAltTV.text = emissionString
         })
 
         viewModel.emissionReduction.observe(viewLifecycleOwner, { emissionReduction ->
             val temp = if (emissionReduction.isNaN()) 0.0 else emissionReduction
 
-            val emissionReductionString = "${"%.3f ".format(temp)} %"
+            val emissionReductionString = "${"%.3f ".format(temp).replace('.', ',')} %"
             emissionReductionTV.text = emissionReductionString
         })
     }
