@@ -30,10 +30,10 @@ class StoreItemDao(private val dbManager: DBManager) {
             do {
                 val storeItem = produceStoreItem(it)
 
-                //if (index == 0 || results[index - 1] != storeItem) {
+                if (index == 0 || results[index - 1] != storeItem) {
                     results.add(storeItem)
                     index++
-               // }
+                }
             } while (it.moveToNext())
         }
 
