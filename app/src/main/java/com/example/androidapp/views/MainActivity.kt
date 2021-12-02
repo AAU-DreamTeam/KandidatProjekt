@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setUpTabs(){
         tabLayout.addTab(tabLayout.newTab().setText("FORBRUG"))
-        tabLayout.addTab(tabLayout.newTab().setText("DATA"))
+        tabLayout.addTab(tabLayout.newTab().setText("VARER"))
 
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
 

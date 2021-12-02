@@ -11,7 +11,7 @@ import com.example.androidapp.data.models.Product
 import com.example.androidapp.data.models.StoreItem
 
 class StoreItemDao(private val dbManager: DBManager) {
-    constructor(context: Context): this(DBManager(context))
+    constructor(context: Context): this(DBManager.getInstance(context))
 
     fun loadAll(): List<StoreItem> {
         val results = mutableListOf<StoreItem>()
@@ -111,7 +111,7 @@ class StoreItemDao(private val dbManager: DBManager) {
     }
 
     private fun loadId(storeItem: StoreItem): Long{
-        var id: Long = dbManager.INVALID_ID
+        var id: Long = DBManager.INVALID_ID
         val query =
                 "SELECT $TABLE.$COLUMN_ID " +
                 "FROM $TABLE " +
@@ -133,7 +133,7 @@ class StoreItemDao(private val dbManager: DBManager) {
     fun saveOrLoadStoreItem(storeItem: StoreItem): Long {
         val id = loadId(storeItem)
 
-        return if (id != dbManager.INVALID_ID) {
+        return if (id != DBManager.INVALID_ID) {
             id
         } else {
             saveStoreItem(storeItem)

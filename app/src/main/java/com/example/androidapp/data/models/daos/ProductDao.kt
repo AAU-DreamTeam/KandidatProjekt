@@ -6,7 +6,7 @@ import com.example.androidapp.data.DBManager
 import com.example.androidapp.data.models.Product
 
 class ProductDao(private val dbManager: DBManager) {
-    constructor(context: Context): this(DBManager(context))
+    constructor(context: Context): this(DBManager.getInstance(context))
 
     fun loadProducts(): List<Product>{
         val query = "SELECT * FROM $TABLE;"

@@ -7,7 +7,7 @@ import com.example.androidapp.data.models.Country
 import org.w3c.dom.Text
 
 class CountryDao(private val dbManager: DBManager) {
-    constructor(context: Context): this(DBManager(context))
+    constructor(context: Context): this(DBManager.getInstance(context))
 
     fun loadCountries(): List<Country> {
         val query = "SELECT * FROM $TABLE;"

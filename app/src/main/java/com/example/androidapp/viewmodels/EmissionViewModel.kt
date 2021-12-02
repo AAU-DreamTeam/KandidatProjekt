@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.androidapp.data.DBManager
 import com.example.androidapp.data.MONTH
 import com.example.androidapp.repositories.PurchaseRepository
 import com.example.androidapp.data.models.Purchase
@@ -80,4 +81,8 @@ class EmissionViewModel: ViewModel()  {
         _totalEmission.value = emissionSum
     }
 
+    override fun onCleared() {
+        super.onCleared()
+        DBManager.close()
+    }
 }

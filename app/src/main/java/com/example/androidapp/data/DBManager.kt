@@ -8,9 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.example.androidapp.data.models.StoreItem
 import com.example.androidapp.data.models.daos.PurchaseDao
 
-class DBManager(context: Context?) : SQLiteOpenHelper(context, "FoodEmission.db", null, 1) {
-    val INVALID_ID = -1L
-
+class DBManager private constructor(context: Context?) : SQLiteOpenHelper(context, "FoodEmission.db", null, 1) {
     override fun onCreate(db: SQLiteDatabase) {
         createTables(db)
         insertProductData(db)
@@ -179,6 +177,23 @@ class DBManager(context: Context?) : SQLiteOpenHelper(context, "FoodEmission.db"
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
         TODO("Not yet implemented")
+    }
+
+    companion object {
+        const val INVALID_ID = -1L
+        private var instance: DBManager? = null
+
+        fun getInstance(context: Context): DBManager{
+            if (instance == null) {
+                instance = DBManager(context)
+            }
+
+            return instance as DBManager
+        }
+
+        fun close(){
+            instance?.close()
+        }
     }
 
 }

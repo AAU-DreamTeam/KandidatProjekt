@@ -11,7 +11,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class PurchaseDao(context: Context) {
-    private val dbManager = DBManager(context)
+    private val dbManager = DBManager.getInstance(context)
 
     fun loadAllFromYearAndMonth(year: String, month: String): List<Purchase> {
         val results = mutableListOf<Purchase>()
