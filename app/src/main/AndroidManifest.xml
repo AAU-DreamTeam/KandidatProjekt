@@ -11,7 +11,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Androidapp">
-        <activity android:name=".MainActivity2"></activity>
+        <activity
+            android:name=".views.ScannerActivity"
+            android:theme="@style/AppTheme" />
+
 
         <meta-data
             android:name="com.google.mlkit.vision.DEPENDENCIES"
@@ -19,7 +22,7 @@
 
         <activity
             android:name=".views.MainActivity"
-            android:theme="@style/Theme.MaterialComponents.Light.NoActionBar">
+            android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
