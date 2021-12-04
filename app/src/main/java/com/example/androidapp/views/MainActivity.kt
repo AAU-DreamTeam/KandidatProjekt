@@ -1,21 +1,59 @@
 package com.example.androidapp.views
 
+import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.hardware.display.DisplayManager
+import android.hardware.display.VirtualDisplay
+import android.media.MediaRecorder
+import android.media.projection.MediaProjection
+import android.media.projection.MediaProjectionManager
 import android.os.Bundle
-import androidx.activity.viewModels
+import android.os.Environment
+import android.util.DisplayMetrics
+import android.util.SparseIntArray
+import android.view.Surface
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
+import androidx.core.app.ActivityCompat
 import androidx.viewpager2.widget.ViewPager2
 import com.example.androidapp.R
-import com.example.androidapp.viewmodels.EmissionViewModel
 import com.example.androidapp.views.adapters.MainAdapter
 import com.google.android.material.tabs.TabLayout
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 class MainActivity : AppCompatActivity() {
     private lateinit var tabLayout: TabLayout
     private lateinit var viewPager: ViewPager2
     private lateinit var viewPagerAdapter: MainAdapter
+    private val callback = object : MediaProjection.Callback(){
+        override fun onStop() {
+            mediaRecorder.stop()
+            mediaRecorder.reset()
+            mediaProjection = null
+            stopScreenSharing()
+        }
+    }
+
+    companion object {
+        val ORIENTATION = SparseIntArray()
+        private val mediaRecorder = MediaRecorder()
+        private var mediaProjection: MediaProjection? = null
+        private var mediaProjectionManager: MediaProjectionManager? = null
+        private var virtualDisplay: VirtualDisplay? = null
+        private val PERMISSION_REQUEST_ID = 10
+        private val ACTIVITY_LAUNCH_ID = 1000
+        private val metrics = DisplayMetrics()
+        private var videoUrl = ""
+
+        init {
+            ORIENTATION.append(Surface.ROTATION_0, 90)
+            ORIENTATION.append(Surface.ROTATION_90, 0)
+            ORIENTATION.append(Surface.ROTATION_180, 270)
+            ORIENTATION.append(Surface.ROTATION_270, 180)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,6 +65,102 @@ class MainActivity : AppCompatActivity() {
         setUpTabs()
         setUpViewPager()
 
+        windowManager.defaultDisplay.getMetrics(metrics)
+        mediaProjectionManager = getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
+        requestPermissions()
+    }
+
+    fun requestPermissions() {
+        if (!hasPermissions()) {
+            ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(android.Manifest.permission.RECORD_AUDIO, android.Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                    PERMISSION_REQUEST_ID)
+        } else {
+            onScreenShare()
+        }
+    }
+
+    private fun onScreenShare() {
+        initializeRecorder()
+        shareScreen()
+    }
+
+    private fun shareScreen() {
+        if (mediaProjection == null) {
+            startActivityForResult(mediaProjectionManager!!.createScreenCaptureIntent(), ACTIVITY_LAUNCH_ID)
+        } else {
+            virtualDisplay = createVirtualDisplay()
+            mediaRecorder.start()
+        }
+    }
+
+    private fun initializeRecorder() {
+        try {
+            videoUrl = "${filesDir.absolutePath}/${SimpleDateFormat("yyyy-MM-dd_HH_mm_ss_SSS", Locale.getDefault()).format(Date())}.mp4"
+
+            mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC)
+            mediaRecorder.setVideoSource(MediaRecorder.VideoSource.SURFACE)
+            mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
+            mediaRecorder.setOutputFile(videoUrl)
+            mediaRecorder.setVideoSize(metrics.widthPixels, metrics.heightPixels)
+            mediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264)
+            mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
+            mediaRecorder.setVideoEncodingBitRate(512*1000)
+            mediaRecorder.setVideoFrameRate(2)
+            mediaRecorder.setOrientationHint(ORIENTATION.get(windowManager.defaultDisplay.rotation))
+            mediaRecorder.prepare()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    private fun stopScreenSharing(){
+        virtualDisplay?.release()
+        destroyMediaProjection()
+    }
+
+    private fun destroyMediaProjection() {
+        mediaProjection?.unregisterCallback(callback)
+        mediaProjection?.stop()
+        mediaProjection = null
+    }
+
+    private fun hasPermissions() : Boolean {
+        return ActivityCompat.checkSelfPermission(this, android.Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED
+                || ActivityCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        if (requestCode == PERMISSION_REQUEST_ID && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            onScreenShare()
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == ACTIVITY_LAUNCH_ID && resultCode == RESULT_OK) {
+            mediaProjection = mediaProjectionManager!!.getMediaProjection(resultCode, data!!)
+            mediaProjection!!.registerCallback(callback, null)
+            virtualDisplay = createVirtualDisplay()
+            mediaRecorder.start()
+        }
+    }
+
+    private fun createVirtualDisplay(): VirtualDisplay? {
+        return mediaProjection!!.createVirtualDisplay(
+                "Virtual display",
+                metrics.widthPixels,
+                metrics.heightPixels,
+                metrics.densityDpi,
+                DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR,
+                mediaRecorder.surface,
+                null,
+                null
+        )
     }
 
     private fun setUpTabs(){
@@ -58,5 +192,12 @@ class MainActivity : AppCompatActivity() {
                 tabLayout.selectTab(tabLayout.getTabAt(position))
             }
         })
+    }
+
+    override fun onDestroy() {
+        mediaRecorder.stop()
+        mediaRecorder.reset()
+        stopScreenSharing()
+        super.onDestroy()
     }
 }
