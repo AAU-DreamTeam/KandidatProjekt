@@ -13,6 +13,8 @@ import android.os.Environment
 import android.util.DisplayMetrics
 import android.util.SparseIntArray
 import android.view.Surface
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.viewpager2.widget.ViewPager2
@@ -27,23 +29,15 @@ class MainActivity : AppCompatActivity() {
     private lateinit var tabLayout: TabLayout
     private lateinit var viewPager: ViewPager2
     private lateinit var viewPagerAdapter: MainAdapter
-    private val callback = object : MediaProjection.Callback(){
-        override fun onStop() {
-            mediaRecorder.stop()
-            mediaRecorder.reset()
-            mediaProjection = null
-            stopScreenSharing()
-        }
-    }
 
     companion object {
         val ORIENTATION = SparseIntArray()
+        private lateinit var resultLauncher: ActivityResultLauncher<Intent>
         private val mediaRecorder = MediaRecorder()
         private var mediaProjection: MediaProjection? = null
         private var mediaProjectionManager: MediaProjectionManager? = null
         private var virtualDisplay: VirtualDisplay? = null
-        private val PERMISSION_REQUEST_ID = 10
-        private val ACTIVITY_LAUNCH_ID = 1000
+        private const val PERMISSION_REQUEST_ID = 10
         private val metrics = DisplayMetrics()
         private var videoUrl = ""
 
@@ -67,6 +61,12 @@ class MainActivity : AppCompatActivity() {
 
         windowManager.defaultDisplay.getMetrics(metrics)
         mediaProjectionManager = getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
+        resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if (it.resultCode == RESULT_OK) {
+                mediaProjection = mediaProjectionManager!!.getMediaProjection(it.resultCode, it.data!!)
+                shareScreen()
+            }
+        }
         requestPermissions()
     }
 
@@ -82,17 +82,18 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun onScreenShare() {
-        initializeRecorder()
-        shareScreen()
+        if (mediaProjection == null) {
+            resultLauncher.launch(mediaProjectionManager!!.createScreenCaptureIntent())
+        } else {
+            shareScreen()
+        }
     }
 
     private fun shareScreen() {
-        if (mediaProjection == null) {
-            startActivityForResult(mediaProjectionManager!!.createScreenCaptureIntent(), ACTIVITY_LAUNCH_ID)
-        } else {
+            initializeRecorder()
             virtualDisplay = createVirtualDisplay()
             mediaRecorder.start()
-        }
+
     }
 
     private fun initializeRecorder() {
@@ -116,12 +117,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun stopScreenSharing(){
+        mediaRecorder.stop()
+        mediaRecorder.reset()
         virtualDisplay?.release()
         destroyMediaProjection()
     }
 
     private fun destroyMediaProjection() {
-        mediaProjection?.unregisterCallback(callback)
         mediaProjection?.stop()
         mediaProjection = null
     }
@@ -134,19 +136,10 @@ class MainActivity : AppCompatActivity() {
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
-        if (requestCode == PERMISSION_REQUEST_ID && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+        if (requestCode == PERMISSION_REQUEST_ID && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
             onScreenShare()
-        }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (requestCode == ACTIVITY_LAUNCH_ID && resultCode == RESULT_OK) {
-            mediaProjection = mediaProjectionManager!!.getMediaProjection(resultCode, data!!)
-            mediaProjection!!.registerCallback(callback, null)
-            virtualDisplay = createVirtualDisplay()
-            mediaRecorder.start()
+        } else {
+            finish()
         }
     }
 
@@ -195,8 +188,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onDestroy() {
-        mediaRecorder.stop()
-        mediaRecorder.reset()
+
         stopScreenSharing()
         super.onDestroy()
     }
