@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.FileProvider
@@ -78,7 +79,6 @@ class ScannerActivity : AppCompatActivity() {
         } else {
             Toast.makeText(this, "No app supports this action", Toast.LENGTH_SHORT).show()
         }
-
     }
 }
 
