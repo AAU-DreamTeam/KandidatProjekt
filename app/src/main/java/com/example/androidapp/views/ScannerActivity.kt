@@ -22,6 +22,10 @@ class ScannerActivity : AppCompatActivity() {
     private val viewModel = ScannerViewModel()
     private var layoutManager: RecyclerView.LayoutManager?=null
 
+    companion object {
+        var takingPicture = false
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scanner)
@@ -54,6 +58,7 @@ class ScannerActivity : AppCompatActivity() {
 
     private fun launchPhotoActivity() {
         val resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            takingPicture = false
             if (result.resultCode == RESULT_OK) {
                 viewModel.runTextRecognition(this)
                 setupRecyclerView()
@@ -75,6 +80,7 @@ class ScannerActivity : AppCompatActivity() {
         }
 
         if (intent.resolveActivity(packageManager) != null) {
+            takingPicture = true
             resultLauncher.launch(intent)
         } else {
             Toast.makeText(this, "No app supports this action", Toast.LENGTH_SHORT).show()

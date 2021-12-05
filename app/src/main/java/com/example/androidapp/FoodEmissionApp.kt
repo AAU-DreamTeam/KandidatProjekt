@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.Application
 import android.os.Bundle
 import android.os.Handler
+import com.example.androidapp.views.ScannerActivity
 
 class FoodEmissionApp: Application(), Application.ActivityLifecycleCallbacks {
     private val activities = mutableListOf<Activity>()
@@ -40,7 +41,7 @@ class FoodEmissionApp: Application(), Application.ActivityLifecycleCallbacks {
     }
 
     override fun onActivityStopped(activity: Activity) {
-        if (activities.size == 2) {
+        if (ScannerActivity.takingPicture) {
             handler.postDelayed(callback, delayLong)
         } else {
             handler.postDelayed(callback, delayShort)
