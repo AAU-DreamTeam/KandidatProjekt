@@ -14,13 +14,9 @@ class DBManager private constructor(context: Context?) : SQLiteOpenHelper(contex
         insertProductData(db)
         insertCountryData(db)
         insertStoreItemData(db)
-        //insertPurchaseData(db)
     }
 
     private fun createTables(db: SQLiteDatabase) {
-        /*val createUserTableStmnt = "CREATE TABLE user(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, password TEXT NOT NULL, created DATE NOT NULL);"
-        db.execSQL(createUserTableStmnt)*/
-
         db.execSQL("PRAGMA foreign_keys = ON;")
 
         val createCountryTableStmnt = "CREATE TABLE country(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, transportEmission REAL NOT NULL, GHPenalty BOOLEAN NOT NULL CHECK(GHPenalty IN (0, 1)));"
@@ -85,19 +81,79 @@ class DBManager private constructor(context: Context?) : SQLiteOpenHelper(contex
     }
 
     private fun insertStoreItemData(db: SQLiteDatabase){
-        insertStoreItem(db, 1, 3,"TOMATER ØKO LØSE SPANIEN", true, false, 0.045)
-        insertStoreItem(db, 1, 3,"TOMATER ØKO SPANIEN", true, true, 0.5)
-        insertStoreItem(db, 1, 3,"TOMATER SPANIEN", false, true, 0.5)
-        insertStoreItem(db, 1, 3,"TOMATER LØSE SPANIEN", false, false, 0.045)
-        /*insertStoreItem(db, 1, 5,"TOMATER ØKO LØSE DANMARK", true, false, 0.045)
-        insertStoreItem(db, 1, 5,"TOMATER ØKO DANMARK", true, true, 0.5)
-        insertStoreItem(db, 1, 5,"TOMATER DANMARK", false, true, 0.5)
-        insertStoreItem(db, 1, 5,"TOMATER LØSE DANMARK", false, false, 0.045)*/
-        /*insertStoreItem(db, 6, 1,"ÆBLER ØKO LØSE ITALIEN", true, false, 0.045)
-        insertStoreItem(db, 6, 1,"ÆBLER ØKO LØSE ITALIEN", true, false, 0.065)
-        insertStoreItem(db, 6, 5,"ÆBLER ØKO LØSE DANMARK", true, false, 0.045)
-        insertStoreItem(db, 6, 5,"ÆBLER ØKO LØSE DK", true, false, 0.045)
-        insertStoreItem(db, 6, 5,"ÆBLER DANMARK", false, true, 0.065)*/
+        insertStoreItem(db, 6, 1,"ebler lose italien", false, false, 0.110)
+        insertStoreItem(db, 6, 5,"ebler lose danmark", false, false, 0.110)
+        insertStoreItem(db, 6, 5,"ebler oko danmark", true, true, 1.0)
+        insertStoreItem(db, 6, 1,"oko bakke ebler", true, true, 0.660)
+        insertStoreItem(db, 6, 1,"oko. pose ebler", true, true, 1.0)
+        insertStoreItem(db, 6, 5,"danske ebler", false, true, 1.5)
+        insertStoreItem(db, 6, 5,"oko. danske bakke ebler", true, true, 0.660)
+        insertStoreItem(db, 6, 5,"danske ebler", false, true, 0.880)
+        insertStoreItem(db, 6, 1,"oko. pink lady", true, true, 0.312)
+        insertStoreItem(db, 6, 5,"pigeon ebler", false, true, 0.750)
+        insertStoreItem(db, 6, 5,"danske belle de boskoop", false, true, 0.660)
+        insertStoreItem(db, 6, 1,"pink lady ebler", false, true, 1.0)
+
+        insertStoreItem(db, 11, 3,"broccoli", false, true, 0.450)
+        insertStoreItem(db, 11, 1,"oko danske broccoli", true, true, 0.450)
+
+        insertStoreItem(db, 9, 5,"oko champignon hvide, skar", true, true, 0.100)
+        insertStoreItem(db, 9, 5,"oko champignon skiver/mix", true, true, 0.100)
+        insertStoreItem(db, 9, 5,"oko champignon hvide", true, true, 0.200)
+        insertStoreItem(db, 9, 5,"oko champignon brune", true, true, 0.400)
+        insertStoreItem(db, 9, 2,"champignon rodskarne", false, true, 0.500)
+
+        insertStoreItem(db, 10, 6,"snackpeber sod rod", false, true, 0.500)
+        insertStoreItem(db, 10, 4,"mix snack peber", false, true, 0.400)
+        insertStoreItem(db, 10, 3,"oko peber california", true, true, 0.300)
+        insertStoreItem(db, 10, 3,"lamuyo peber", false, true, 0.600)
+        insertStoreItem(db, 10, 4,"lose peberfrugter", false, false, 0.180)
+        insertStoreItem(db, 10, 5,"rod peber", false, true, 0.360)
+
+        insertStoreItem(db, 12, 5,"oko gulerodder", true, true, 0.800)
+        insertStoreItem(db, 12, 5,"danske gulerodder", false, true, 1.0)
+        insertStoreItem(db, 12, 5,"oko. danske gulerodder", true, true, 1.0)
+        insertStoreItem(db, 12, 5,"gulerodder", false, true, 1.0)
+        insertStoreItem(db, 12, 5,"orangerodder", false, true, 0.500)
+        insertStoreItem(db, 12, 5,"orangerodder", true, true, 0.250)
+        insertStoreItem(db, 12, 5,"orangerodder", false, true, 0.200)
+
+        insertStoreItem(db, 1, 6,"tomater i spand", false, true, 0.500)
+        insertStoreItem(db, 1, 5,"oko tomater san marzano", true, true, 0.200)
+        insertStoreItem(db, 1, 3,"oko tomater cherry", true, true, 0.250)
+        insertStoreItem(db, 1, 5,"oko tomater intensity", true, true, 0.250)
+        insertStoreItem(db, 1, 4,"intensity tom. princip", false, true, 0.300)
+        insertStoreItem(db, 1, 5,"oko runde tomater", true, true, 0.500)
+        insertStoreItem(db, 1, 6,"cherrytomater mix", false, true, 0.500)
+        insertStoreItem(db, 1, 4,"gusto tomater", false, true, 0.450)
+        insertStoreItem(db, 1, 3,"cocktailtomat", false, true, 0.500)
+        insertStoreItem(db, 1, 5,"danske mix tomater", false, true, 0.325)
+        insertStoreItem(db, 1, 6,"lose tomater", false, false, 0.075)
+        insertStoreItem(db, 1, 5,"san marzano", false, true, 0.250)
+        insertStoreItem(db, 1, 5,"tomater ida", false, true, 0.200)
+        insertStoreItem(db, 1, 5,"blommetomater", false, true, 0.500)
+        insertStoreItem(db, 1, 5,"oko intensity gule", true, true, 0.250)
+        insertStoreItem(db, 1, 3,"oko tomater allure", true, true, 0.200)
+
+        insertStoreItem(db, 3, 3,"oko iceberg levevis", true, true, 0.400)
+        insertStoreItem(db, 3, 3,"iceberg", false, true, 0.400)
+
+        insertStoreItem(db, 8, 1,"oko blomkal", true, true, 0.450)
+        insertStoreItem(db, 8, 1,"blomkal", false, false, 0.450)
+
+        insertStoreItem(db, 4, 5,"oko rodkal", true, true, 1.5)
+        insertStoreItem(db, 4, 5,"rodkal", false, true, 1.5)
+
+        insertStoreItem(db, 5, 5,"oko hvidkal", true, true, 1.5)
+        insertStoreItem(db, 5, 5,"danske hvidkal", false, false, 1.5)
+
+        insertStoreItem(db, 7, 5,"oko spidskal", true, true, 0.700)
+        insertStoreItem(db, 7, 5,"oko spidskal rod", true, true, 0.700)
+
+        insertStoreItem(db, 2, 3,"udl. agurk", false, false, 0.300)
+        insertStoreItem(db, 2, 3,"oko agurk levevis", true, true, 0.300)
+        insertStoreItem(db, 2, 5,"oko agurk dk", true, true, 0.300)
+        insertStoreItem(db, 2, 3,"skoleagurker", false, true, 0.300)
     }
 
     private fun insertStoreItem(db: SQLiteDatabase, productID: Int, countryID: Int, receiptText: String, organic: Boolean, packaged: Boolean, weight: Double, store: String = "Føtex"): Long {
@@ -117,32 +173,6 @@ class DBManager private constructor(context: Context?) : SQLiteOpenHelper(contex
     fun insert(table: String, contentValues: ContentValues): Long {
         return writableDatabase.insert(table, null, contentValues)
     }
-
-    private fun insertPurchaseData(db: SQLiteDatabase){
-        insertPurchase(db,1, 2, "2021-11-01 14:30:00")
-       /* insertPurchase(db,2, 3 * 0.065, "2021-11-01 14:30:00")
-        insertPurchase(db,3, 1 * 0.045, "2021-11-05 14:30:00")
-        insertPurchase(db,4, 7 * 0.045, "2021-11-10 14:30:00")
-        insertPurchase(db,5, 3 * 0.065, "2021-11-13 14:30:00")
-        insertPurchase(db,6, 5 * 0.045, "2021-11-15 14:30:00")
-        insertPurchase(db,7, 1 * 0.065, "2021-11-16 14:30:00")
-        insertPurchase(db,8, 3 * 0.045, "2021-11-20 14:30:00")
-        insertPurchase(db,9, 2 * 0.045, "2021-11-21 14:30:00")
-        insertPurchase(db,10, 5 * 0.065, "2021-11-23 14:30:00")*/
-
-    }
-
-    fun insertPurchase(db: SQLiteDatabase, storeItemID: Int, quantity: Int, timestamp: String): Long {
-        val contentValues = ContentValues()
-
-        contentValues.put("storeItemID", storeItemID)
-        contentValues.put("quantity", quantity)
-        contentValues.put("timestamp", timestamp)
-
-        return db.insert(PurchaseDao.TABLE, null, contentValues)
-    }
-
-    //id INTEGER PRIMARY KEY AUTOINCREMENT, productID INTEGER NOT NULL, countryID INTEGER NOT NULL, receiptText TEXT NOT NULL, organic BOOLEAN NOT NULL CHECK(organic IN (0, 1)), packaged BOOLEAN NOT NULL CHECK(packaged IN (0, 1)), weight REAL NOT NULL, store TEXT NOT NULL, FOREIGN KEY(productID) REFERENCES product(id), FOREIGN KEY(countryID) REFERENCES country(id)
 
     fun <T> selectMultiple(query: String, producer: (cursor: Cursor) -> T): List<T> {
         val db = readableDatabase
