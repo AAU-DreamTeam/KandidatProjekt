@@ -23,10 +23,10 @@ class ScreenRecorder (activity: AppCompatActivity){
 
     private fun initializeRecorder(activity: AppCompatActivity) {
         try {
-            val videoUrl = "${activity.filesDir.absolutePath}/${
+            val audioUrl = "${activity.filesDir.absolutePath}/${
                 SimpleDateFormat("yyyy-MM-dd_HH_mm_ss_SSS", Locale.getDefault()).format(
                     Date()
-                )}.mp4"
+                )}.3gp"
 
             val stat = StatFs(activity.filesDir.absolutePath)
             val blockSize = stat.blockSizeLong
@@ -34,15 +34,15 @@ class ScreenRecorder (activity: AppCompatActivity){
             Log.i("------Free memory------", (availableBlocks * blockSize).toString())
 
             mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC)
-            mediaRecorder.setVideoSource(MediaRecorder.VideoSource.SURFACE)
+            //mediaRecorder.setVideoSource(MediaRecorder.VideoSource.SURFACE)
             mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
-            mediaRecorder.setOutputFile(videoUrl)
-            mediaRecorder.setVideoSize(metrics.widthPixels, metrics.heightPixels)
-            mediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264)
+            mediaRecorder.setOutputFile(audioUrl)
+            //mediaRecorder.setVideoSize(metrics.widthPixels, metrics.heightPixels)
+            //mediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264)
             mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
-            mediaRecorder.setVideoEncodingBitRate(512*1000)
-            mediaRecorder.setVideoFrameRate(2)
-            mediaRecorder.setOrientationHint(MainActivity.ORIENTATION.get(activity.windowManager.defaultDisplay.rotation))
+            //mediaRecorder.setVideoEncodingBitRate(512*1000)
+            //mediaRecorder.setVideoFrameRate(2)
+            //mediaRecorder.setOrientationHint(MainActivity.ORIENTATION.get(activity.windowManager.defaultDisplay.rotation))
             mediaRecorder.prepare()
         } catch (e: Exception) {
             e.printStackTrace()
