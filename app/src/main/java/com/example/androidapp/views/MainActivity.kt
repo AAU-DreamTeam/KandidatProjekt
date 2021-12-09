@@ -31,19 +31,7 @@ class MainActivity : AppCompatActivity() {
     companion object {
         var isStarted = false
         var screenRecorder: ScreenRecorder? = null
-        //val ORIENTATION = SparseIntArray()
-        //private lateinit var resultLauncher: ActivityResultLauncher<Intent>
-        //private var mediaProjection: MediaProjection? = null
-        //private var mediaProjectionManager: MediaProjectionManager? = null
-        //private var virtualDisplay: VirtualDisplay? = null
         private const val PERMISSION_REQUEST_ID = 10
-
-        /*init {
-            ORIENTATION.append(Surface.ROTATION_0, 90)
-            ORIENTATION.append(Surface.ROTATION_90, 0)
-            ORIENTATION.append(Surface.ROTATION_180, 270)
-            ORIENTATION.append(Surface.ROTATION_270, 180)
-        }*/
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,19 +44,6 @@ class MainActivity : AppCompatActivity() {
 
         setUpTabs()
         setUpViewPager()
-
-        //mediaProjectionManager = getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
-        /*resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            if (it.resultCode == RESULT_OK) {
-                mediaProjection = mediaProjectionManager!!.getMediaProjection(
-                    it.resultCode,
-                    it.data!!
-                )
-                shareScreen()
-            } else {
-                finish()
-            }
-        }*/
 
         requestPermissions()
 
@@ -133,19 +108,6 @@ class MainActivity : AppCompatActivity() {
             finish()
         }
     }
-
-    /*private fun createVirtualDisplay(): VirtualDisplay? {
-        return mediaProjection!!.createVirtualDisplay(
-            "Virtual display",
-            screenRecorder!!.metrics.widthPixels,
-            screenRecorder!!.metrics.heightPixels,
-            screenRecorder!!.metrics.densityDpi,
-            DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR,
-            screenRecorder!!.mediaRecorder.surface,
-            null,
-            null
-        )
-    }*/
 
     private fun setUpTabs(){
         tabLayout.addTab(tabLayout.newTab().setText("FORBRUG"))

@@ -34,15 +34,9 @@ class ScreenRecorder (activity: AppCompatActivity){
             Log.i("------Free memory------", (availableBlocks * blockSize).toString())
 
             mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC)
-            //mediaRecorder.setVideoSource(MediaRecorder.VideoSource.SURFACE)
             mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
             mediaRecorder.setOutputFile(audioUrl)
-            //mediaRecorder.setVideoSize(metrics.widthPixels, metrics.heightPixels)
-            //mediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264)
             mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
-            //mediaRecorder.setVideoEncodingBitRate(512*1000)
-            //mediaRecorder.setVideoFrameRate(2)
-            //mediaRecorder.setOrientationHint(MainActivity.ORIENTATION.get(activity.windowManager.defaultDisplay.rotation))
             mediaRecorder.prepare()
         } catch (e: Exception) {
             e.printStackTrace()
