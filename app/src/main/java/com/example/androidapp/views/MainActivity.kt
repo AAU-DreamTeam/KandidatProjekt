@@ -9,6 +9,7 @@ import android.media.projection.MediaProjection
 import android.media.projection.MediaProjectionManager
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.util.SparseIntArray
 import android.view.Surface
 import android.widget.Toast
@@ -28,6 +29,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var viewPagerAdapter: MainAdapter
 
     companion object {
+        var isStarted = false
         var screenRecorder: ScreenRecorder? = null
         val ORIENTATION = SparseIntArray()
         private lateinit var resultLauncher: ActivityResultLauncher<Intent>
@@ -174,6 +176,18 @@ class MainActivity : AppCompatActivity() {
                 tabLayout.selectTab(tabLayout.getTabAt(position))
             }
         })
+    }
+
+    override fun onStart() {
+        isStarted = true
+        super.onStart()
+        Log.i("-----------", "onStart: MainActivity")
+    }
+
+    override fun onStop() {
+        isStarted = false
+        super.onStop()
+        Log.i("-----------", "onStop: MainActivity")
     }
 
     override fun onDestroy() {

@@ -23,6 +23,7 @@ class ScannerActivity : AppCompatActivity() {
     private var layoutManager: RecyclerView.LayoutManager?=null
 
     companion object {
+        var isStarted = false
         var takingPicture = false
     }
 
@@ -47,6 +48,17 @@ class ScannerActivity : AppCompatActivity() {
         }
     }
 
+    override fun onStart() {
+        isStarted = true
+        super.onStart()
+        Log.i("-----------", "onStart: ScannerActivity")
+    }
+
+    override fun onStop() {
+        isStarted = false
+        super.onStop()
+        Log.i("-----------", "onStop: ScannerActivity")
+    }
     private fun setupRecyclerView(){
         layoutManager = LinearLayoutManager(this)
         recyclerView.layoutManager = layoutManager
