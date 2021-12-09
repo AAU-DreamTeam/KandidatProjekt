@@ -37,12 +37,12 @@ class DBManager private constructor(context: Context?) : SQLiteOpenHelper(contex
     }
 
     private fun insertCountryData(db: SQLiteDatabase) {
-        insertCountry(db, "Italien", 0.62, false)
-        insertCountry(db, "Polen", 0.32, true)
-        insertCountry(db, "Spanien", 0.74, false)
-        insertCountry(db, "Holland", 0.26, true)
-        insertCountry(db, "Danmark", 0.05, true)
-        insertCountry(db, "Marokko", 0.55, false)
+        insertCountry(db, "Italien", 0.3184644, false)
+        insertCountry(db, "Polen", 0.1625874, true)
+        insertCountry(db, "Spanien", 0.3771804, false)
+        insertCountry(db, "Holland", 0.1346274, true)
+        insertCountry(db, "Danmark", 0.02796, true)
+        insertCountry(db, "Marokko", 1.3174058, false)
     }
 
     private fun insertCountry(db: SQLiteDatabase, name: String, emission: Double, GHPenalty: Boolean) : Long {

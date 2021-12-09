@@ -7,7 +7,7 @@ import com.example.androidapp.data.models.daos.StoreItemDao
 
 class EmissionCalculator {
     companion object{
-        private val GH_PENALTY = 7.5
+        private val GH_PENALTY = 8.0
         private val ORGANIC_PENALTY = 1.21
         private val NO_PENALTY = 1.0
         private val NO_EMISSION = 0.0

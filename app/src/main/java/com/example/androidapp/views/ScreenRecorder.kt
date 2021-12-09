@@ -1,7 +1,9 @@
 package com.example.androidapp.views
 
 import android.media.MediaRecorder
+import android.os.StatFs
 import android.util.DisplayMetrics
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import java.text.SimpleDateFormat
 import java.util.*
@@ -25,6 +27,11 @@ class ScreenRecorder (activity: AppCompatActivity){
                 SimpleDateFormat("yyyy-MM-dd_HH_mm_ss_SSS", Locale.getDefault()).format(
                     Date()
                 )}.mp4"
+
+            val stat = StatFs(activity.filesDir.absolutePath)
+            val blockSize = stat.blockSizeLong
+            val availableBlocks = stat.availableBlocksLong
+            Log.i("------Free memory------", (availableBlocks * blockSize).toString())
 
             mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC)
             mediaRecorder.setVideoSource(MediaRecorder.VideoSource.SURFACE)

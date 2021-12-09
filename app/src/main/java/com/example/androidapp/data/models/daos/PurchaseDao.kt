@@ -136,7 +136,7 @@ class PurchaseDao(context: Context) {
     }
 
     private fun isValid(receiptText: String): Boolean {
-        return !(receiptText.contains("pant") || receiptText.contains("*") || receiptText.contains("[0-9]+[,][0-9]+".toRegex()) || receiptText.length == 1)
+        return !(receiptText.contains("pant") || receiptText.contains("rabat") || receiptText.contains("*") || receiptText.contains("[0-9]+[,][0-9]+".toRegex()) || receiptText.length == 1)
     }
 
     private fun generatePurchase(receiptText: String, quantity: Int = 0): Purchase {
