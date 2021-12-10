@@ -76,7 +76,7 @@ class MainActivity : AppCompatActivity() {
         screenRecorder = ScreenRecorder(this)
         //virtualDisplay = createVirtualDisplay()
         screenRecorder?.start()
-        Toast.makeText(this, "Skærm og lyd optages\n", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "Lyd optages\n", Toast.LENGTH_SHORT).show()
     }
 
     private fun stopScreenSharing(){
