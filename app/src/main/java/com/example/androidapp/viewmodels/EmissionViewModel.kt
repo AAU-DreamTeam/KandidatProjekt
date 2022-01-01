@@ -4,17 +4,17 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.androidapp.data.DBManager
-import com.example.androidapp.data.MONTH
+import com.example.androidapp.models.enums.MONTH
+import com.example.androidapp.models.Purchase
+import com.example.androidapp.models.StoreItem
 import com.example.androidapp.repositories.PurchaseRepository
-import com.example.androidapp.data.models.Purchase
-import com.example.androidapp.data.models.StoreItem
 import com.example.androidapp.repositories.StoreItemRepository
-import java.text.DateFormat
-import java.text.SimpleDateFormat
 import java.util.*
 
 class EmissionViewModel: ViewModel()  {
+    private var purchaseRepository: PurchaseRepository? = null
+    private var storeItemRepository: StoreItemRepository? = null
+
     private val timeZone = "Europe/Copenhagen"
     private val calendar: Calendar = Calendar.getInstance(TimeZone.getTimeZone(timeZone))
 
@@ -36,39 +36,44 @@ class EmissionViewModel: ViewModel()  {
     private val _emissionReduction = MutableLiveData<Double>()
     val emissionReduction: LiveData<Double> get() = _emissionReduction
 
-    private val _data = MutableLiveData<List<StoreItem>>(listOf())
-    val data: LiveData<List<StoreItem>> get() = _data
+    fun initiate(context: Context) {
+        if (purchaseRepository == null) {
+            purchaseRepository = PurchaseRepository(context)
+        }
 
-    fun loadData(context: Context){
+        if (storeItemRepository == null) {
+            storeItemRepository = StoreItemRepository(context)
+        }
+    }
+
+    fun loadData(){
         val monthTemp = calendar.get(Calendar.MONTH)
 
         _month.value = MONTH.values()[monthTemp].name
         _year.value = calendar.get(Calendar.YEAR).toString()
 
-        _purchases.value = PurchaseRepository(context).loadAllFromYearAndMonth(year.value!!, String.format("%02d", monthTemp + 1))
+        _purchases.value = purchaseRepository!!.loadPurchases(year.value!!, String.format("%02d", monthTemp + 1))
 
         calcTotalEmission()
-        _totalEmissionAlt.value = PurchaseRepository(context).loadAlternativeEmission(_purchases.value!!)
+        _totalEmissionAlt.value = purchaseRepository!!.loadAlternativeEmission(_purchases.value!!)
 
         _emissionReduction.value = ((totalEmission.value!! - totalEmissionAlt.value!!)/totalEmission.value!!) * 100
-
-        _data.value = StoreItemRepository(context).loadAll()
     }
 
-    fun loadAlternatives(context: Context, purchaseId: Int): List<StoreItem> {
-        return StoreItemRepository(context).loadAlternatives(_purchases.value!![purchaseId].storeItem)
+    fun onViewAlternatives(purchaseId: Int): List<StoreItem> {
+        return storeItemRepository!!.loadAlternatives(_purchases.value!![purchaseId].storeItem)
     }
 
-    fun loadPrev(context: Context){
+    fun onViewPrev(){
         calendar.add(Calendar.MONTH, -1)
 
-        loadData(context)
+        loadData()
     }
 
-    fun loadNext(context: Context){
+    fun onViewNext(){
         calendar.add(Calendar.MONTH, 1)
 
-        loadData(context)
+        loadData()
     }
 
     private fun calcTotalEmission(){
@@ -83,6 +88,7 @@ class EmissionViewModel: ViewModel()  {
 
     override fun onCleared() {
         super.onCleared()
-        DBManager.close()
+        purchaseRepository?.close()
+        storeItemRepository?.close()
     }
 }

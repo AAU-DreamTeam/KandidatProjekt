@@ -7,12 +7,11 @@ import android.widget.*
 import androidx.core.widget.doAfterTextChanged
 import androidx.recyclerview.widget.RecyclerView
 import com.example.androidapp.R
-import com.example.androidapp.data.models.Country
-import com.example.androidapp.data.models.Product
-import com.example.androidapp.data.models.Purchase
+import com.example.androidapp.models.Country
+import com.example.androidapp.models.Product
+import com.example.androidapp.models.Purchase
 import com.example.androidapp.viewmodels.ScannerViewModel
 import com.google.android.material.button.MaterialButtonToggleGroup
-import com.google.android.material.card.MaterialCardView
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.android.synthetic.main.card_layout_alt.view.*
 
@@ -50,7 +49,7 @@ class ScannerAdapter(var purchases: List<Purchase>,
             if (holder.title.text!!.isEmpty()) {
                 holder.title.error = "Indtast tekst"
             } else {
-                viewModel.onTitleChanged(holder.adapterPosition, it.toString())
+                viewModel.onReceiptTextChanged(holder.adapterPosition, it.toString())
             }
         }
 

@@ -1,4 +1,4 @@
-package com.example.androidapp.data.models
+package com.example.androidapp.models
 
 class Purchase(val id: Int,
                val storeItem: StoreItem,

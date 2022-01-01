@@ -18,20 +18,25 @@ import kotlinx.android.synthetic.main.activity_scanner.*
 import java.io.File
 import java.io.IOException
 
-class ScannerActivity : AppCompatActivity() {
+class ScannerView : AppCompatActivity() {
     private val viewModel = ScannerViewModel()
     private var layoutManager: RecyclerView.LayoutManager?=null
-
-    companion object {
-        var isStarted = false
-        var takingPicture = false
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scanner)
-        viewModel.loadCountries(this)
-        viewModel.loadProducts(this)
+
+        viewModel.initiate(this)
+        viewModel.loadCountries()
+        viewModel.loadProducts()
+
+        viewModel.saved.observe(this) {
+            if (it) {
+                finish()
+            } else {
+                Toast.makeText(this, "Kan ikke gemme før alle felter er udfyldt", Toast.LENGTH_SHORT).show()
+            }
+        }
 
         launchPhotoActivity()
 
@@ -40,25 +45,11 @@ class ScannerActivity : AppCompatActivity() {
         }
 
         btn_save.setOnClickListener {
-            if (viewModel.onSave(this)) {
-                finish()
-            } else {
-                Toast.makeText(this, "Kan ikke gemme før alle felter er udfyldt", Toast.LENGTH_SHORT).show()
-            }
+            viewModel.onSave()
         }
+
     }
 
-    override fun onStart() {
-        isStarted = true
-        super.onStart()
-        Log.i("-----------", "onStart: ScannerActivity")
-    }
-
-    override fun onStop() {
-        isStarted = false
-        super.onStop()
-        Log.i("-----------", "onStop: ScannerActivity")
-    }
     private fun setupRecyclerView(){
         layoutManager = LinearLayoutManager(this)
         recyclerView.layoutManager = layoutManager
@@ -69,30 +60,28 @@ class ScannerActivity : AppCompatActivity() {
     }
 
     private fun launchPhotoActivity() {
-        val resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            takingPicture = false
-            if (result.resultCode == RESULT_OK) {
-                viewModel.runTextRecognition(this)
-                setupRecyclerView()
-            }
-        }
 
         val fileName = "image"
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         val storageDirectory = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        val imageFile : File
+        var imageFile : File? = null
 
         try {
             imageFile = File.createTempFile(fileName, ".jpg", storageDirectory)
-            viewModel.imagePath = imageFile.absolutePath
             val imageUri = FileProvider.getUriForFile(this, "com.example.androidapp.fileprovider", imageFile)
             intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri)
         } catch (e: IOException) {
             e.printStackTrace()
         }
 
+        val resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                viewModel.onPhotoTaken(imageFile!!.absolutePath)
+                setupRecyclerView()
+            }
+        }
+
         if (intent.resolveActivity(packageManager) != null) {
-            takingPicture = true
             resultLauncher.launch(intent)
         } else {
             Toast.makeText(this, "No app supports this action", Toast.LENGTH_SHORT).show()

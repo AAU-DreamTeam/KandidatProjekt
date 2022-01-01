@@ -1,19 +1,17 @@
-package com.example.androidapp.data.models.daos
+package com.example.androidapp.models.daos
 
 import android.content.ContentValues
 import android.content.Context
-import android.content.pm.ChangedPackages
 import android.database.Cursor
-import androidx.core.content.contentValuesOf
-import com.example.androidapp.data.DBManager
-import com.example.androidapp.data.EmissionCalculator
-import com.example.androidapp.data.models.Product
-import com.example.androidapp.data.models.StoreItem
+import com.example.androidapp.models.tools.DBManager
+import com.example.androidapp.models.tools.EmissionCalculator
+import com.example.androidapp.models.StoreItem
+import java.util.*
 
 class StoreItemDao(private val dbManager: DBManager) {
-    constructor(context: Context): this(DBManager.getInstance(context))
+    constructor(context: Context): this(DBManager(context))
 
-    fun loadAll(): List<StoreItem> {
+    fun loadStoreItems(): List<StoreItem> {
         val results = mutableListOf<StoreItem>()
         val query =
                 "SELECT $ALL_COLUMNS, " +           // 5
@@ -57,7 +55,7 @@ class StoreItemDao(private val dbManager: DBManager) {
         }
     }
 
-    fun generateStoreItem(receiptText: String): StoreItem {
+    fun extractStoreItem(receiptText: String): StoreItem {
         var result: StoreItem? = null
         val formattedReceiptText = formatReceiptText(receiptText)
         val query =
@@ -74,7 +72,7 @@ class StoreItemDao(private val dbManager: DBManager) {
         }
 
         if (result == null) {
-            result = extractStoreItem(formattedReceiptText)
+            result = generateStoreItem(formattedReceiptText)
         }
 
         result!!.receiptText = receiptText
@@ -83,10 +81,10 @@ class StoreItemDao(private val dbManager: DBManager) {
     }
 
     private fun formatReceiptText(receiptText: String): String {
-        return receiptText.replace('ø', 'o').replace('å', 'a').replace('æ','e')
+        return receiptText.toUpperCase(Locale.getDefault()).replace('Ø', 'O').replace('Å', 'A').replace('Æ','E')
     }
 
-    private fun extractStoreItem(receiptText: String): StoreItem {
+    private fun generateStoreItem(receiptText: String): StoreItem {
         val product = ProductDao(dbManager).extractProduct(receiptText)
         val country = CountryDao(dbManager).extractCountry(receiptText)
         return StoreItem(
@@ -95,24 +93,49 @@ class StoreItemDao(private val dbManager: DBManager) {
                 receiptText,
                 isOrganic(receiptText),
                 isPackaged(receiptText),
-                extractWeight()
+                extractWeight(receiptText).toDouble()
         )
     }
 
     private fun isOrganic(receiptText: String): Boolean {
-        return receiptText.contains("oko")
+        return receiptText.contains("OKO")
     }
 
     private fun isPackaged(receiptText: String): Boolean {
-        return !receiptText.contains("los")
+        return !receiptText.contains("LOS")
     }
 
-    private fun extractWeight(): Double{
-        return 0.0
+    private fun extractWeight(receiptText: String): Double{
+        val regex = "[0-9]+([G]|[K][G])".toRegex()
+        val find = regex.find(receiptText.replace(" ", ""))
+        var inGrams = false
+
+        val weight = buildString {
+            if (find != null) {
+                for (char in find.value) {
+                    if (!char.isDigit()) {
+                        break
+                    }
+
+                    this.append(char)
+                }
+
+                inGrams = !find.value.contains("KG")
+
+            } else {
+                this.append(0)
+            }
+        }.toDouble()
+
+        return if (inGrams) {
+            weight/1000
+        } else {
+            return weight
+        }
     }
 
     private fun loadId(storeItem: StoreItem): Long{
-        var id: Long = DBManager.INVALID_ID
+        var id: Long = dbManager.INVALID_ID
         val query =
                 "SELECT $TABLE.$COLUMN_ID " +
                 "FROM $TABLE " +
@@ -131,17 +154,17 @@ class StoreItemDao(private val dbManager: DBManager) {
         return id
     }
 
-    fun saveOrLoadStoreItem(storeItem: StoreItem): Long {
+    fun saveStoreItem(storeItem: StoreItem): Long {
         val id = loadId(storeItem)
 
-        return if (id != DBManager.INVALID_ID) {
+        return if (id != dbManager.INVALID_ID) {
             id
         } else {
-            saveStoreItem(storeItem)
+            save(storeItem)
         }
     }
 
-    private fun saveStoreItem(storeItem: StoreItem): Long {
+    private fun save(storeItem: StoreItem): Long {
         val contentValues = ContentValues()
 
         contentValues.put(COLUMN_PRODUCT_ID, storeItem.product.id)
@@ -202,5 +225,9 @@ class StoreItemDao(private val dbManager: DBManager) {
                     cursor.getString(startIndex + COLUMN_STORE_POSITION)
             )
         }
+    }
+
+    fun close() {
+        dbManager.close()
     }
 }

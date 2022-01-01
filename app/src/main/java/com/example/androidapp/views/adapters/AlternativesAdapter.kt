@@ -7,8 +7,8 @@ import android.view.ViewGroup
 import androidx.core.text.HtmlCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.androidapp.R
-import com.example.androidapp.data.models.Purchase
-import com.example.androidapp.data.models.StoreItem
+import com.example.androidapp.models.Purchase
+import com.example.androidapp.models.StoreItem
 import kotlinx.android.synthetic.main.alternative_list_item.view.*
 
 class AlternativesAdapter(val context: Context, val purchase: Purchase, var alternatives: List<StoreItem>): RecyclerView.Adapter<AlternativesAdapter.ViewHolder>() {

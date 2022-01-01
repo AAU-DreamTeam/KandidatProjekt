@@ -9,7 +9,7 @@
     app:cardCornerRadius="10dp"
     app:contentPadding="4dp"
     app:cardBackgroundColor="@color/colorPrimary"
-    tools:context=".views.ScannerActivity">
+    tools:context=".views.ScannerView">
 
 
     <LinearLayout

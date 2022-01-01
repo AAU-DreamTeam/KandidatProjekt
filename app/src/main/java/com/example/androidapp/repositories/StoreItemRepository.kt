@@ -1,8 +1,8 @@
 package com.example.androidapp.repositories
 
 import android.content.Context
-import com.example.androidapp.data.models.StoreItem
-import com.example.androidapp.data.models.daos.StoreItemDao
+import com.example.androidapp.models.StoreItem
+import com.example.androidapp.models.daos.StoreItemDao
 
 class StoreItemRepository(context: Context){
     private val storeItemDao = StoreItemDao(context)
@@ -11,7 +11,11 @@ class StoreItemRepository(context: Context){
         return storeItemDao.loadAlternatives(storeItem)
     }
 
-    fun loadAll(): List<StoreItem>{
-        return storeItemDao.loadAll()
+    fun loadStoreItems(): List<StoreItem>{
+        return storeItemDao.loadStoreItems()
+    }
+
+    fun close(){
+        storeItemDao.close()
     }
 }

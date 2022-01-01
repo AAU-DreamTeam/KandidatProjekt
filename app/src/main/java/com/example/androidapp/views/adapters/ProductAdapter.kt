@@ -6,8 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
-import com.example.androidapp.data.models.Country
-import com.example.androidapp.data.models.Product
+import com.example.androidapp.models.Product
 
 
 class ProductAdapter(context: Context, private val resource: Int, private val products: List<Product>): ArrayAdapter<Product>(context, resource, products) {

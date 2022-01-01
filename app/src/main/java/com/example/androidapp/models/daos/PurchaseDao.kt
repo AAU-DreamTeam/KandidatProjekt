@@ -1,19 +1,20 @@
-package com.example.androidapp.data.models.daos
+package com.example.androidapp.models.daos
 
 import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
-import com.example.androidapp.data.DBManager
-import com.example.androidapp.data.EmissionCalculator
-import com.example.androidapp.data.models.Purchase
+import com.example.androidapp.models.tools.DBManager
+import com.example.androidapp.models.tools.EmissionCalculator
+import com.example.androidapp.models.Purchase
+import com.example.androidapp.models.tools.TextRecognizer
 import com.google.mlkit.vision.text.Text
 import java.text.SimpleDateFormat
 import java.util.*
 
 class PurchaseDao(context: Context) {
-    private val dbManager = DBManager.getInstance(context)
+    private val dbManager = DBManager(context)
 
-    fun loadAllFromYearAndMonth(year: String, month: String): List<Purchase> {
+    fun loadPurchases(year: String, month: String): List<Purchase> {
         val results = mutableListOf<Purchase>()
         val query =
                 "SELECT $ALL_COLUMNS, " +
@@ -67,34 +68,39 @@ class PurchaseDao(context: Context) {
         return emissions.sum()
     }
 
-    fun generatePurchases(text: Text): MutableList<Purchase>{
-        val purchases = mutableListOf<Purchase>()
+    fun extractPurchases(imagePath: String, callback: (MutableList<Purchase>) -> Unit) {
+        TextRecognizer().runTextRecognition(imagePath) {
+            extractPurchasesFromText(it, callback)
+        }
+    }
 
+    private fun extractPurchasesFromText(text: Text, callback: (MutableList<Purchase>) -> Unit) {
+        val purchases = mutableListOf<Purchase>()
         val iterator = text.textBlocks.iterator()
         var endReached = false
 
         while (!endReached && iterator.hasNext()) {
-            endReached = generatePurchasesFromBlockLines(iterator.next().lines, purchases)
+            endReached = extractPurchasesFromBlock(iterator.next().lines, purchases)
         }
 
-        return purchases
+        callback(purchases)
     }
 
-    private fun generatePurchasesFromBlockLines(lines: List<Text.Line>, purchases: MutableList<Purchase>): Boolean {
+    private fun extractPurchasesFromBlock(lines: List<Text.Line>, purchases: MutableList<Purchase>): Boolean {
         var i = 0
         val limit = lines.size
 
         while (i < limit) {
-            val (current, next) = getCurrentAndNext(lines, i, limit)
+            val current = lines[i].text
 
             if (endReached(current)) {
                 return true
             }
 
             if (isValid(current)) {
-                val quantity = extractQuantity(next)
+                val quantity = extractQuantity(lines, i, limit)
 
-                purchases.add(generatePurchase(current, quantity.toInt()))
+                purchases.add(extractPurchaseFromLine(current, quantity.toInt()))
             }
             i++
         }
@@ -102,23 +108,23 @@ class PurchaseDao(context: Context) {
         return false
     }
 
-    private fun getCurrentAndNext(lines: List<Text.Line>, i: Int, limit: Int): Pair<String, String> {
-        val current = lines[i].text.toLowerCase(Locale.getDefault())
+    private fun getNext(lines: List<Text.Line>, i: Int, limit: Int): String {
         val next =
                 if (i + 1 < limit)
-                    lines[i + 1].text.toLowerCase(Locale.getDefault())
+                    lines[i + 1].text
                 else ""
 
-        return Pair(current, next)
+        return next
     }
 
     private fun endReached(receiptText: String): Boolean {
-        return receiptText.contains("total")
+        return receiptText.contains("TOTAL")
     }
 
-    private fun extractQuantity(receiptText: String) : String {
-        val regex = "[0-9]+[x][0-9]+[,][0-9]+".toRegex()
-        val find = regex.find(receiptText.replace(" ", ""))
+    private fun extractQuantity(lines: List<Text.Line>, i: Int, limit: Int) : String {
+        val next = getNext(lines, i, limit)
+        val regex = "[0-9]+[xX][0-9]+[,][0-9]+".toRegex()
+        val find = regex.find(next.replace(" ", ""))
 
         return buildString {
             if (find != null) {
@@ -136,14 +142,13 @@ class PurchaseDao(context: Context) {
     }
 
     private fun isValid(receiptText: String): Boolean {
-        return !(receiptText.contains("pant") || receiptText.contains("rabat") || receiptText.contains("*") || receiptText.contains("[0-9]+[,][0-9]+".toRegex()) || receiptText.length == 1)
+        return !(receiptText.contains("PANT") || receiptText.contains("RABAT") || receiptText.contains("*") || receiptText.contains("[0-9]+[,][0-9]+".toRegex()) || receiptText.length == 1)
     }
 
-    private fun generatePurchase(receiptText: String, quantity: Int = 0): Purchase {
-        val storeItem = StoreItemDao(dbManager).generateStoreItem(receiptText)
+    private fun extractPurchaseFromLine(receiptText: String, quantity: Int = 0): Purchase {
+        val storeItem = StoreItemDao(dbManager).extractStoreItem(receiptText)
         val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
 
-        //TODO: Extract quantity
         return Purchase(storeItem, sdf.format(Calendar.getInstance().time), quantity)
     }
 
@@ -170,7 +175,7 @@ class PurchaseDao(context: Context) {
     }
 
     private fun savePurchase(purchase: Purchase){
-        val storeItemId = StoreItemDao(dbManager).saveOrLoadStoreItem(purchase.storeItem);
+        val storeItemId = StoreItemDao(dbManager).saveStoreItem(purchase.storeItem);
         val contentValues = ContentValues()
 
         contentValues.put(COLUMN_STORE_ITEM_ID, storeItemId.toString())
@@ -204,5 +209,9 @@ class PurchaseDao(context: Context) {
 
             return Purchase(cursor.getInt(startIndex + COLUMN_ID_POSITION), storeItem, cursor.getString(startIndex + COLUMN_TIMESTAMP_POSITION), cursor.getInt(startIndex + COLUMN_QUANTITY_POSITION))
         }
+    }
+
+    fun close() {
+        dbManager.close()
     }
 }

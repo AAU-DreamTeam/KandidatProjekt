@@ -13,7 +13,7 @@ import com.example.androidapp.viewmodels.EmissionViewModel
 import com.example.androidapp.views.adapters.EmissionListAdapter
 import kotlinx.android.synthetic.main.fragment_list.*
 
-class ListFragment : Fragment() {
+class ListView : Fragment() {
     private val viewModel: EmissionViewModel by activityViewModels()
 
     override fun onCreateView(

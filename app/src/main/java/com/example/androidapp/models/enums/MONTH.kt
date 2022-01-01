@@ -1,4 +1,4 @@
-package com.example.androidapp.data
+package com.example.androidapp.models.enums
 
 enum class MONTH() {
     JANUAR,

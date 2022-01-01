@@ -1,7 +1,6 @@
-package com.example.androidapp.data.models
+package com.example.androidapp.models
 
-import com.example.androidapp.data.EmissionCalculator
-import java.lang.Exception
+import com.example.androidapp.models.tools.EmissionCalculator
 import java.util.*
 
 class StoreItem (val id: Int,
@@ -21,7 +20,7 @@ class StoreItem (val id: Int,
                 weight: Double,
                 store: String = "Føtex"): this(0, product, country, _receiptText, organic, packaged, weight, store)
 
-    var receiptText = _receiptText.toLowerCase(Locale.getDefault())
+    var receiptText = _receiptText
     val emissionPerKg: Double get() = EmissionCalculator.calcEmission(this)
 
     fun hasValidWeight(): Boolean {

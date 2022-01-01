@@ -13,8 +13,8 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.androidapp.R
-import com.example.androidapp.data.models.Purchase
-import com.example.androidapp.data.models.StoreItem
+import com.example.androidapp.models.Purchase
+import com.example.androidapp.models.StoreItem
 import com.example.androidapp.viewmodels.EmissionViewModel
 import kotlinx.android.synthetic.main.emission_list_item.view.*
 
@@ -41,7 +41,7 @@ class EmissionListAdapter(val context: Context, var purchases: List<Purchase>, v
                 holder.showAlternatives()
 
                 if (!holder.alternativesGot) {
-                    holder.setUpAlternatives(context, purchases[position], viewModel.loadAlternatives(context, holder.adapterPosition))
+                    holder.setUpAlternatives(context, purchases[position], viewModel.onViewAlternatives(holder.adapterPosition))
                 }
             }
         }

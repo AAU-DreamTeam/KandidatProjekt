@@ -1,28 +1,32 @@
 package com.example.androidapp.viewmodels
 
 import android.content.Context
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.media.ExifInterface
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.androidapp.data.models.Country
-import com.example.androidapp.data.models.Product
-import com.example.androidapp.data.models.Purchase
+import com.example.androidapp.models.Country
+import com.example.androidapp.models.Product
+import com.example.androidapp.models.Purchase
 import com.example.androidapp.repositories.CountryRepository
 import com.example.androidapp.repositories.ProductRepository
 import com.example.androidapp.repositories.PurchaseRepository
+import com.example.androidapp.repositories.StoreItemRepository
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.Text
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 import java.io.File
-import java.util.*
 
 class ScannerViewModel: ViewModel() {
-    var imagePath: String = ""
+    private var purchaseRepository: PurchaseRepository? = null
+    private var countryRepository: CountryRepository? = null
+    private var productRepository: ProductRepository? = null
+
+    private val _saved = MutableLiveData<Boolean>()
+    val saved: LiveData<Boolean> get() = _saved
 
     private val _products = MutableLiveData<List<Product>>(listOf())
     val products: LiveData<List<Product>> get() = _products
@@ -33,51 +37,32 @@ class ScannerViewModel: ViewModel() {
     private val _purchases = MutableLiveData<MutableList<Purchase>>(mutableListOf())
     val purchases: LiveData<MutableList<Purchase>> get() = _purchases
 
-    fun loadProducts(context: Context) {
-        _products.value = ProductRepository(context).loadProducts()
-    }
-
-    fun loadCountries(context: Context){
-        _countries.value = CountryRepository(context).loadCountries()
-    }
-
-    fun runTextRecognition(context: Context){
-        val image = InputImage.fromBitmap(BitmapFactory.decodeFile(imagePath), getCameraPhotoOrientation(imagePath))
-
-        val recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
-
-        recognizer.process(image)
-                .addOnSuccessListener { text ->
-                    textToPurchases(context, text)
-                }
-                .addOnFailureListener { e -> // Task failed with an exception
-                    e.printStackTrace()
-                }
-    }
-
-    private fun getCameraPhotoOrientation(imagePath: String?): Int {
-        var rotate = 0
-        try {
-            val imageFile = File(imagePath)
-            val exif = ExifInterface(imageFile.absolutePath)
-            val orientation: Int = exif.getAttributeInt(
-                    ExifInterface.TAG_ORIENTATION,
-                    ExifInterface.ORIENTATION_NORMAL)
-            when (orientation) {
-                ExifInterface.ORIENTATION_ROTATE_270 -> rotate = 270
-                ExifInterface.ORIENTATION_ROTATE_180 -> rotate = 180
-                ExifInterface.ORIENTATION_ROTATE_90 -> rotate = 90
-            }
-            Log.i("RotateImage", "Exif orientation: $orientation")
-            Log.i("RotateImage", "Rotate value: $rotate")
-        } catch (e: Exception) {
-            e.printStackTrace()
+    fun initiate(context: Context) {
+        if (purchaseRepository == null) {
+            purchaseRepository = PurchaseRepository(context)
         }
-        return rotate
+
+        if (productRepository == null) {
+            productRepository = ProductRepository(context)
+        }
+
+        if (countryRepository == null) {
+            countryRepository = CountryRepository(context)
+        }
     }
 
-    private fun textToPurchases(context: Context, text: Text) {
-        _purchases.value = PurchaseRepository(context).generatePurchases(text)
+    fun onPhotoTaken(imagePath: String){
+        purchaseRepository!!.extractPurchases(imagePath) {
+            _purchases.value = it
+        }
+    }
+
+    fun loadProducts() {
+        _products.value = productRepository!!.loadProducts()
+    }
+
+    fun loadCountries(){
+        _countries.value = countryRepository!!.loadCountries()
     }
 
     fun onDeletePurchase(index: Int){
@@ -92,7 +77,7 @@ class ScannerViewModel: ViewModel() {
         _purchases.value!![index].storeItem.packaged = value
     }
 
-    fun onTitleChanged(index: Int, value: String){
+    fun onReceiptTextChanged(index: Int, value: String){
         _purchases.value!![index].storeItem.receiptText = value
     }
 
@@ -112,7 +97,14 @@ class ScannerViewModel: ViewModel() {
         _purchases.value!![index].storeItem.weight = value
     }
 
-    fun onSave(context: Context): Boolean{
-        return PurchaseRepository(context).savePurchases(_purchases.value!!)
+    fun onSave(){
+        _saved.value = purchaseRepository!!.savePurchases(_purchases.value!!)
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        purchaseRepository?.close()
+        productRepository?.close()
+        countryRepository?.close()
     }
 }

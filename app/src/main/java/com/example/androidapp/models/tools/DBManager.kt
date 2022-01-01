@@ -1,14 +1,15 @@
-package com.example.androidapp.data
+package com.example.androidapp.models.tools
 
 import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper;
-import com.example.androidapp.data.models.StoreItem
-import com.example.androidapp.data.models.daos.PurchaseDao
+import java.util.*
 
-class DBManager private constructor(context: Context?) : SQLiteOpenHelper(context, "FoodEmission.db", null, 1) {
+class DBManager(context: Context?) : SQLiteOpenHelper(context, "FoodEmission.db", null, 1) {
+    val INVALID_ID = -1L
+
     override fun onCreate(db: SQLiteDatabase) {
         createTables(db)
         insertProductData(db)
@@ -126,7 +127,7 @@ class DBManager private constructor(context: Context?) : SQLiteOpenHelper(contex
         insertStoreItem(db, 1, 5,"oko runde tomater", true, true, 0.500)
         insertStoreItem(db, 1, 6,"cherrytomater mix", false, true, 0.500)
         insertStoreItem(db, 1, 4,"gusto tomater", false, true, 0.450)
-        insertStoreItem(db, 1, 3,"cocktailtomat", false, true, 0.500)
+        insertStoreItem(db, 1, 3,"COCKTAILTOMAT", false, true, 0.500)
         insertStoreItem(db, 1, 5,"danske mix tomater", false, true, 0.325)
         insertStoreItem(db, 1, 6,"lose tomater", false, false, 0.075)
         insertStoreItem(db, 1, 5,"san marzano", false, true, 0.250)
@@ -161,7 +162,7 @@ class DBManager private constructor(context: Context?) : SQLiteOpenHelper(contex
 
         contentValues.put("productID", productID)
         contentValues.put("countryID", countryID)
-        contentValues.put("receiptText", receiptText)
+        contentValues.put("receiptText", receiptText.toUpperCase(Locale.getDefault()))
         contentValues.put("organic", organic)
         contentValues.put("packaged", packaged)
         contentValues.put("weight", weight)
@@ -208,22 +209,4 @@ class DBManager private constructor(context: Context?) : SQLiteOpenHelper(contex
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
         TODO("Not yet implemented")
     }
-
-    companion object {
-        const val INVALID_ID = -1L
-        private var instance: DBManager? = null
-
-        fun getInstance(context: Context): DBManager{
-            if (instance == null) {
-                instance = DBManager(context)
-            }
-
-            return instance as DBManager
-        }
-
-        fun close(){
-            instance?.close()
-        }
-    }
-
 }

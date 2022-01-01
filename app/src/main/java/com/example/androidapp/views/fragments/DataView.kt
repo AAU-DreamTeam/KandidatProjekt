@@ -9,12 +9,13 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.androidapp.R
+import com.example.androidapp.viewmodels.DataViewModel
 import com.example.androidapp.viewmodels.EmissionViewModel
 import com.example.androidapp.views.adapters.DataAdapter
 import kotlinx.android.synthetic.main.fragment_data.*
 
-class DataFragment : Fragment() {
-    private val viewModel: EmissionViewModel by activityViewModels()
+class DataView : Fragment() {
+    private val viewModel: DataViewModel by activityViewModels()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -25,12 +26,14 @@ class DataFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        viewModel.initiate(requireContext())
+
         storeItemList.layoutManager = LinearLayoutManager(requireContext())
 
-        viewModel.data.observe(viewLifecycleOwner, { list ->
+        viewModel.storeItems.observe(viewLifecycleOwner, { list ->
             storeItemList.adapter = DataAdapter(requireContext(), list)
         })
 
-        viewModel.loadData(requireContext())
+        viewModel.loadStoreItems()
     }
 }

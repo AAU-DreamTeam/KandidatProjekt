@@ -1,9 +1,9 @@
-package com.example.androidapp.data
+package com.example.androidapp.models.tools
 
-import com.example.androidapp.data.models.StoreItem
-import com.example.androidapp.data.models.daos.CountryDao
-import com.example.androidapp.data.models.daos.ProductDao
-import com.example.androidapp.data.models.daos.StoreItemDao
+import com.example.androidapp.models.StoreItem
+import com.example.androidapp.models.daos.CountryDao
+import com.example.androidapp.models.daos.ProductDao
+import com.example.androidapp.models.daos.StoreItemDao
 
 class EmissionCalculator {
     companion object{

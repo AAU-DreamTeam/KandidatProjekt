@@ -1,13 +1,12 @@
-package com.example.androidapp.data.models.daos
+package com.example.androidapp.models.daos
 
 import android.content.Context
 import android.database.Cursor
-import com.example.androidapp.data.DBManager
-import com.example.androidapp.data.models.Country
-import org.w3c.dom.Text
+import com.example.androidapp.models.tools.DBManager
+import com.example.androidapp.models.Country
 
 class CountryDao(private val dbManager: DBManager) {
-    constructor(context: Context): this(DBManager.getInstance(context))
+    constructor(context: Context): this(DBManager(context))
 
     fun loadCountries(): List<Country> {
         val query = "SELECT * FROM $TABLE;"
@@ -61,5 +60,9 @@ class CountryDao(private val dbManager: DBManager) {
                     cursor.getInt(startIndex + COLUMN_GHPENALTY_POSITION) != 0
             )
         }
+    }
+
+    fun close() {
+        dbManager.close()
     }
 }

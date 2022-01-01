@@ -15,7 +15,7 @@ import com.example.androidapp.R
 import com.example.androidapp.viewmodels.EmissionViewModel
 import kotlinx.android.synthetic.main.emission_list_item.*
 
-class OverviewFragment : Fragment() {
+class OverviewView : Fragment() {
     private val viewModel: EmissionViewModel by activityViewModels()
     private lateinit var totalEmissionTV: TextView
     private lateinit var totalEmissionAltTV: TextView

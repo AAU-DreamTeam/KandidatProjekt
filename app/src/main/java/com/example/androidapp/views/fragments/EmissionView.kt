@@ -9,20 +9,18 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import com.example.androidapp.R
 import com.example.androidapp.viewmodels.EmissionViewModel
-import com.example.androidapp.views.ScannerActivity
+import com.example.androidapp.views.ScannerView
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.button.MaterialButtonToggleGroup
 
-class EmissionFragment : Fragment() {
+class EmissionView : Fragment() {
     private val viewModel: EmissionViewModel by activityViewModels()
     private lateinit var toggleButton : MaterialButtonToggleGroup
-    private lateinit var overviewFragment: OverviewFragment
-    private lateinit var listFragment: ListFragment
+    private lateinit var overviewView: OverviewView
+    private lateinit var listView: ListView
     private lateinit var fragmentFL: FrameLayout
     private lateinit var scanButton: MaterialButton
     private lateinit var prevButton: MaterialButton
@@ -33,8 +31,9 @@ class EmissionFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         val rootView = inflater.inflate(R.layout.fragment_emission, container, false)
 
-        overviewFragment = OverviewFragment()
-        listFragment = ListFragment()
+        viewModel.initiate(requireContext())
+        overviewView = OverviewView()
+        listView = ListView()
         toggleButton = rootView.findViewById(R.id.toggleButton)
         fragmentFL = rootView.findViewById(R.id.fragment_fl)
         scanButton = rootView.findViewById(R.id.btn_scan)
@@ -46,9 +45,9 @@ class EmissionFragment : Fragment() {
         setUpToggleButton()
         setUpMonthButtons()
 
-        viewModel.loadData(requireContext())
+        viewModel.loadData()
 
-        childFragmentManager.beginTransaction().replace(fragmentFL.id, overviewFragment).commit()
+        childFragmentManager.beginTransaction().replace(fragmentFL.id, overviewView).commit()
 
         return rootView
     }
@@ -65,8 +64,8 @@ class EmissionFragment : Fragment() {
         toggleButton.addOnButtonCheckedListener { toggleButton, checkedId, isChecked ->
             if(isChecked) {
                 when(checkedId) {
-                    R.id.btn_overview -> childFragmentManager.beginTransaction().replace(fragmentFL.id, overviewFragment).commit()
-                    R.id.btn_list -> childFragmentManager.beginTransaction().replace(fragmentFL.id, listFragment).commit()
+                    R.id.btn_overview -> childFragmentManager.beginTransaction().replace(fragmentFL.id, overviewView).commit()
+                    R.id.btn_list -> childFragmentManager.beginTransaction().replace(fragmentFL.id, listView).commit()
                 }
             } else if (toggleButton.checkedButtonId == View.NO_ID) {
                 toggleButton.check(checkedId)
@@ -76,21 +75,21 @@ class EmissionFragment : Fragment() {
 
     private fun setUpScanButton() {
         val resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            viewModel.loadData(requireContext())
+            viewModel.loadData()
         }
 
         scanButton.setOnClickListener{
-            resultLauncher.launch(Intent(activity, ScannerActivity::class.java))
+            resultLauncher.launch(Intent(activity, ScannerView::class.java))
         }
     }
 
     private fun setUpMonthButtons(){
         prevButton.setOnClickListener {
-            viewModel.loadPrev(requireContext())
+            viewModel.onViewPrev()
         }
 
         nextButton.setOnClickListener {
-            viewModel.loadNext(requireContext())
+            viewModel.onViewNext()
         }
     }
 }
