@@ -65,7 +65,7 @@ class ScannerAdapter(var purchases: List<Purchase>,
             holder.toggleButton.check(R.id.btn_packaged)
         }
 
-        holder.toggleButton.addOnButtonCheckedListener(){ _, checkedId, isChecked ->
+        holder.toggleButton.addOnButtonCheckedListener{ _, checkedId, isChecked ->
             when(checkedId) {
                 R.id.btn_organic -> viewModel.onOrganicChanged(holder.adapterPosition, isChecked)
                 R.id.btn_packaged -> viewModel.onPackagedChanged(holder.adapterPosition, isChecked)

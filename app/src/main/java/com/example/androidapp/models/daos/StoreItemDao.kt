@@ -81,7 +81,7 @@ class StoreItemDao(private val dbManager: DBManager) {
     }
 
     private fun formatReceiptText(receiptText: String): String {
-        return receiptText.toUpperCase(Locale.getDefault()).replace('Ø', 'O').replace('Å', 'A').replace('Æ','E')
+        return receiptText.toLowerCase(Locale.getDefault()).replace('ø', 'o').replace('å', 'a').replace('æ','e')
     }
 
     private fun generateStoreItem(receiptText: String): StoreItem {
@@ -98,15 +98,15 @@ class StoreItemDao(private val dbManager: DBManager) {
     }
 
     private fun isOrganic(receiptText: String): Boolean {
-        return receiptText.contains("OKO")
+        return receiptText.contains("oko")
     }
 
     private fun isPackaged(receiptText: String): Boolean {
-        return !receiptText.contains("LOS")
+        return !receiptText.contains("los")
     }
 
     private fun extractWeight(receiptText: String): Double{
-        val regex = "[0-9]+([G]|[K][G])".toRegex()
+        val regex = "[0-9]+([g]|[k][g])".toRegex()
         val find = regex.find(receiptText.replace(" ", ""))
         var inGrams = false
 
@@ -120,7 +120,7 @@ class StoreItemDao(private val dbManager: DBManager) {
                     this.append(char)
                 }
 
-                inGrams = !find.value.contains("KG")
+                inGrams = !find.value.contains("kg")
 
             } else {
                 this.append(0)

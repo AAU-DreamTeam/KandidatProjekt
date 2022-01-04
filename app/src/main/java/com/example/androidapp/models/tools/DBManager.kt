@@ -127,7 +127,7 @@ class DBManager(context: Context?) : SQLiteOpenHelper(context, "FoodEmission.db"
         insertStoreItem(db, 1, 5,"oko runde tomater", true, true, 0.500)
         insertStoreItem(db, 1, 6,"cherrytomater mix", false, true, 0.500)
         insertStoreItem(db, 1, 4,"gusto tomater", false, true, 0.450)
-        insertStoreItem(db, 1, 3,"COCKTAILTOMAT", false, true, 0.500)
+        insertStoreItem(db, 1, 3,"cocktailtomat", false, true, 0.500)
         insertStoreItem(db, 1, 5,"danske mix tomater", false, true, 0.325)
         insertStoreItem(db, 1, 6,"lose tomater", false, false, 0.075)
         insertStoreItem(db, 1, 5,"san marzano", false, true, 0.250)
@@ -162,7 +162,7 @@ class DBManager(context: Context?) : SQLiteOpenHelper(context, "FoodEmission.db"
 
         contentValues.put("productID", productID)
         contentValues.put("countryID", countryID)
-        contentValues.put("receiptText", receiptText.toUpperCase(Locale.getDefault()))
+        contentValues.put("receiptText", receiptText)
         contentValues.put("organic", organic)
         contentValues.put("packaged", packaged)
         contentValues.put("weight", weight)
