@@ -14,7 +14,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Androidapp">
-
+        <activity android:name=".views.GameView"></activity>
+        <activity android:name=".views.AlternativesView" />
         <activity
             android:name=".views.ScannerView"
             android:theme="@style/AppTheme" />

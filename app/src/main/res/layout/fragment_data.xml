@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".views.fragments.DataView">
+    tools:context=".views.fragments.mainView.DataView">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/storeItemList"

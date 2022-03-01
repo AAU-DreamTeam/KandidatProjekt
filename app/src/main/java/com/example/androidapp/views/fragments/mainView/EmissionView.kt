@@ -1,4 +1,4 @@
-package com.example.androidapp.views.fragments
+package com.example.androidapp.views.fragments.mainView
 
 import android.content.Intent
 import android.os.Bundle
