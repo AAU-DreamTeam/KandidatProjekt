@@ -41,23 +41,35 @@ class MainView : AppCompatActivity() {
     }
 
     private fun setUpTabs(){
-        tabLayout.addTab(tabLayout.newTab().setText("FORBRUG"))
-        tabLayout.addTab(tabLayout.newTab().setText("VARER"))
+        with(tabLayout) {
 
-        tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            addTab(setupTab(R.drawable.ic_home))
+            addTab(setupTab(R.drawable.ic_vs))
+            addTab(setupTab(R.drawable.ic_basket))
 
-            override fun onTabSelected(tab: TabLayout.Tab?) {
-                viewPager.currentItem = tab!!.position
-            }
 
-            override fun onTabReselected(tab: TabLayout.Tab?) {
-                // Handle tab reselect
-            }
+            addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
 
-            override fun onTabUnselected(tab: TabLayout.Tab?) {
-                // Handle tab unselect
-            }
-        })
+                override fun onTabSelected(tab: TabLayout.Tab?) {
+                    viewPager.currentItem = tab!!.position
+                }
+
+                override fun onTabReselected(tab: TabLayout.Tab?) {
+                    // Handle tab reselect
+                }
+
+                override fun onTabUnselected(tab: TabLayout.Tab?) {
+                    // Handle tab unselect
+                }
+            })
+        }
+    }
+    private fun setupTab(drawable: Int): TabLayout.Tab {
+        val newTab = tabLayout.newTab()
+        val view = getLayoutInflater().inflate(R.layout.customtab,null);
+        view.setBackgroundResource(drawable)
+        newTab.customView = view
+        return newTab
     }
 
     private fun setUpViewPager(){

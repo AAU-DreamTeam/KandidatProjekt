@@ -8,21 +8,21 @@
     tools:context=".views.MainView">
 
     <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tabLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:background="@color/colorPrimary"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:tabBackground="@drawable/tab_background"
-        app:tabIndicatorColor="@color/white"
-        app:tabIndicatorGravity="bottom"
-        app:tabTextAppearance="@style/TabLayoutTextStyle"
-        app:tabTextColor="@color/black" />
+            android:id="@+id/tabLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="8dp"
+            android:background="@color/colorPrimary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tabBackground="@drawable/tab_background"
+            app:tabIndicatorColor="@color/white"
+            app:tabIndicatorGravity="bottom"
+            app:tabTextAppearance="@style/TextAppearance.AppCompat.Display4"
+            app:tabTextColor="@color/black" app:tabMinWidth="100dp" app:tabInlineLabel="false"/>
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager"
