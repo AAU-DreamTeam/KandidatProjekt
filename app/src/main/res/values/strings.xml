@@ -14,5 +14,7 @@
     <string name="til_en_udledning_paa"> Til en udledning på </string>
     <string name="alternativer"> Alternativer </string>
     <string name="choose_product_text"> Produkt: </string>
-
+    <string name="dit_co2_aftryk_er"> Dit CO<sub><small>2</small></sub> aftryk er </string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
