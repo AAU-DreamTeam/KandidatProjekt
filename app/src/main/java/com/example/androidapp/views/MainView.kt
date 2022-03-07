@@ -44,7 +44,7 @@ class MainView : AppCompatActivity() {
         with(tabLayout) {
 
             addTab(setupTab(R.drawable.ic_home))
-            addTab(setupTab(R.drawable.ic_vs))
+            addTab(setupTab(R.drawable.ic_graph))
             addTab(setupTab(R.drawable.ic_basket))
 
 
