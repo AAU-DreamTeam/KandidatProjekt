@@ -15,6 +15,7 @@ import com.example.androidapp.viewmodels.EmissionViewModel
 import com.example.androidapp.views.ScannerView
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.button.MaterialButtonToggleGroup
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class EmissionView : Fragment() {
     private val viewModel: EmissionViewModel by activityViewModels()
@@ -22,10 +23,9 @@ class EmissionView : Fragment() {
     private lateinit var overviewView: OverviewView
     private lateinit var listView: ListView
     private lateinit var fragmentFL: FrameLayout
-    private lateinit var scanButton: MaterialButton
+    private lateinit var scanButton: FloatingActionButton
     private lateinit var prevButton: MaterialButton
     private lateinit var nextButton: MaterialButton
-    private lateinit var monthTV: TextView
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -34,20 +34,11 @@ class EmissionView : Fragment() {
         viewModel.initiate(requireContext())
         overviewView = OverviewView()
         listView = ListView()
-        toggleButton = rootView.findViewById(R.id.toggleButton)
         fragmentFL = rootView.findViewById(R.id.fragment_fl)
-        scanButton = rootView.findViewById(R.id.btn_scan)
-        prevButton = rootView.findViewById(R.id.btn_prev)
-        nextButton = rootView.findViewById(R.id.btn_next)
-        monthTV = rootView.findViewById(R.id.monthTV)
-
-        setUpScanButton()
-        setUpToggleButton()
-        setUpMonthButtons()
-
         viewModel.loadData()
 
         childFragmentManager.beginTransaction().replace(fragmentFL.id, overviewView).commit()
+
 
         return rootView
     }
@@ -55,17 +46,14 @@ class EmissionView : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.month.observe(viewLifecycleOwner, { month ->
-            monthTV.text = month
-        })
     }
 
     private fun setUpToggleButton() {
         toggleButton.addOnButtonCheckedListener { toggleButton, checkedId, isChecked ->
             if(isChecked) {
                 when(checkedId) {
-                    R.id.btn_overview -> childFragmentManager.beginTransaction().replace(fragmentFL.id, overviewView).commit()
-                    R.id.btn_list -> childFragmentManager.beginTransaction().replace(fragmentFL.id, listView).commit()
+                    //R.id.btn_overview -> childFragmentManager.beginTransaction().replace(fragmentFL.id, overviewView).commit()
+                    //R.id.btn_list -> childFragmentManager.beginTransaction().replace(fragmentFL.id, listView).commit()
                 }
             } else if (toggleButton.checkedButtonId == View.NO_ID) {
                 toggleButton.check(checkedId)
