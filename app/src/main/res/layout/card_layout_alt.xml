@@ -80,7 +80,7 @@
                     android:hint="@string/oprindelsesland_btn_text">
 
                     <AutoCompleteTextView
-                        android:id="@+id/countryOption"
+                        android:id="@+id/co2Showcase"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="none" />

@@ -11,10 +11,10 @@
             android:layout_height="match_parent">
 
         <View
-                android:layout_width="397dp"
-                android:layout_height="200dp" android:id="@+id/materialCardView3"
-                app:layout_constraintStart_toStartOf="@id/materialCardView"
-                app:layout_constraintBottom_toTopOf="@+id/materialCardView2"
+                android:layout_width="400dp"
+                android:layout_height="251dp" android:id="@+id/materialCardView3"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="5dp" android:layout_marginTop="13dp"
                 app:layout_constraintTop_toBottomOf="@+id/materialCardView"/>
         <com.google.android.material.card.MaterialCardView
                 android:id="@+id/materialCardView"
@@ -34,13 +34,21 @@
                     android:gravity="center_horizontal|center_vertical"
                     android:orientation="vertical">
 
-                <Spinner
-                        android:layout_width="362dp"
-                        android:layout_height="50dp" android:id="@+id/spinner"
-                        android:textAlignment="center"
-                        android:layout_gravity="center_horizontal"
-                        android:dropDownSelector="@drawable/ic_navigate_before_black_24dp" android:background="@null"
-                        android:layout_marginLeft="40dp"/>
+                <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+                        android:layout_width="300dp"
+
+                        android:layout_height="wrap_content"
+                >
+
+                    <AutoCompleteTextView
+                            android:id="@+id/co2Showcase"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="20sp"
+                            android:gravity="center"
+                            android:inputType="none"/>
+                </com.google.android.material.textfield.TextInputLayout>
                 <TextView
                         android:id="@+id/totalEmission"
                         style="@style/CardTextView"
@@ -53,34 +61,49 @@
 
         <com.google.android.material.card.MaterialCardView
                 android:id="@+id/materialCardView2"
-                android:layout_width="393dp"
-                android:layout_height="131dp"
-                android:layout_margin="8dp"
+                android:layout_width="390dp"
+                android:layout_height="wrap_content"
                 app:cardElevation="0dp"
-                app:strokeWidth="1dp"
+                android:backgroundTint="@android:color/transparent"
                 app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginStart="8dp"
-                app:layout_constraintBottom_toBottomOf="parent" android:layout_marginBottom="8dp">
-            <Button
-                android:id="@+id/button_nooo"
-                android:layout_height="wrap_content"
-                app:backgroundTint="@color/colorButton"
-                android:textColor="@color/black"
-                android:layout_width="wrap_content"
-                android:text="Nooo" />
-            <Button
-                android:id="@+id/button_yess"
-                android:textColor="@color/black"
-                android:layout_height="wrap_content"
-                app:backgroundTint="@color/colorButton"
-                android:layout_width="wrap_content"
-                android:text="yess" />
+                android:layout_marginStart="8dp" android:layout_marginTop="12dp"
+                app:layout_constraintTop_toBottomOf="@+id/line">
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:orientation="vertical">
+                <TextView
+                        android:id="@+id/gameText"
+                        style="@style/CardTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="15sp"/>
+            </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
         <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@android:color/darker_gray" android:id="@+id/line"
-                app:layout_constraintStart_toStartOf="parent" android:layout_marginTop="4dp"
+                app:layout_constraintStart_toStartOf="parent" android:layout_marginTop="12dp"
                 app:layout_constraintTop_toBottomOf="@+id/materialCardView3"/>
+        <Button
+                android:id="@+id/button_play"
+                android:textColor="@color/black"
+                android:layout_height="wrap_content"
+                app:backgroundTint="@color/colorButton"
+                android:layout_width="wrap_content"
+                android:text="@string/play_button"
+                app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="108dp"
+                app:layout_constraintTop_toBottomOf="@+id/materialCardView2" android:layout_marginTop="4dp"/>
+        <Button
+                android:id="@+id/button_showNumbers"
+                android:layout_height="wrap_content"
+                app:backgroundTint="@color/colorButton"
+                android:textColor="@color/black"
+                android:layout_width="wrap_content"
+                android:text="@string/show_button"
+                app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="161dp"
+                app:layout_constraintTop_toBottomOf="@+id/button_play"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

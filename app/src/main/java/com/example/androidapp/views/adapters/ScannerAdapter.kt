@@ -140,7 +140,7 @@ class ScannerAdapter(var purchases: List<Purchase>,
     inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
         val toggleButton: MaterialButtonToggleGroup = itemView.findViewById(R.id.toggleButton)
         val deleteButton: Button = itemView.findViewById(R.id.btn_delete)
-        val country: AutoCompleteTextView = itemView.findViewById(R.id.countryOption)
+        val country: AutoCompleteTextView = itemView.findViewById(R.id.co2Showcase)
         val product: AutoCompleteTextView = itemView.findViewById(R.id.productOption)
         val weight: TextInputEditText = itemView.findViewById(R.id.weight_input)
         val amount: TextInputEditText = itemView.findViewById(R.id.amount_input)
@@ -151,7 +151,7 @@ class ScannerAdapter(var purchases: List<Purchase>,
             val countryAdapter = CountryAdapter(itemView.context, R.layout.dropdown_item, countries)
 
             itemView.productOption.setAdapter(productAdapter)
-            itemView.countryOption.setAdapter(countryAdapter)
+            itemView.co2Showcase.setAdapter(countryAdapter)
 
             toggleButton.addOnButtonCheckedListener { toggleButton, checkedId, isChecked ->
                 toggleBtnListener()

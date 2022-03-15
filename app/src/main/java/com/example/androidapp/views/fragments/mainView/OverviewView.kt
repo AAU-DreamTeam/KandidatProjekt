@@ -1,31 +1,31 @@
 package com.example.androidapp.views.fragments.mainView
 
+import android.widget.*
+
+
+
 import android.content.Context
-import android.content.Intent
-import android.content.Intent.ACTION_VIEW
-import android.icu.util.TimeUnit.values
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.Spinner
-import android.widget.TextView
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.text.HtmlCompat
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.androidapp.R
 import com.example.androidapp.viewmodels.EmissionViewModel
-import com.example.androidapp.views.ScannerView
-import com.google.android.material.button.MaterialButton
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import java.time.chrono.JapaneseEra.values
+import kotlinx.android.synthetic.main.activity_game_view.view.*
+import kotlinx.android.synthetic.main.activity_scanner.*
+import kotlinx.android.synthetic.main.fragment_overview.*
 
 class OverviewView : Fragment() {
     private val viewModel: EmissionViewModel by activityViewModels()
+    private val intervals = arrayListOf<String>("Ugentligt CO2 forbrug","Månedligt CO2 forbrug")
     private lateinit var totalEmissionTV: TextView
-    private lateinit var spinner: Spinner
+    private lateinit var gameTV: TextView
+    private lateinit var playButton: Button
+    private lateinit var showButton: Button
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -33,10 +33,12 @@ class OverviewView : Fragment() {
         val rootView = inflater.inflate(R.layout.fragment_overview, container, false)
 
         totalEmissionTV = rootView.findViewById(R.id.totalEmission)
+        gameTV = rootView.findViewById(R.id.gameText)
+        playButton= rootView.findViewById(R.id.button_play)
+        showButton= rootView.findViewById(R.id.button_showNumbers)
 
-        spinner= rootView.findViewById(R.id.spinner)
-
-        createSpinner(rootView.context)
+        setupDropDown(rootView)
+        setupPage()
 
         return rootView
     }
@@ -52,10 +54,30 @@ class OverviewView : Fragment() {
 
     }
 
-    fun createSpinner(context: Context){
-        val list = listOf<String>("Ugentlig forbrug","Måndeligt forbrug")
-        spinner.adapter= ArrayAdapter<String>(context,R.layout.spinner_icon,list)
+    fun setupPage(){
+        if(viewModel.purchases.value?.isNotEmpty() == false){
+            gameTV.text= resources.getString(R.string.game_no_products_text)
+            playButton.visibility= View.INVISIBLE
+            showButton.visibility = View.INVISIBLE
 
+        }else{
+            gameTV.text= resources.getString(R.string.game_text)
+            setupButtons()
+        }
+    }
+
+    private fun setupDropDown(view: View){
+        val adapter: ArrayAdapter<Any?> = ArrayAdapter<Any?>(
+            this.requireContext(),
+            R.layout.dropdown_menu_popup_item,
+            intervals as List<Any?>
+        )
+        val editDropDown = view.findViewById<AutoCompleteTextView>(R.id.co2Showcase)
+
+        editDropDown.setAdapter(adapter)
+        editDropDown.setText(adapter.getItem(0).toString(),false)
+    }
+    private fun setupButtons(){
 
     }
 
