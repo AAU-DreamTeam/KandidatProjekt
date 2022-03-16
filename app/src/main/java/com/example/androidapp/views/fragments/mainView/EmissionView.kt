@@ -38,7 +38,7 @@ class EmissionView : Fragment() {
         fragmentFL = rootView.findViewById(R.id.fragment_fl)
         scanButton = rootView.findViewById(R.id.btn_scan)
         prevButton = rootView.findViewById(R.id.btn_prev)
-        nextButton = rootView.findViewById(R.id.btn_next)
+        nextButton = rootView.findViewById(R.id.btnNext)
         monthTV = rootView.findViewById(R.id.monthTV)
 
         setUpScanButton()

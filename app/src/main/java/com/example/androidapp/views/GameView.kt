@@ -1,9 +1,7 @@
 package com.example.androidapp.views
 
-import android.opengl.Visibility
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import androidx.core.content.ContextCompat
@@ -22,6 +20,7 @@ class GameView : AppCompatActivity() {
         setContentView(R.layout.activity_game_view)
 
         QuizMaster.nextQuestion()
+
 
         viewModel.emission.observe(this) {
             carbonFootprint.text = "%.1f ".format(it).replace('.', ',') + " kg"
@@ -69,25 +68,23 @@ class GameView : AppCompatActivity() {
 
         viewModel.remainingQuestions.observe(this) {
             if (it == 0) {
-                btn_next.text = "Afslut"
-                btn_next.setOnClickListener{
+                btnNext.text = "Afslut"
+                btnNext.setOnClickListener{
                     finish()
                 }
             }
         }
 
-        btn_above.setOnClickListener{
+        btnAbove.setOnClickListener{
             QuizMaster.submitAnswer(QuestionAnswer.ABOVE)
         }
 
-        btn_below.setOnClickListener{
+        btnBelow.setOnClickListener{
             QuizMaster.submitAnswer(QuestionAnswer.BELLOW)
         }
 
-        btn_next.setOnClickListener{
-            if (!QuizMaster.nextQuestion()) {
-
-            }
+        btnNext.setOnClickListener{
+            QuizMaster.nextQuestion()
         }
     }
 }

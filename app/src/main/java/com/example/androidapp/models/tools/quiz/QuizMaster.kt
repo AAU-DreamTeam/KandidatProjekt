@@ -10,8 +10,7 @@ import java.util.*
 
 object QuizMaster : ViewModel() {
     private val _emission = MutableLiveData<Double>(null)
-    val emission: LiveData<Double>
-        get() = _emission
+    val emission: LiveData<Double> get() = _emission
 
     private val _score = MutableLiveData(0)
     val score: LiveData<Int> get() = _score
@@ -28,7 +27,8 @@ object QuizMaster : ViewModel() {
     private val _remainingQuestions = MutableLiveData<Int>()
     val remainingQuestions: LiveData<Int> get() = _remainingQuestions
 
-    private val questions = ArrayMap<QuestionType, Question>()
+    private val questions = mutableListOf<Question>()
+    private val questionTypeToIndex = mutableMapOf<QuestionType, Int>()
     private var indices: MutableList<Int>? = null
 
     fun nextQuestion() : Boolean {
@@ -51,8 +51,9 @@ object QuizMaster : ViewModel() {
         var numberOfQuestions = 0
 
         for ((index, type) in QuestionType.values().withIndex()) {
-            questions[type] = questionFactory.getQuestion(type, emission.value!!)
+            questions.add(index, questionFactory.getQuestion(type, emission.value!!))
             indices!!.add(index)
+            questionTypeToIndex[type] = index
             numberOfQuestions++
         }
 
@@ -61,7 +62,7 @@ object QuizMaster : ViewModel() {
     }
 
     private fun drawQuestion() {
-        _currentQuestion.value = questions.valueAt(indices!!.removeLast())
+        _currentQuestion.value = questions[indices!!.removeLast()]
         _remainingQuestions.value = _remainingQuestions.value?.minus(1)
     }
 
@@ -79,9 +80,13 @@ object QuizMaster : ViewModel() {
 
 
     fun getQuestion(type: QuestionType) : Question {
-        val question = questions[type]
+        val questionIndex = questionTypeToIndex[type]
 
-        return question ?: throw IllegalArgumentException("Unable to find question of type ${type.name}.")
+        if (questionIndex != null) {
+            return questions[questionIndex]
+        } else {
+            throw IllegalArgumentException("Unable to find question of type ${type.name}.")
+        }
     }
 
     fun reset() {

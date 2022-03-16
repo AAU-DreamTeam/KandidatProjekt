@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         app:cardBackgroundColor="@color/white"
-        app:cardCornerRadius="5dp"
+        app:cardCornerRadius="10dp"
         app:cardElevation="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -145,7 +145,7 @@
         app:layout_constraintHorizontal_bias="0.845"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/scoreCard"
-        app:strokeColor="#A1A1A1"
+        app:strokeColor="#00FFFFFF"
         app:strokeWidth="1dp" />
 
     <com.google.android.material.card.MaterialCardView
@@ -154,7 +154,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:cardBackgroundColor="@color/black"
-        app:cardCornerRadius="5dp"
+        app:cardCornerRadius="10dp"
         app:cardElevation="0dp"
         app:contentPaddingBottom="0dp"
         app:contentPaddingTop="0dp"
@@ -174,7 +174,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:srcCompat="@mipmap/ic_launcher_foreground" />
+                app:srcCompat="@mipmap/ic_car_foreground" />
 
             <LinearLayout
                 android:id="@+id/questionLL"
@@ -209,10 +209,10 @@
                     android:layout_height="wrap_content">
 
                     <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btn_above"
+                        android:id="@+id/btnAbove"
                         style="@style/TextStyle18"
                         android:layout_width="wrap_content"
-                        android:layout_height="45dp"
+                        android:layout_height="40dp"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentRight="true"
                         android:layout_margin="8dp"
@@ -233,7 +233,7 @@
                         app:backgroundTint="@color/colorButton"
                         app:cornerRadius="10dp"
                         app:iconPadding="0dp"
-                        app:iconSize="40dp"
+                        app:iconSize="35dp"
                         app:iconTint="@color/black"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/or"
@@ -252,13 +252,13 @@
                         android:text="eller"
                         android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/btn_below"
+                        app:layout_constraintEnd_toStartOf="@+id/btnBelow"
                         app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toEndOf="@+id/btn_above"
+                        app:layout_constraintStart_toEndOf="@+id/btnAbove"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btn_below"
+                        android:id="@+id/btnBelow"
                         style="@style/TextStyle18"
                         android:layout_width="wrap_content"
                         android:layout_height="45dp"
@@ -364,7 +364,7 @@
                     app:lineHeight="35dp" />
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_next"
+                    android:id="@+id/btnNext"
                     style="@style/TextStyle18"
                     android:layout_width="160dp"
                     android:layout_height="45dp"
@@ -395,5 +395,4 @@
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
-
 </LinearLayout>
