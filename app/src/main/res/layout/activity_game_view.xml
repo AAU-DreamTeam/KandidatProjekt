@@ -10,13 +10,13 @@
     android:orientation="vertical">
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/materialCardView"
+        android:id="@+id/scoreCard"
         style="@style/Card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         app:cardBackgroundColor="@color/white"
-        app:cardCornerRadius="5dp"
+        app:cardCornerRadius="10dp"
         app:cardElevation="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -28,21 +28,22 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/carbon_footprint_header"
                 style="@style/TextStyle18"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
+                android:layout_marginTop="0dp"
+                android:layout_marginBottom="0dp"
                 android:gravity="center"
                 android:text="@string/dit_co2_aftryk_er"
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/carbon_footprint"
+                android:id="@+id/carbonFootprint"
                 style="@style/TextStyle32"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="0dp"
-                android:layout_marginBottom="8dp"
+                android:layout_marginBottom="0dp"
                 android:gravity="center"
                 android:text="1,3 kg"
                 android:textStyle="bold" />
@@ -52,18 +53,17 @@
                 android:layout_height="wrap_content">
 
                 <LinearLayout
-                    android:id="@+id/linearLayout2"
+                    android:id="@+id/linearLayoutScore"
                     android:layout_width="120dp"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/linearLayout"
+                    app:layout_constraintEnd_toStartOf="@+id/linearLayoutHighScore"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
                     <TextView
-                        android:id="@+id/current_score_header"
                         style="@style/TextStyle18"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -72,28 +72,28 @@
                         android:text="Score:" />
 
                     <TextView
-                        android:id="@+id/current_score"
+                        android:id="@+id/score"
                         style="@style/TextStyle24"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="0dp"
+                        android:layout_marginBottom="0dp"
                         android:gravity="center"
                         android:text="0" />
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/linearLayout"
+                    android:id="@+id/linearLayoutHighScore"
                     android:layout_width="120dp"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toEndOf="@+id/linearLayout2"
+                    app:layout_constraintStart_toEndOf="@+id/linearLayoutScore"
                     app:layout_constraintTop_toTopOf="parent">
 
                     <TextView
-                        android:id="@+id/high_score_header"
                         style="@style/TextStyle18"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -103,11 +103,12 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/high_score"
+                        android:id="@+id/highScore"
                         style="@style/TextStyle24"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="0dp"
+                        android:layout_marginBottom="0dp"
                         android:gravity="center"
                         android:text="3"
                         android:textStyle="bold" />
@@ -117,52 +118,55 @@
 
     </com.google.android.material.card.MaterialCardView>
 
-    <Button
-        android:id="@+id/button"
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/circle"
         style="@style/TextStyle24"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="-30dp"
-        android:layout_marginBottom="-30dp"
+        android:layout_marginTop="-35dp"
+        android:layout_marginBottom="-35dp"
         android:width="65dp"
         android:height="65dp"
         android:backgroundTint="@color/grey"
+        android:clickable="false"
         android:insetTop="0dp"
         android:insetBottom="0dp"
         android:minWidth="0dp"
         android:minHeight="0dp"
         android:padding="0dp"
-        android:text="VS"
         android:textSize="24sp"
         android:textStyle="bold"
         app:cornerRadius="1000dp"
+        app:iconGravity="textEnd"
         app:iconPadding="0dp"
+        app:iconSize="50dp"
+        app:iconTint="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.845"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/materialCardView"
-        app:strokeColor="#A1A1A1"
+        app:layout_constraintTop_toBottomOf="@+id/scoreCard"
+        app:strokeColor="#00FFFFFF"
         app:strokeWidth="1dp" />
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/materialCardView2"
+        android:id="@+id/questionCard"
         style="@style/Card"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:cardBackgroundColor="@color/black"
-        app:cardCornerRadius="5dp"
+        app:cardCornerRadius="10dp"
         app:cardElevation="0dp"
         app:contentPaddingBottom="0dp"
         app:contentPaddingTop="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/materialCardView">
+        app:layout_constraintTop_toBottomOf="@+id/scoreCard">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <ImageView
-                android:id="@+id/background_image"
+                android:id="@+id/backgroundImage"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:alpha="0.5"
@@ -171,13 +175,13 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:srcCompat="@mipmap/ic_launcher_foreground" />
+                app:srcCompat="@mipmap/ic_car_foreground" />
 
             <LinearLayout
+                android:id="@+id/questionLL"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:visibility="visible"
                 android:gravity="center"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -187,7 +191,7 @@
                 app:layout_constraintVertical_bias="0.0">
 
                 <TextView
-                    android:id="@+id/question_start"
+                    android:id="@+id/questionStart"
                     style="@style/TextStyleShadow24"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -206,10 +210,10 @@
                     android:layout_height="wrap_content">
 
                     <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btn_above"
+                        android:id="@+id/btnAbove"
                         style="@style/TextStyle18"
                         android:layout_width="wrap_content"
-                        android:layout_height="45dp"
+                        android:layout_height="40dp"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentRight="true"
                         android:layout_margin="8dp"
@@ -230,13 +234,14 @@
                         app:backgroundTint="@color/colorButton"
                         app:cornerRadius="10dp"
                         app:iconPadding="0dp"
-                        app:iconSize="40dp"
+                        app:iconSize="35dp"
                         app:iconTint="@color/black"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/or"
                         app:layout_constraintHorizontal_bias="0.5"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:layout_marginRight="8dp" />
 
                     <TextView
                         android:id="@+id/or"
@@ -248,13 +253,13 @@
                         android:text="eller"
                         android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/btn_below"
+                        app:layout_constraintEnd_toStartOf="@+id/btnBelow"
                         app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toEndOf="@+id/btn_above"
+                        app:layout_constraintStart_toEndOf="@+id/btnAbove"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btn_below"
+                        android:id="@+id/btnBelow"
                         style="@style/TextStyle18"
                         android:layout_width="wrap_content"
                         android:layout_height="45dp"
@@ -288,7 +293,7 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <TextView
-                    android:id="@+id/question_middle"
+                    android:id="@+id/questionMiddle"
                     style="@style/TextStyleShadow36"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -298,7 +303,7 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/question_end"
+                    android:id="@+id/questionEnd"
                     style="@style/TextStyleShadow24"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -309,11 +314,13 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/answerLL"
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:orientation="vertical"
-                android:visibility="visible"
+
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -322,7 +329,7 @@
                 app:layout_constraintVertical_bias="0.0">
 
                 <TextView
-                    android:id="@+id/result_header"
+                    android:id="@+id/answerHeader"
                     style="@style/TextStyleShadow48"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -333,7 +340,7 @@
                     android:visibility="visible" />
 
                 <TextView
-                    android:id="@+id/question_emission"
+                    android:id="@+id/answerQuizEmission"
                     style="@style/TextStyleShadow24"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -345,7 +352,7 @@
                     app:lineHeight="35dp" />
 
                 <TextView
-                    android:id="@+id/user_emission"
+                    android:id="@+id/answerUserEmission"
                     style="@style/TextStyleShadow24"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -358,7 +365,7 @@
                     app:lineHeight="35dp" />
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_result"
+                    android:id="@+id/btnNext"
                     style="@style/TextStyle18"
                     android:layout_width="160dp"
                     android:layout_height="45dp"
@@ -372,7 +379,7 @@
                     android:paddingLeft="16dp"
                     android:paddingEnd="16dp"
                     android:paddingRight="16dp"
-                    android:text="Next"
+                    android:text="Næste"
                     android:textColor="@color/black"
                     android:textStyle="bold"
                     android:theme="@style/AppTheme"
@@ -389,5 +396,4 @@
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
-
 </LinearLayout>
