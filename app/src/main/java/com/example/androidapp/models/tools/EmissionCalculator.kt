@@ -3,6 +3,7 @@ package com.example.androidapp.models.tools
 import com.example.androidapp.models.StoreItem
 import com.example.androidapp.models.daos.CountryDao
 import com.example.androidapp.models.daos.ProductDao
+import com.example.androidapp.models.daos.PurchaseDao
 import com.example.androidapp.models.daos.StoreItemDao
 
 class EmissionCalculator {
@@ -25,25 +26,29 @@ class EmissionCalculator {
                     storeItem.country.transportEmission
         }
 
-        fun sqlEmissionFormula(): String {
+        fun sqlEmissionPerKgFormula(): String {
             val packagingEmission =
-                    "CASE WHEN ${StoreItemDao.COLUMN_PACKAGED} = 1 THEN ${ProductDao.COLUMN_PACKAGING} " +
+                    "CASE WHEN ${StoreItemDao.TABLE}.${StoreItemDao.COLUMN_PACKAGED} = 1 THEN ${ProductDao.TABLE}.${ProductDao.COLUMN_PACKAGING} " +
                          "ELSE $NO_EMISSION " +
                     "END"
             val organicPenalty =
-                    "CASE WHEN ${StoreItemDao.COLUMN_ORGANIC} = 1 THEN $ORGANIC_PENALTY " +
+                    "CASE WHEN ${StoreItemDao.TABLE}.${StoreItemDao.COLUMN_ORGANIC} = 1 THEN $ORGANIC_PENALTY " +
                          "ELSE $NO_PENALTY " +
                     "END"
             val ghPenalty =
-                    "CASE WHEN ${ProductDao.COLUMN_GHCULTIVATED} = 1 AND ${CountryDao.COLUMN_GHPENALTY} = 1 THEN $GH_PENALTY " +
+                    "CASE WHEN ${ProductDao.TABLE}.${ProductDao.COLUMN_GHCULTIVATED} = 1 AND ${CountryDao.TABLE}.${CountryDao.COLUMN_GHPENALTY} = 1 THEN $GH_PENALTY " +
                          "ELSE $NO_PENALTY " +
                     "END"
-            return "${ProductDao.COLUMN_ILUC} + " +
-                    "${ProductDao.COLUMN_PROCESSING} + " +
-                    "${ProductDao.COLUMN_RETAIL} + " +
-                    "${ProductDao.COLUMN_CULTIVATION} * $organicPenalty * $ghPenalty + " +
+            return "${ProductDao.TABLE}.${ProductDao.COLUMN_ILUC} + " +
+                    "${ProductDao.TABLE}.${ProductDao.COLUMN_PROCESSING} + " +
+                    "${ProductDao.TABLE}.${ProductDao.COLUMN_RETAIL} + " +
+                    "${ProductDao.TABLE}.${ProductDao.COLUMN_CULTIVATION} * $organicPenalty * $ghPenalty + " +
                     "$packagingEmission + " +
-                    CountryDao.COLUMN_TRANSPORT_EMISSION
+                    "${CountryDao.TABLE}.${CountryDao.COLUMN_TRANSPORT_EMISSION}"
+        }
+
+        fun sqlEmissionPerPurchaseFormula(): String {
+            return "(${sqlEmissionPerKgFormula()}) * ${StoreItemDao.TABLE}.${StoreItemDao.COLUMN_WEIGHT} * ${PurchaseDao.TABLE}.${PurchaseDao.COLUMN_QUANTITY}"
         }
     }
 }

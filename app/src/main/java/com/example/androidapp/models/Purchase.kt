@@ -1,13 +1,22 @@
 package com.example.androidapp.models
 
+import java.text.SimpleDateFormat
+import java.time.DayOfWeek
+import java.time.Month
+import java.time.Year
+import java.util.*
+
 class Purchase(val id: Int,
                val storeItem: StoreItem,
-               val timestamp: String,
+               private val calendar: Calendar,
                var quantity: Int){
-    constructor(storeItem: StoreItem, timestamp: String, quantity: Int): this(0, storeItem, timestamp, quantity)
+    constructor(storeItem: StoreItem, calendar: Calendar, quantity: Int): this(0, storeItem, calendar, quantity)
 
     var weight = storeItem.weight * quantity
+        private set
     val emission: Double get() =  storeItem.emissionPerKg * weight
+    val week: Int get() = calendar.get(Calendar.WEEK_OF_YEAR)
+    val timestamp: String get() = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(calendar.time)
 
     fun isValid(): Boolean {
         return quantity > 0 && storeItem.isValid()

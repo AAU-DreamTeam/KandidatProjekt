@@ -45,7 +45,7 @@ class MainView : AppCompatActivity() {
 
         }
 
-        resultLauncher.launch(Intent(this, GameView::class.java))
+ //       resultLauncher.launch(Intent(this, GameView::class.java))
     }
 
     private fun setUpTabs(){
