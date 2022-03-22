@@ -27,7 +27,8 @@ object QuizMaster : ViewModel() {
     private val _remainingQuestions = MutableLiveData<Int>()
     val remainingQuestions: LiveData<Int> get() = _remainingQuestions
 
-    private val questions = mutableListOf<Question>()
+    private val _questions = mutableListOf<Question>()
+    val questions: LiveData<MutableList<Question>> get() = _questions
     private val questionTypeToIndex = mutableMapOf<QuestionType, Int>()
     private var indices: MutableList<Int>? = null
 
@@ -51,7 +52,7 @@ object QuizMaster : ViewModel() {
         var numberOfQuestions = 0
 
         for ((index, type) in QuestionType.values().withIndex()) {
-            questions.add(index, questionFactory.getQuestion(type, emission.value!!))
+            _questions.add(index, questionFactory.getQuestion(type, emission.value!!))
             indices!!.add(index)
             questionTypeToIndex[type] = index
             numberOfQuestions++
@@ -62,7 +63,7 @@ object QuizMaster : ViewModel() {
     }
 
     private fun drawQuestion() {
-        _currentQuestion.value = questions[indices!!.removeLast()]
+        _currentQuestion.value = _questions[indices!!.removeLast()]
         _remainingQuestions.value = _remainingQuestions.value?.minus(1)
     }
 
@@ -83,14 +84,14 @@ object QuizMaster : ViewModel() {
         val questionIndex = questionTypeToIndex[type]
 
         if (questionIndex != null) {
-            return questions[questionIndex]
+            return _questions[questionIndex]
         } else {
             throw IllegalArgumentException("Unable to find question of type ${type.name}.")
         }
     }
 
     fun reset() {
-        questions.clear()
+        _questions.clear()
         indices = null
     }
 }

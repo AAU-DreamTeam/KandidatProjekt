@@ -44,6 +44,9 @@ class EmissionViewModel: ViewModel()  {
     private val _emissionReduction = MutableLiveData<Double>()
     val emissionReduction: LiveData<Double> get() = _emissionReduction
 
+    private val _emissionList = MutableLiveData<ArrayList<Double?>>()
+    val emissionList: LiveData<ArrayList<Double?>> get() = _emissionList
+
     fun initiate(context: Context) {
         if (purchaseRepository == null) {
             purchaseRepository = PurchaseRepository(context)
@@ -61,6 +64,8 @@ class EmissionViewModel: ViewModel()  {
         _year.value = calendar.get(Calendar.YEAR).toString()
         _monthlyEmission.value = purchaseRepository!!.loadEmissionFromYearMonth(calendar)
         _weeklyEmission.value = purchaseRepository!!.loadEmissionFromYearWeek(calendar)
+        _emissionList.value?.add(0,_weeklyEmission.value)
+        _emissionList.value?.add(1, _weeklyEmission.value)
 
         _purchases.value = purchaseRepository!!.loadAllPurchases()
         //extractTrips()

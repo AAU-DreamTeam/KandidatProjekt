@@ -32,6 +32,7 @@ class OverviewView : Fragment() {
     private lateinit var topView: View
     private lateinit var constraintView: ConstraintLayout
     private lateinit var co2Showcase: AutoCompleteTextView
+    private var pos =0
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -60,12 +61,13 @@ class OverviewView : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
-
-        viewModel.totalEmission.observe(viewLifecycleOwner, { emission ->
-            val emissionString = HtmlCompat.fromHtml("%.3f ".format(emission).replace('.',
+        viewModel.emissionList.observe(viewLifecycleOwner, { list ->
+            val emissionString = HtmlCompat.fromHtml("%.3f ".format(list[pos]).replace('.',
                 ',') + "kg CO<sub><small><small>2</small></small></sub>", HtmlCompat.FROM_HTML_MODE_LEGACY)
             totalEmissionTV.text = emissionString})
+
+    }
+    private fun setupIcons(){
 
     }
 
@@ -92,41 +94,16 @@ class OverviewView : Fragment() {
         co2Showcase.setAdapter(adapter)
         co2Showcase.setText(adapter.getItem(0).toString(),false)
 
-        /*
+
         co2Showcase.setOnItemClickListener(object : AdapterView.OnItemClickListener {
             override fun onItemClick(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
                 val selected = parent.getItemAtPosition(position) as String
-                val pos: Int = intervals.indexOf(selected)
-                viewModel.weeklyEmission.removeObserver({ emission ->
-                    val emissionString = HtmlCompat.fromHtml("%.3f ".format(emission).replace('.',
-                        ',') + "kg CO<sub><small><small>2</small></small></sub>", HtmlCompat.FROM_HTML_MODE_LEGACY)
-                    totalEmissionTV.text = emissionString})
-                viewModel.monthlyEmission.removeObserver({ emission ->
-                    val emissionString = HtmlCompat.fromHtml("%.3f ".format(emission).replace('.',
-                        ',') + "kg CO<sub><small><small>2</small></small></sub>", HtmlCompat.FROM_HTML_MODE_LEGACY)
-                    totalEmissionTV.text = emissionString})
-                if(pos==0){
-                    viewModel.weeklyEmission.observe(viewLifecycleOwner,{ emission ->
-                        val emissionString = HtmlCompat.fromHtml("%.3f ".format(emission).replace('.',
-                            ',') + "kg CO<sub><small><small>2</small></small></sub>", HtmlCompat.FROM_HTML_MODE_LEGACY)
-                        totalEmissionTV.text = emissionString})
-                }else{
-                    viewModel.monthlyEmission.observe(viewLifecycleOwner,{ emission ->
-                        val emissionString = HtmlCompat.fromHtml("%.3f ".format(emission).replace('.',
-                            ',') + "kg CO<sub><small><small>2</small></small></sub>", HtmlCompat.FROM_HTML_MODE_LEGACY)
-                        totalEmissionTV.text = emissionString})
-                }
+                pos = intervals.indexOf(selected)
+                viewModel.loadData()
             }
-        })*/
+        })
 
     }
-    /*
-    viewModel.weeklyEmission.observe(viewLifecycleOwner, { emission ->
-                        val emissionString = HtmlCompat.fromHtml("%.3f ".format(emission).replace('.',
-                            ',') + "kg CO<sub><small><small>2</small></small></sub>", HtmlCompat.FROM_HTML_MODE_LEGACY)
-                        totalEmissionTV.text = emissionString
-                    })
-     */
 
     private fun setupButtons(){
         val resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
