@@ -43,7 +43,7 @@ class StoreItemDao(private val dbManager: DBManager) {
                 "SELECT $ALL_COLUMNS, " +           // 5
                         "${ProductDao.ALL_COLUMNS}, " +            // 12
                         "${CountryDao.ALL_COLUMNS}, " +            // 17
-                        "MIN(${EmissionCalculator.sqlEmissionFormula()}) " +
+                        "MIN(${EmissionCalculator.sqlEmissionPerKgFormula()}) " +
                 "FROM $TABLE " +
                 "INNER JOIN ${ProductDao.TABLE} ON $COLUMN_PRODUCT_ID = ${ProductDao.TABLE}.${ProductDao.COLUMN_ID} " +
                 "INNER JOIN ${CountryDao.TABLE} ON $COLUMN_COUNTRY_ID = ${CountryDao.TABLE}.${CountryDao.COLUMN_ID} " +

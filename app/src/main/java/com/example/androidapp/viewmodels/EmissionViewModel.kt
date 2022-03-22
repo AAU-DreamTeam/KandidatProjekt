@@ -15,8 +15,7 @@ class EmissionViewModel: ViewModel()  {
     private var purchaseRepository: PurchaseRepository? = null
     private var storeItemRepository: StoreItemRepository? = null
 
-    private val timeZone = "Europe/Copenhagen"
-    private val calendar: Calendar = Calendar.getInstance(TimeZone.getTimeZone(timeZone))
+    private val calendar: Calendar = Calendar.getInstance(TimeZone.getTimeZone("Europe/Copenhagen"))
 
     private val _year = MutableLiveData<String>()
     val year: LiveData<String> get() = _year
@@ -27,14 +26,17 @@ class EmissionViewModel: ViewModel()  {
     private val _purchases = MutableLiveData<List<Purchase>>()
     val purchases: LiveData<List<Purchase>> get() = _purchases
 
+    private val _trips = MutableLiveData<MutableList<Pair<String, MutableList<Purchase>>>>(mutableListOf())
+    val trips: LiveData<MutableList<Pair<String, MutableList<Purchase>>>> get() = _trips
+
     private val _totalEmission = MutableLiveData<Double>()
     val totalEmission: LiveData<Double> get() = _totalEmission
 
-    private val _weeklyEmission = MutableLiveData<Double>()
-    val weeklyEmission: LiveData<Double> get() = _weeklyEmission
-
     private val _monthlyEmission = MutableLiveData<Double>()
     val monthlyEmission: LiveData<Double> get() = _monthlyEmission
+
+    private val _weeklyEmission = MutableLiveData<Double>()
+    val weeklyEmission: LiveData<Double> get() = _weeklyEmission
 
     private val _totalEmissionAlt = MutableLiveData<Double>()
     val totalEmissionAlt: LiveData<Double> get() = _totalEmissionAlt
@@ -57,16 +59,38 @@ class EmissionViewModel: ViewModel()  {
 
         _month.value = MONTH.values()[monthTemp].name
         _year.value = calendar.get(Calendar.YEAR).toString()
+        _monthlyEmission.value = purchaseRepository!!.loadEmissionFromYearMonth(calendar)
+        _weeklyEmission.value = purchaseRepository!!.loadEmissionFromYearWeek(calendar)
 
-        _purchases.value = purchaseRepository!!.loadPurchases(year.value!!, String.format("%02d", monthTemp + 1))
+        _purchases.value = purchaseRepository!!.loadAllPurchases()
+        //extractTrips()
 
         calcTotalEmission()
         _totalEmissionAlt.value = purchaseRepository!!.loadAlternativeEmission(_purchases.value!!)
-        calcWeeklyEmission()
-        calcMonthlyEmission()
 
         _emissionReduction.value = ((totalEmission.value!! - totalEmissionAlt.value!!)/totalEmission.value!!) * 100
     }
+
+    /*fun extractTrips(){
+        var prevTimestamp = ""
+        var currTimestamp = ""
+        var index = -1
+
+        for (purchase in _purchases.value!!) {
+            currTimestamp = purchase.timestamp
+
+            if (prevTimestamp != currTimestamp) {
+                val tripPurchases = mutableListOf<Purchase>()
+
+                index++
+                tripPurchases.add(purchase)
+                _trips.value!!.add(index, Pair(currTimestamp, tripPurchases))
+                prevTimestamp = purchase.timestamp
+            } else {
+                _trips.value!![index].second.add(purchase)
+            }
+        }
+    }*/
 
     fun onViewAlternatives(purchaseId: Int): List<StoreItem> {
         return storeItemRepository!!.loadAlternatives(_purchases.value!![purchaseId].storeItem)
@@ -92,48 +116,6 @@ class EmissionViewModel: ViewModel()  {
         }
 
         _totalEmission.value = emissionSum
-    }
-    private fun calcWeeklyEmission(){
-        var emissionSum  = 0.0
-        val calender = Calendar.getInstance()
-        calender.setTime(Calendar.getInstance().time)
-        val weeknumber = calender.get(Calendar.WEEK_OF_YEAR)
-        val year = calender.get(Calendar.YEAR)
-        System.out.println("CurrentWeek"+weeknumber)
-        System.out.println("CurrentYear"+year)
-        System.out.println("CurrentMonth"+calender.get(Calendar.MONTH)+1)
-        System.out.println("PruchasesSize "+purchases.value!!.size)
-
-        purchases.value!!.forEach{
-
-            System.out.println("WeekNumber"+it.weekNumber)
-            System.out.println("Year"+it.year)
-            System.out.println("Month"+it.month)
-            if(it.year ==year && it.weekNumber == weeknumber){
-                emissionSum += it.emission
-            }else if(year > it.year && weeknumber > it.weekNumber){
-                return@forEach
-            }
-        }
-
-        _weeklyEmission.value = emissionSum
-    }
-    private fun calcMonthlyEmission(){
-        var emissionSum  = 0.0
-        val calender = Calendar.getInstance()
-        calender.setTime(Calendar.getInstance().time)
-        val month = calender.get(Calendar.MONTH)+1
-        val year = calender.get(Calendar.YEAR)
-
-        purchases.value!!.forEach{
-            if(it.year == year && it.month == month) {
-                emissionSum += it.emission
-            }else if(year>it.year && month > it.month){
-                return@forEach
-            }
-        }
-
-        _monthlyEmission.value = emissionSum
     }
 
     override fun onCleared() {

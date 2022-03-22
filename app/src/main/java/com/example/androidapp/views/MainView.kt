@@ -1,6 +1,5 @@
 package com.example.androidapp.views
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -13,30 +12,22 @@ import android.os.Handler
 import android.util.Log
 import android.util.SparseIntArray
 import android.view.Surface
-import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import androidx.activity.ComponentActivity
-import androidx.activity.viewModels
-import androidx.fragment.app.activityViewModels
 import androidx.viewpager2.widget.ViewPager2
 import com.example.androidapp.R
-import com.example.androidapp.viewmodels.EmissionViewModel
+import com.example.androidapp.models.tools.quiz.QuizMaster
 import com.example.androidapp.views.adapters.MainAdapter
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayout
 
 
 class MainView : AppCompatActivity() {
-    private val viewModel: EmissionViewModel by viewModels()
     private lateinit var tabLayout: TabLayout
     private lateinit var viewPager: ViewPager2
     private lateinit var viewPagerAdapter: MainAdapter
-    private lateinit var scanButton: FloatingActionButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,11 +36,16 @@ class MainView : AppCompatActivity() {
 
         tabLayout = findViewById(R.id.tabLayout)
         viewPager = findViewById(R.id.viewPager)
-        scanButton = findViewById(R.id.floatingScan)
-        setUpScanButton()
 
         setUpTabs()
         setUpViewPager()
+
+        QuizMaster.setEmission(3.0)
+        val resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+
+        }
+
+ //       resultLauncher.launch(Intent(this, GameView::class.java))
     }
 
     private fun setUpTabs(){
@@ -88,20 +84,10 @@ class MainView : AppCompatActivity() {
         viewPagerAdapter = MainAdapter(supportFragmentManager, lifecycle)
         viewPager.adapter = viewPagerAdapter
 
-        /*viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+        viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 tabLayout.selectTab(tabLayout.getTabAt(position))
             }
-        })*/
-    }
-    private fun setUpScanButton() {
-
-        val resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            viewModel.loadData()
-        }
-
-        scanButton.setOnClickListener{
-            resultLauncher.launch(Intent(this, ScannerView::class.java))
-        }
+        })
     }
 }

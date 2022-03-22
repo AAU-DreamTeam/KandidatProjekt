@@ -2,13 +2,27 @@ package com.example.androidapp.repositories
 
 import android.content.Context
 import com.example.androidapp.models.Purchase
+import com.example.androidapp.models.daos.CountryDao
+import com.example.androidapp.models.daos.ProductDao
 import com.example.androidapp.models.daos.PurchaseDao
+import com.example.androidapp.models.daos.StoreItemDao
+import com.example.androidapp.models.tools.EmissionCalculator
+import java.text.SimpleDateFormat
+import java.util.*
 
 class PurchaseRepository(context: Context){
     private val purchaseDao = PurchaseDao(context)
 
-    fun loadPurchases(year: String, month: String): List<Purchase>{
-        return purchaseDao.loadPurchases(year, month)
+    fun loadEmissionFromYearMonth(calendar: Calendar): Double {
+        return purchaseDao.loadEmissionFromYearMonth(calendar)
+    }
+
+    fun loadEmissionFromYearWeek(calendar: Calendar): Double {
+        return purchaseDao.loadEmissionFromYearWeek(calendar)
+    }
+
+    fun loadAllPurchases(): List<Purchase>{
+        return purchaseDao.loadAllPurchases()
     }
 
     fun loadAlternativeEmission(purchases: List<Purchase>): Double {
