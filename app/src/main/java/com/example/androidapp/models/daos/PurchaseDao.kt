@@ -4,6 +4,7 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
 import com.example.androidapp.models.Purchase
+import com.example.androidapp.models.Trip
 import com.example.androidapp.models.tools.DBManager
 import com.example.androidapp.models.tools.EmissionCalculator
 import com.example.androidapp.models.tools.TextRecognizer
@@ -200,7 +201,6 @@ class PurchaseDao(context: Context) {
 
     private fun savePurchase(purchase: Purchase){
         val storeItemId = StoreItemDao(dbManager).saveStoreItem(purchase.storeItem);
-        val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
         val contentValues = ContentValues()
 
         contentValues.put(COLUMN_STORE_ITEM_ID, storeItemId.toString())
@@ -244,9 +244,48 @@ class PurchaseDao(context: Context) {
 
             return Purchase(cursor.getInt(startIndex + COLUMN_ID_POSITION), storeItem, calendar, cursor.getInt(startIndex + COLUMN_QUANTITY_POSITION))
         }
+
+        fun produceTrip(cursor: Cursor): List<Trip> {
+            val trips = mutableListOf<Trip>()
+            var timestamp = cursor.getString(COLUMN_TIMESTAMP_POSITION)
+            var purchases = mutableListOf<Purchase>()
+
+            do {
+                val purchase = producePurchase(cursor)
+                val t = purchase.timestamp
+
+                if (t != timestamp) {
+                    trips.add(Trip(purchases))
+                    timestamp = purchase.timestamp
+                    purchases = mutableListOf()
+                }
+                purchases.add(purchase)
+            } while (cursor.moveToNext())
+
+            trips.add(Trip(purchases))
+
+            return trips
+        }
     }
 
     fun close() {
         dbManager.close()
+    }
+
+    fun loadAllTrips(): List<Trip> {
+        val query =
+            "SELECT $ALL_COLUMNS, " +
+                    "${StoreItemDao.ALL_COLUMNS}, " +
+                    "${ProductDao.ALL_COLUMNS}, " +
+                    "${CountryDao.ALL_COLUMNS} " +
+                    "FROM $TABLE " +
+                    "INNER JOIN ${StoreItemDao.TABLE} ON $COLUMN_STORE_ITEM_ID = ${StoreItemDao.TABLE}.${StoreItemDao.COLUMN_ID} " +
+                    "INNER JOIN ${ProductDao.TABLE} ON ${StoreItemDao.COLUMN_PRODUCT_ID} = ${ProductDao.TABLE}.${ProductDao.COLUMN_ID} " +
+                    "INNER JOIN ${CountryDao.TABLE} ON ${StoreItemDao.COLUMN_COUNTRY_ID} = ${CountryDao.TABLE}.${CountryDao.COLUMN_ID} " +
+                    "ORDER BY $TABLE.$COLUMN_TIMESTAMP DESC;"
+
+        return dbManager.select<List<Trip>>(query) {
+            produceTrip(it)
+        } ?: listOf()
     }
 }

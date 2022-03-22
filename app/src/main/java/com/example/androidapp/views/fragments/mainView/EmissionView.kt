@@ -15,12 +15,13 @@ import com.example.androidapp.viewmodels.EmissionViewModel
 import com.example.androidapp.views.ScannerView
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.button.MaterialButtonToggleGroup
+import kotlinx.android.synthetic.main.emission_list_item.*
 
 class EmissionView : Fragment() {
     private val viewModel: EmissionViewModel by activityViewModels()
     private lateinit var toggleButton : MaterialButtonToggleGroup
     private lateinit var overviewView: OverviewView
-    private lateinit var listView: ListView
+    private lateinit var purchaseView: PurchaseView
     private lateinit var fragmentFL: FrameLayout
     private lateinit var scanButton: MaterialButton
     private lateinit var prevButton: MaterialButton
@@ -33,7 +34,7 @@ class EmissionView : Fragment() {
 
         viewModel.initiate(requireContext())
         overviewView = OverviewView()
-        listView = ListView()
+        purchaseView = PurchaseView()
         toggleButton = rootView.findViewById(R.id.toggleButton)
         fragmentFL = rootView.findViewById(R.id.fragment_fl)
         scanButton = rootView.findViewById(R.id.btn_scan)
@@ -65,7 +66,7 @@ class EmissionView : Fragment() {
             if(isChecked) {
                 when(checkedId) {
                     R.id.btn_overview -> childFragmentManager.beginTransaction().replace(fragmentFL.id, overviewView).commit()
-                    R.id.btn_list -> childFragmentManager.beginTransaction().replace(fragmentFL.id, listView).commit()
+                    R.id.btn_list -> childFragmentManager.beginTransaction().replace(fragmentFL.id, purchaseView).commit()
                 }
             } else if (toggleButton.checkedButtonId == View.NO_ID) {
                 toggleButton.check(checkedId)

@@ -2,6 +2,7 @@ package com.example.androidapp.repositories
 
 import android.content.Context
 import com.example.androidapp.models.Purchase
+import com.example.androidapp.models.Trip
 import com.example.androidapp.models.daos.CountryDao
 import com.example.androidapp.models.daos.ProductDao
 import com.example.androidapp.models.daos.PurchaseDao
@@ -23,6 +24,10 @@ class PurchaseRepository(context: Context){
 
     fun loadAllPurchases(): List<Purchase>{
         return purchaseDao.loadAllPurchases()
+    }
+
+    fun loadAllTrips(): List<Trip> {
+        return purchaseDao.loadAllTrips()
     }
 
     fun loadAlternativeEmission(purchases: List<Purchase>): Double {
