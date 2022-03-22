@@ -8,7 +8,7 @@ import java.util.*
 
 class Purchase(val id: Int,
                val storeItem: StoreItem,
-               val calendar: Calendar,
+               private val calendar: Calendar,
                var quantity: Int){
     constructor(storeItem: StoreItem, calendar: Calendar, quantity: Int): this(0, storeItem, calendar, quantity)
 

@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.androidapp.R
 import com.example.androidapp.viewmodels.EmissionViewModel
 import com.example.androidapp.views.adapters.EmissionListAdapter
-import com.example.androidapp.views.adapters.TripListAdapter
 import kotlinx.android.synthetic.main.fragment_list.*
 import kotlinx.android.synthetic.main.fragment_purchase_view.*
 
@@ -29,8 +28,8 @@ class PurchaseView : Fragment() {
 
         tripListRV.layoutManager = LinearLayoutManager(requireContext())
 
-        viewModel.trips.observe(viewLifecycleOwner) { list ->
-            tripListRV.adapter = TripListAdapter(requireContext(), list)
+        viewModel.purchases.observe(viewLifecycleOwner) { list ->
+            purchaseList.adapter = EmissionListAdapter(requireContext(), list, viewModel)
         }
     }
 }

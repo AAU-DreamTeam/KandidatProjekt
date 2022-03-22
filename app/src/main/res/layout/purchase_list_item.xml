@@ -1,273 +1,103 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal">
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/purchaseCard"
+        android:id="@+id/tripCard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
+        android:layout_margin="8dp"
         app:cardBackgroundColor="@color/colorPrimary"
         app:cardCornerRadius="10dp"
         app:cardElevation="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:strokeWidth="0dp">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:padding="8dp">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:id="@+id/linearLayout"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <TextView
-                        android:id="@+id/productTV"
-                        style="@style/TextStyle24"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="0dp"
-                        android:text="TextView" />
-
-                    <TextView
-                        android:id="@+id/emissionTV"
-                        style="@style/TextStyle18"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="TextView" />
-
-                </LinearLayout>
-
-                <com.google.android.material.button.MaterialButton
-                    style="text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_marginBottom="16dp"
-                    android:width="65dp"
-                    android:height="65dp"
-                    android:clickable="false"
-                    android:insetLeft="0dp"
-                    android:insetTop="0dp"
-                    android:insetRight="0dp"
-                    android:insetBottom="0dp"
-                    android:minWidth="0dp"
-                    android:minHeight="0dp"
-                    android:padding="0dp"
-                    android:paddingLeft="0dp"
-                    android:paddingTop="0dp"
-                    android:paddingRight="0dp"
-                    android:paddingBottom="0dp"
-                    android:textSize="24sp"
-                    android:textStyle="bold"
-                    app:backgroundTint="@color/black"
-                    app:cornerRadius="1000dp"
-                    app:elevation="0dp"
-                    app:icon="@drawable/ic_face_smile_solid"
-                    app:iconGravity="textEnd"
-                    app:iconPadding="0dp"
-                    app:iconSize="65dp"
-                    app:iconTint="#06A803"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                </com.google.android.material.button.MaterialButton>
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <LinearLayout
-                    android:id="@+id/organicLL"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <TextView
-                        style="@style/TextStyle16"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="0dp"
-                        android:text="Øko:"
-                        tools:layout_editor_absoluteX="144dp" />
-
-                    <TextView
-                        android:id="@+id/organicTV"
-                        style="@style/TextStyle14"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="0dp"
-                        android:text="Nej"
-                        tools:layout_editor_absoluteX="144dp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/packagedLL"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/countryLL"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toEndOf="@+id/organicLL"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <TextView
-                        style="@style/TextStyle16"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="0dp"
-                        android:text="Løs:"
-                        tools:layout_editor_absoluteX="144dp" />
-
-                    <TextView
-                        android:id="@+id/packagedTV"
-                        style="@style/TextStyle14"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="0dp"
-                        android:text="Nej"
-                        tools:layout_editor_absoluteX="144dp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/countryLL"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/weightLL"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toEndOf="@+id/packagedLL"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <TextView
-                        style="@style/TextStyle16"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="0dp"
-                        android:text="Land:" />
-
-                    <TextView
-                        android:id="@+id/countryTV"
-                        style="@style/TextStyle14"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="0dp"
-                        android:text="Marokko" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/weightLL"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <TextView
-                        style="@style/TextStyle16"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="0dp"
-                        android:text="Vægt:" />
-
-                    <TextView
-                        android:id="@+id/weightTV"
-                        style="@style/TextStyle14"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="0dp"
-                        android:text="1000 g" />
-                </LinearLayout>
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:id="@+id/linearLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
-                android:gravity="center"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
-                    style="@style/TextStyle16"
+                    android:id="@+id/productTV"
+                    style="@style/TextStyle24"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="0dp"
-                    android:gravity="center"
-                    android:text="Der findes et alternativ som er" />
+                    android:text="TextView" />
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnAlternatives"
+                <TextView
+                    android:id="@+id/emissionTV"
                     style="@style/TextStyle18"
-                    android:layout_width="wrap_content"
-                    android:layout_height="40dp"
-                    android:layout_margin="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginRight="8dp"
-                    android:insetTop="0dp"
-                    android:insetBottom="0dp"
-                    android:minWidth="0dp"
-                    android:minHeight="0dp"
-                    android:paddingStart="16dp"
-                    android:paddingLeft="16dp"
-                    android:paddingEnd="16dp"
-                    android:paddingRight="16dp"
-                    android:text="100% bedre"
-                    android:textColor="@color/black"
-                    android:textStyle="bold"
-                    android:theme="@style/AppTheme"
-                    app:backgroundTint="@color/colorButton"
-                    app:cornerRadius="10dp"
-                    app:iconPadding="0dp"
-                    app:iconSize="35dp"
-                    app:iconTint="@color/black"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/or"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="TextView" />
+
             </LinearLayout>
 
+            <com.google.android.material.button.MaterialButton
+                style="text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="16dp"
+                android:width="65dp"
+                android:height="65dp"
+                android:clickable="false"
+                android:insetLeft="0dp"
+                android:insetTop="0dp"
+                android:insetRight="0dp"
+                android:insetBottom="0dp"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:padding="0dp"
+                android:paddingLeft="0dp"
+                android:paddingTop="0dp"
+                android:paddingRight="0dp"
+                android:paddingBottom="0dp"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                app:backgroundTint="@color/black"
+                app:cornerRadius="1000dp"
+                app:elevation="0dp"
+                app:icon="@drawable/ic_face_smile_solid"
+                app:iconGravity="textEnd"
+                app:iconPadding="0dp"
+                app:iconSize="65dp"
+                app:iconTint="#06A803"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-        </LinearLayout>
+            </com.google.android.material.button.MaterialButton>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
     </com.google.android.material.card.MaterialCardView>
+
+
+
 </LinearLayout>
