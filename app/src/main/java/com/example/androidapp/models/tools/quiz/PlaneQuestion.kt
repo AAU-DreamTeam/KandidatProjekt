@@ -1,14 +1,22 @@
 package com.example.androidapp.models.tools.quiz
 
 import androidx.core.text.HtmlCompat
+import com.example.androidapp.R
 import kotlin.math.roundToInt
 import kotlin.random.Random
 
 class PlaneQuestion(emission: Double) : Question {
     private val emissionPerKM = 0.254
-    override val actualValue = (emission/ emissionPerKM).roundToInt()
+    private val emissionPerHour = emissionPerKM * 780
+    override val actualValue1 = (emission/ emissionPerKM).roundToInt()
     override val quizValue = calcQuizValue()
     override var result: Boolean?= null
+    override val actualValue2 = (emission /emissionPerHour).roundToInt()
+    override var didQuestion1 = false
+    override var didQuestion2 = false
+    override val iconStr1 = "$actualValue1 km"
+    override val iconStr2 = "$actualValue2 hour(s)"
+    override val iconId = R.drawable.ic_airplanemode_active_black_24dp
 
     override fun getType(): QuestionType {
         return QuestionType.PLANE
@@ -19,8 +27,8 @@ class PlaneQuestion(emission: Double) : Question {
         val roundToNearest = 10
 
         do {
-            value = Random.nextInt(0, 2 * actualValue)
-        } while (value == actualValue)
+            value = Random.nextInt(0, 2 * actualValue1)
+        } while (value == actualValue1)
 
         value = (value / roundToNearest) * roundToNearest
 
@@ -43,7 +51,7 @@ class PlaneQuestion(emission: Double) : Question {
     override fun getAnswerLine(line: Int): String {
         return when(line) {
             1 -> "En flypassager udleder ${"%.1f ".format(quizValue * emissionPerKM).replace('.', ',')} kg $CO2Str ved at flyve $quizValue km"
-            2 -> "Din udledning svarer til at flyve $actualValue km"
+            2 -> "Din udledning svarer til at flyve $actualValue1 km"
             else -> throw Exception("Unable to generate answer line: $line.")
         }
     }

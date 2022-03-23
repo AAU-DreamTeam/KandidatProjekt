@@ -29,7 +29,7 @@ class OverviewView : Fragment() {
     private lateinit var gameTV: TextView
     private lateinit var playButton: Button
     private lateinit var showButton: Button
-    private lateinit var topView: View
+    private lateinit var topView: ConstraintLayout
     private lateinit var constraintView: ConstraintLayout
     private lateinit var co2Showcase: AutoCompleteTextView
     private var pos =0
@@ -67,8 +67,13 @@ class OverviewView : Fragment() {
             totalEmissionTV.text = emissionString})
 
     }
-    private fun setupIcons(){
+    private fun setupIcons(rootView: View){
 
+
+    }
+    private fun setupIcon(rootView: View){
+        var view = LayoutInflater.from(rootView.context).inflate(R.layout.overview_icon, null);
+        topView.addView(view)
     }
 
     fun setupPage(){
