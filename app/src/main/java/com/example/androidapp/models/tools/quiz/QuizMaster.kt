@@ -27,12 +27,13 @@ object QuizMaster : ViewModel() {
     private val _remainingQuestions = MutableLiveData<Int>()
     val remainingQuestions: LiveData<Int> get() = _remainingQuestions
 
-    private val _questions = mutableListOf<Question>()
+    private val _questions = MutableLiveData<MutableList<Question>>()
     val questions: LiveData<MutableList<Question>> get() = _questions
     private val questionTypeToIndex = mutableMapOf<QuestionType, Int>()
     private var indices: MutableList<Int>? = null
 
     fun nextQuestion() : Boolean {
+
         if (emission.value != null) {
             if (indices == null) {
                 generateQuestions()
@@ -52,7 +53,7 @@ object QuizMaster : ViewModel() {
         var numberOfQuestions = 0
 
         for ((index, type) in QuestionType.values().withIndex()) {
-            _questions.add(index, questionFactory.getQuestion(type, emission.value!!))
+            _questions.value?.add(index, questionFactory.getQuestion(type, emission.value!!))
             indices!!.add(index)
             questionTypeToIndex[type] = index
             numberOfQuestions++
@@ -63,7 +64,7 @@ object QuizMaster : ViewModel() {
     }
 
     private fun drawQuestion() {
-        _currentQuestion.value = _questions[indices!!.removeLast()]
+        _currentQuestion.value = _questions.value?.get(indices!!.removeLast())
         _remainingQuestions.value = _remainingQuestions.value?.minus(1)
     }
 
@@ -80,18 +81,18 @@ object QuizMaster : ViewModel() {
     }
 
 
-    fun getQuestion(type: QuestionType) : Question {
+    fun getQuestion(type: QuestionType) : Question? {
         val questionIndex = questionTypeToIndex[type]
 
         if (questionIndex != null) {
-            return _questions[questionIndex]
+            return _questions.value?.get(questionIndex)
         } else {
             throw IllegalArgumentException("Unable to find question of type ${type.name}.")
         }
     }
 
     fun reset() {
-        _questions.clear()
+        _questions.value?.clear()
         indices = null
     }
 }
