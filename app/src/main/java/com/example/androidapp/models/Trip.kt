@@ -15,7 +15,7 @@ class Trip(val purchases: MutableList<Purchase>) {
         return prettyTimestamp
     }
 
-    private fun toDanish(str: String): String{
+    private fun toDanish(str: String): String {
         return when(str) {
             "Mon" -> "Man"
             "Tue" -> "Tir"
