@@ -31,6 +31,7 @@ object QuizMaster : ViewModel() {
     private var indices: MutableList<Int>? = null
 
     fun nextQuestion() : Boolean {
+
         if (emission.value != null) {
             if (indices == null) {
                 generateQuestions()

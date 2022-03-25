@@ -3,6 +3,7 @@ package com.example.androidapp.views.fragments.mainView
 
 import android.content.Context
 import android.content.Intent
+import android.content.res.Resources
 import android.graphics.Point
 import android.os.Build
 import android.os.Bundle
@@ -14,6 +15,8 @@ import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.example.androidapp.R
+import com.example.androidapp.models.tools.quiz.Question
+import com.example.androidapp.models.tools.quiz.QuizMaster
 import com.example.androidapp.viewmodels.EmissionViewModel
 import com.example.androidapp.views.GameView
 import kotlinx.android.synthetic.main.activity_game_view.view.*
@@ -48,8 +51,9 @@ class OverviewView : Fragment() {
         co2Showcase = rootView.findViewById(R.id.co2Showcase)
 
         setupDropDown()
-        setHeight(rootView )
+        setHeight(rootView)
         setupButtons()
+        setupIcons(rootView)
 
         return rootView
     }
@@ -67,13 +71,32 @@ class OverviewView : Fragment() {
             totalEmissionTV.text = emissionString})
 
     }
-    private fun setupIcons(rootView: View){
+    private fun setupIcons(rootView: View) {
 
+        val questions = QuizMaster.questions.value
+        if (questions != null) {
+            for (i in questions.indices) {
+                setupIcon(rootView, questions[i], i)
+            }
+        }
+        QuizMaster.questions.observe(viewLifecycleOwner, { list ->
+            for (i in list.indices) {
+                val view = rootView.findViewById<ConstraintLayout>(R.id.overviewView)
+                setupIconObserve( list[i], view.findViewWithTag<View>("icon" + i))
 
+            }
+        })
     }
-    private fun setupIcon(rootView: View){
-        var view = LayoutInflater.from(rootView.context).inflate(R.layout.overview_icon, null);
+    private fun setupIcon(rootView: View,icon:Question,tag:Int){
+        val view = LayoutInflater.from(rootView.context).inflate(R.layout.overview_icon, null);
+        val imageView = view.findViewById<ImageView>(R.id.icon_imageView)
+        imageView.setImageDrawable(rootView.resources.getDrawable(icon.iconId))
+        view.setTag("icon"+tag)
         topView.addView(view)
+    }
+    private fun setupIconObserve(icon:Question,iconView:View){
+        iconView.findViewById<TextView>(R.id.icon_textView).setText(icon.iconStr1)
+        iconView.findViewById<TextView>(R.id.icon_textView2).setText(icon.iconStr2)
     }
 
     fun setupPage(){
@@ -158,3 +181,5 @@ class OverviewView : Fragment() {
     }
 
 }
+
+
