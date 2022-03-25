@@ -3,7 +3,6 @@ package com.example.androidapp.views.fragments.mainView
 
 import android.content.Context
 import android.content.Intent
-import android.content.res.Resources
 import android.graphics.Point
 import android.os.Build
 import android.os.Bundle
@@ -11,6 +10,7 @@ import android.view.*
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -21,10 +21,6 @@ import com.example.androidapp.models.tools.quiz.QuestionVariantType
 import com.example.androidapp.models.tools.quiz.QuizMaster
 import com.example.androidapp.viewmodels.EmissionViewModel
 import com.example.androidapp.views.GameView
-import kotlinx.android.synthetic.main.activity_game_view.view.*
-import kotlinx.android.synthetic.main.activity_scanner.*
-import kotlinx.android.synthetic.main.fragment_overview.*
-import java.util.*
 
 
 class OverviewView : Fragment() {
@@ -38,6 +34,7 @@ class OverviewView : Fragment() {
     private lateinit var constraintView: ConstraintLayout
     private lateinit var co2Showcase: AutoCompleteTextView
     private var pos =0
+    private val iconPerLine = 3
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -55,7 +52,7 @@ class OverviewView : Fragment() {
         setupDropDown()
         setHeight(rootView)
         setupButtons()
-        setupIcons(rootView)
+        setupIcons(rootView,inflater,container)
 
         return rootView
     }
@@ -77,30 +74,38 @@ class OverviewView : Fragment() {
             )
             totalEmissionTV.text = emissionString
         }
-
     }
-    private fun setupIcons(rootView: View) {
+    private fun setupIcons(rootView: View,inflater: LayoutInflater,container: ViewGroup?) {
 
         val questions = QuizMaster.questions.value
         if (questions != null) {
             for (i in questions.indices) {
-                setupIcon(rootView, questions[i], i)
+                setupIcon(rootView, questions[i], i,inflater,container)
             }
         }
         QuizMaster.questions.observe(viewLifecycleOwner) { list ->
             for (i in list.indices) {
-                val view = rootView.findViewById<ConstraintLayout>(R.id.overviewView)
-                setupIconObserve(list[i], view.findViewWithTag<View>("icon$i"))
+                setupIconObserve(list[i], topView.findViewById(i))
 
             }
         }
     }
-    private fun setupIcon(rootView: View,icon:Question,tag:Int){
-        val view = LayoutInflater.from(rootView.context).inflate(R.layout.overview_icon, null);
+    private fun setupIcon(rootView: View,icon:Question,tag:Int,inflater: LayoutInflater,container: ViewGroup?){
+        val view = inflater.inflate(R.layout.overview_icon,container, false);
         val imageView = view.findViewById<ImageView>(R.id.icon_imageView)
         imageView.setImageDrawable(rootView.resources.getDrawable(icon.iconId))
-        view.setTag("icon"+tag)
+        view.id =tag
         topView.addView(view)
+        val constraintSet = ConstraintSet()
+        constraintSet.clone(topView)
+        if(tag%iconPerLine!=0){
+            constraintSet.connect(tag,ConstraintSet.LEFT,tag-1,ConstraintSet.RIGHT)
+        }
+        if (tag>=iconPerLine){
+            constraintSet.connect(tag,ConstraintSet.TOP,tag-iconPerLine*(tag/iconPerLine),ConstraintSet.BOTTOM)
+        }
+        constraintSet.applyTo(topView)
+
     }
     private fun setupIconObserve(icon:Question,iconView:View){
         if (icon.getType() == QuestionType.TREE) {

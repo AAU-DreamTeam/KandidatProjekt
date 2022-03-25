@@ -81,6 +81,7 @@ object QuizMaster : ViewModel() {
 
     fun setEmission(emission: Double) {
         _emission.value = emission
+        generateQuestions()
     }
 
     fun submitAnswer(answer: QuestionAnswer) {
