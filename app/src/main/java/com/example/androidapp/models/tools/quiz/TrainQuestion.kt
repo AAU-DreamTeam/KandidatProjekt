@@ -30,6 +30,10 @@ class TrainQuestion(emission: Double, type: QuestionType): Question {
         indices.shuffle()
     }
 
+    override fun getType(): QuestionType {
+        return QuestionType.TRAIN
+    }
+
     override fun getQuestionLine(line: Int): String {
         return when(line) {
             1 -> "Kører en togpassager"

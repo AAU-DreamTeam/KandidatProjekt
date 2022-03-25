@@ -11,11 +11,9 @@ class CarQuestion(emission: Double, type: QuestionType): Question {
     override val numberOfVariants: Int
     override var currentIndex = -1
     override val indices = mutableListOf<Int>()
-
     private val quizValueStr: String get() = variants[currentIndex].quizValueStr
     private val actualValueStr: String get() = variants[currentIndex].actualValueStr
     private val quizEmission: Double get() = variants[currentIndex].quizEffect
-
     init {
         val qvFactory = QuestionVariantFactory()
         val variantTypes = mutableListOf(QuestionVariantType.EMISSION_KILOMETERS, QuestionVariantType.EMISSION_HOURS)
@@ -29,6 +27,10 @@ class CarQuestion(emission: Double, type: QuestionType): Question {
         numberOfVariants = indices.size
 
         indices.shuffle()
+    }
+
+    override fun getType(): QuestionType {
+        return QuestionType.CAR
     }
 
     override fun getQuestionLine(line: Int): String {

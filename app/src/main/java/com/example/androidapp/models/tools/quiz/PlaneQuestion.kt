@@ -10,7 +10,6 @@ class PlaneQuestion(emission: Double, type: QuestionType) : Question {
     override val indices = mutableListOf<Int>()
     override val numberOfVariants: Int
     override var currentIndex = -1
-
     private val quizValueStr: String get() = variants[currentIndex].quizValueStr
     private val actualValueStr: String get() = variants[currentIndex].actualValueStr
     private val quizEmission: Double get() = variants[currentIndex].quizEffect
@@ -28,6 +27,10 @@ class PlaneQuestion(emission: Double, type: QuestionType) : Question {
         numberOfVariants = indices.size
 
         indices.shuffle()
+    }
+
+    override fun getType(): QuestionType {
+        return QuestionType.PLANE
     }
 
     override fun getQuestionLine(line: Int): String {

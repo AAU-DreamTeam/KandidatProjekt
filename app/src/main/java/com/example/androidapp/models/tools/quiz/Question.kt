@@ -28,6 +28,8 @@ interface Question {
         }
     }
 
+    fun getType(): QuestionType
+
     fun getQuestionLine(line: Int): String
 
     fun getAnswerLine(line: Int): String

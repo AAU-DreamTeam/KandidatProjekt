@@ -30,6 +30,10 @@ class TreeQuestion(emission: Double, type: QuestionType): Question {
         indices.shuffle()
     }
 
+    override fun getType(): QuestionType {
+        return QuestionType.TREE
+    }
+
     override fun getQuestionLine(line: Int): String {
         return when(line) {
             1 -> "Bruger et træ"
