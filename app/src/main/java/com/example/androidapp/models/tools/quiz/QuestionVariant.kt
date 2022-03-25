@@ -9,8 +9,10 @@ interface QuestionVariant {
     val actualValueStr: String
     val quizValueStr: String
     val roundToNearest: Int
+    var hasBeenAsked: Boolean
 
     fun submit(answer: QuestionAnswer): Boolean {
+        hasBeenAsked = true
         return when(answer){
             QuestionAnswer.ABOVE -> quizValue < actualValue
             QuestionAnswer.BELLOW -> quizValue > actualValue

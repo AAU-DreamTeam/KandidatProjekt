@@ -24,14 +24,13 @@ object QuizMaster : ViewModel() {
     private val _remainingQuestions = MutableLiveData<Int>()
     val remainingQuestions: LiveData<Int> get() = _remainingQuestions
 
-    private val _questions = MutableLiveData<MutableList<Question>>(mutableListOf())
+    private val _questions = MutableLiveData<MutableList<Question>>()
     val questions: LiveData<MutableList<Question>> get() = _questions
 
     private val questionTypeToIndex = mutableMapOf<QuestionType, Int>()
     private var indices: MutableList<Int>? = null
 
     fun nextQuestion() : Boolean {
-
         if (emission.value != null) {
             if (indices == null) {
                 generateQuestions()
@@ -47,13 +46,15 @@ object QuizMaster : ViewModel() {
 
     private fun generateQuestions() {
         val questionFactory = QuestionFactory()
+        val questionsList = mutableListOf<Question>()
+
         indices = mutableListOf()
         var numberOfQuestions = 0
 
         for ((index, type) in QuestionType.values().withIndex()) {
             val question = questionFactory.getQuestion(type, emission.value!!)
 
-            _questions.value!!.add(index, question)
+            questionsList.add(index, question)
 
             for (i in 0 until question.numberOfVariants) {
                 indices!!.add(index)
@@ -65,6 +66,8 @@ object QuizMaster : ViewModel() {
 
         _remainingQuestions.value = numberOfQuestions
         indices!!.shuffle()
+
+        _questions.value = questionsList
     }
 
     private fun drawQuestion() {

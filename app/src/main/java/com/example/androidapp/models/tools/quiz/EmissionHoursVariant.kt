@@ -9,6 +9,7 @@ class EmissionHoursVariant(emission: Double, questionType: QuestionType): Questi
     private val unitPlural: String
     override val actualValue: Int
     override val roundToNearest: Int
+    override var hasBeenAsked = false
     override val quizValue: Int
     override val quizEffect: Double
     override val actualValueStr: String
@@ -62,6 +63,6 @@ class EmissionHoursVariant(emission: Double, questionType: QuestionType): Questi
     }
 
     private fun valueToString(value: Int): String {
-        return "$value ${if (value == 1) unitSingular else unitPlural}"
+        return if(value == -1) "? $unitPlural" else "$value ${if (value == 1) unitSingular else unitPlural}"
     }
 }

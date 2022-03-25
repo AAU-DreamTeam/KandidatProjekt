@@ -7,7 +7,8 @@ class AbsorptionDaysVariant(emission: Double, questionType: QuestionType): Quest
     override val roundToNearest = 5
     override val actualValue = (emission / absorptionPerDay).roundToInt()
     override val quizValue = calcQuizValue()
-    override val actualValueStr = valueToString(actualValue)
+    override var hasBeenAsked = false
+    override val actualValueStr get() = if (!hasBeenAsked) valueToString(-1) else valueToString(actualValue)
     override val quizValueStr = valueToString(quizValue)
     override val quizEffect = quizValue * absorptionPerDay
 
@@ -15,6 +16,6 @@ class AbsorptionDaysVariant(emission: Double, questionType: QuestionType): Quest
         val unitSingular = "dag"
         val unitPlural = "dage"
 
-        return "$value ${if (value == 1) unitSingular else unitPlural}"
+        return if(value == -1) "? $unitPlural" else "$value ${if (value == 1) unitSingular else unitPlural}"
     }
 }
