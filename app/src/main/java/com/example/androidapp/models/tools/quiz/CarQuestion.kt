@@ -1,32 +1,40 @@
 package com.example.androidapp.models.tools.quiz
 
-import android.text.Html
-import androidx.core.text.HtmlCompat
 import com.example.androidapp.R
-import kotlin.math.roundToInt
-import kotlin.random.Random
 
-class CarQuestion(emission: Double): Question {
-    private val emissionPerKM = 0.171
-    private val emissionPerHour = emissionPerKM * 100
-    override val actualValue1 = (emission/ emissionPerKM).roundToInt()
-    override val quizValue = calcQuizValue()
-    override var result: Boolean?= null
-    override val actualValue2 = (emission /emissionPerHour).roundToInt()
-    override var didQuestion1 = false
-    override var didQuestion2 = false
-    override val iconStr1 = "$actualValue1 km"
-    override val iconStr2 = "$actualValue2 hour(s)"
+class CarQuestion(emission: Double, type: QuestionType): Question {
+    var result: Boolean?= null
     override val iconId = R.drawable.ic_directions_car_black_24dp
+    override val bgImageId = R.mipmap.ic_car_foreground
+    override val variants = mutableListOf<QuestionVariant>()
+    override val variantTypeToIndex = mutableMapOf<QuestionVariantType, Int>()
+    override val numberOfVariants: Int
+    override var currentIndex = -1
+    override val indices = mutableListOf<Int>()
 
-    override fun getType() : QuestionType {
-        return QuestionType.CAR
+    private val quizValueStr: String get() = variants[currentIndex].quizValueStr
+    private val actualValueStr: String get() = variants[currentIndex].actualValueStr
+    private val quizEmission: Double get() = variants[currentIndex].quizEffect
+
+    init {
+        val qvFactory = QuestionVariantFactory()
+        val variantTypes = mutableListOf(QuestionVariantType.EMISSION_KILOMETERS, QuestionVariantType.EMISSION_HOURS)
+
+        for ((index, variantType) in variantTypes.withIndex()) {
+            variants.add(index, qvFactory.getQuestionVariant(variantType, emission, type))
+            variantTypeToIndex[variantType] = index
+            indices.add(index)
+        }
+
+        numberOfVariants = indices.size
+
+        indices.shuffle()
     }
 
     override fun getQuestionLine(line: Int): String {
         return when(line) {
             1 -> "Kører en bil"
-            2 -> "$quizValue km"
+            2 -> quizValueStr
             3 -> "for at matche din udledning?"
             else -> throw Exception("Unable to generate question line: $line.")
         }
@@ -34,27 +42,10 @@ class CarQuestion(emission: Double): Question {
 
     override fun getAnswerLine(line: Int): String {
         return when(line) {
-            1 -> "En bil udleder ${"%.1f ".format(quizValue * emissionPerKM).replace('.', ',')} kg $CO2Str ved at køre $quizValue km"
-            2 -> "Din udledning svarer til at køre $actualValue1 km"
+            1 -> "En bil udleder ${"%.1f ".format(quizEmission).replace('.', ',')} kg $CO2Str ved at køre $quizValueStr"
+            2 -> "Din udledning svarer til at køre $actualValueStr"
             else -> throw Exception("Unable to generate answer line: $line.")
         }
-    }
-
-    private fun calcQuizValue() : Int {
-        var value: Int
-        val roundToNearest = 10
-
-        do {
-            value = Random.nextInt(0, 2 * actualValue1)
-        } while (value == actualValue1)
-
-        value = (value / roundToNearest) * roundToNearest
-
-        if (value == 0) {
-            value = if (value == roundToNearest) roundToNearest * 2 else roundToNearest
-        }
-
-        return value
     }
 
 }
