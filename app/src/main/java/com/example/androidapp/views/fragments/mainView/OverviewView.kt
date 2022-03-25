@@ -16,6 +16,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.example.androidapp.R
 import com.example.androidapp.models.tools.quiz.Question
+import com.example.androidapp.models.tools.quiz.QuestionType
+import com.example.androidapp.models.tools.quiz.QuestionVariantType
 import com.example.androidapp.models.tools.quiz.QuizMaster
 import com.example.androidapp.viewmodels.EmissionViewModel
 import com.example.androidapp.views.GameView
@@ -65,10 +67,16 @@ class OverviewView : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.emissionList.observe(viewLifecycleOwner, { list ->
-            val emissionString = HtmlCompat.fromHtml("%.3f ".format(list[pos]).replace('.',
-                ',') + "kg CO<sub><small><small>2</small></small></sub>", HtmlCompat.FROM_HTML_MODE_LEGACY)
-            totalEmissionTV.text = emissionString})
+        viewModel.emissionList.observe(viewLifecycleOwner) { list ->
+            val emissionString = HtmlCompat.fromHtml(
+                "%.3f ".format(list[pos]).replace(
+                    '.',
+                    ','
+                ) + "kg CO<sub><small><small>2</small></small></sub>",
+                HtmlCompat.FROM_HTML_MODE_LEGACY
+            )
+            totalEmissionTV.text = emissionString
+        }
 
     }
     private fun setupIcons(rootView: View) {
@@ -79,13 +87,13 @@ class OverviewView : Fragment() {
                 setupIcon(rootView, questions[i], i)
             }
         }
-        QuizMaster.questions.observe(viewLifecycleOwner, { list ->
+        QuizMaster.questions.observe(viewLifecycleOwner) { list ->
             for (i in list.indices) {
                 val view = rootView.findViewById<ConstraintLayout>(R.id.overviewView)
-                setupIconObserve( list[i], view.findViewWithTag<View>("icon" + i))
+                setupIconObserve(list[i], view.findViewWithTag<View>("icon$i"))
 
             }
-        })
+        }
     }
     private fun setupIcon(rootView: View,icon:Question,tag:Int){
         val view = LayoutInflater.from(rootView.context).inflate(R.layout.overview_icon, null);
@@ -95,8 +103,12 @@ class OverviewView : Fragment() {
         topView.addView(view)
     }
     private fun setupIconObserve(icon:Question,iconView:View){
-        iconView.findViewById<TextView>(R.id.icon_textView).setText(icon.iconStr1)
-        iconView.findViewById<TextView>(R.id.icon_textView2).setText(icon.iconStr2)
+        if (icon.getType() == QuestionType.TREE) {
+            iconView.findViewById<TextView>(R.id.icon_textView).text = icon.getVariant(QuestionVariantType.ABSORPTION_DAYS).actualValueStr
+        } else {
+            iconView.findViewById<TextView>(R.id.icon_textView).text = icon.getVariant(QuestionVariantType.EMISSION_KILOMETERS).actualValueStr
+            iconView.findViewById<TextView>(R.id.icon_textView2).text = icon.getVariant(QuestionVariantType.EMISSION_HOURS).actualValueStr
+        }
     }
 
     fun setupPage(){

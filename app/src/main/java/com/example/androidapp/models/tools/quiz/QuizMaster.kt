@@ -1,12 +1,9 @@
 package com.example.androidapp.models.tools.quiz
 
-import android.util.ArrayMap
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.androidapp.R
 import java.lang.Exception
-import java.util.*
 
 object QuizMaster : ViewModel() {
     private val _emission = MutableLiveData<Double>(null)
@@ -27,8 +24,9 @@ object QuizMaster : ViewModel() {
     private val _remainingQuestions = MutableLiveData<Int>()
     val remainingQuestions: LiveData<Int> get() = _remainingQuestions
 
-    private val _questions = MutableLiveData<MutableList<Question>>()
+    private val _questions = MutableLiveData<MutableList<Question>>(mutableListOf())
     val questions: LiveData<MutableList<Question>> get() = _questions
+
     private val questionTypeToIndex = mutableMapOf<QuestionType, Int>()
     private var indices: MutableList<Int>? = null
 
@@ -53,10 +51,16 @@ object QuizMaster : ViewModel() {
         var numberOfQuestions = 0
 
         for ((index, type) in QuestionType.values().withIndex()) {
-            _questions.value?.add(index, questionFactory.getQuestion(type, emission.value!!))
-            indices!!.add(index)
+            val question = questionFactory.getQuestion(type, emission.value!!)
+
+            _questions.value!!.add(index, question)
+
+            for (i in 0 until question.numberOfVariants) {
+                indices!!.add(index)
+                numberOfQuestions++
+            }
+
             questionTypeToIndex[type] = index
-            numberOfQuestions++
         }
 
         _remainingQuestions.value = numberOfQuestions
@@ -64,7 +68,11 @@ object QuizMaster : ViewModel() {
     }
 
     private fun drawQuestion() {
-        _currentQuestion.value = _questions.value?.get(indices!!.removeLast())
+        val newQuestion = _questions.value!![indices!!.removeLast()]
+
+        newQuestion.draw()
+
+        _currentQuestion.value = newQuestion
         _remainingQuestions.value = _remainingQuestions.value?.minus(1)
     }
 
@@ -81,18 +89,18 @@ object QuizMaster : ViewModel() {
     }
 
 
-    fun getQuestion(type: QuestionType) : Question? {
-        val questionIndex = questionTypeToIndex[type]
+    fun getQuestionVariant(questionType: QuestionType, variantType: QuestionVariantType): QuestionVariant {
+        val questionIndex = questionTypeToIndex[questionType]
 
         if (questionIndex != null) {
-            return _questions.value?.get(questionIndex)
+            return _questions.value!![questionIndex].getVariant(variantType)
         } else {
-            throw IllegalArgumentException("Unable to find question of type ${type.name}.")
+            throw IllegalArgumentException("Unable to find question of type ${questionType.name}.")
         }
     }
 
     fun reset() {
-        _questions.value?.clear()
+        _questions.value!!.clear()
         indices = null
     }
 }

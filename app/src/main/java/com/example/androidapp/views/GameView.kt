@@ -8,7 +8,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.text.HtmlCompat
 import com.example.androidapp.R
 import com.example.androidapp.models.tools.quiz.QuestionAnswer
-import com.example.androidapp.models.tools.quiz.QuestionType
 import com.example.androidapp.models.tools.quiz.QuizMaster
 import kotlinx.android.synthetic.main.activity_game_view.*
 
@@ -48,12 +47,7 @@ class GameView : AppCompatActivity() {
             circle.icon = ContextCompat.getDrawable(this, R.drawable.ic_question_mark_black_24dp)
             circle.setBackgroundColor(ContextCompat.getColor(this, R.color.grey))
 
-            when(it.getType()) {
-                QuestionType.TREE -> backgroundImage.setImageResource(R.mipmap.ic_tree_foreground)
-                QuestionType.CAR -> backgroundImage.setImageResource(R.mipmap.ic_car_foreground)
-                QuestionType.TRAIN -> backgroundImage.setImageResource(R.mipmap.ic_train_foreground)
-                QuestionType.PLANE -> backgroundImage.setImageResource(R.mipmap.ic_plane_foreground)
-            }
+            backgroundImage.setImageResource(it.bgImageId)
         }
 
         viewModel.currentQuestionResult.observe(this) {

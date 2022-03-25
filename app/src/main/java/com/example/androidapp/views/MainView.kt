@@ -41,11 +41,6 @@ class MainView : AppCompatActivity() {
         setUpViewPager()
 
         QuizMaster.setEmission(3.0)
-        val resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-
-        }
-
- //       resultLauncher.launch(Intent(this, GameView::class.java))
     }
 
     private fun setUpTabs(){
