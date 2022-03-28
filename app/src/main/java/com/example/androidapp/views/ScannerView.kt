@@ -6,9 +6,19 @@ import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
+import android.view.View
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.cardview.widget.CardView
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.FileProvider
+import androidx.core.view.isGone
+import androidx.core.view.isInvisible
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.androidapp.R
@@ -20,11 +30,19 @@ import java.io.IOException
 
 class ScannerView : AppCompatActivity() {
     private val viewModel = ScannerViewModel()
-    private var layoutManager: RecyclerView.LayoutManager?=null
+
+
+    private lateinit var constraintView:ConstraintLayout
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scanner)
+
+
+
+
+        constraintView= findViewById(R.id.scannerViewConstraint)
 
         viewModel.initiate(this)
         viewModel.loadCountries()
@@ -48,14 +66,85 @@ class ScannerView : AppCompatActivity() {
             viewModel.onSave()
         }
 
+
+        linearLayout1.setOnClickListener {
+            if (recyclerView.isGone) {
+               closeRecyclerView(recyclerView2, btn_completed_data)
+                openRecyclerView(recyclerView, btn_missing_data)
+                //completedToBottomConstraint()
+
+            }else {
+                closeRecyclerView(recyclerView,btn_missing_data)
+                openRecyclerView(recyclerView2,btn_completed_data)
+                //completedToTopConstraint()
+
+            }
+        }
+
+
+
+        linearLayout2.setOnClickListener {
+            if (recyclerView2.isGone) {
+                closeRecyclerView(recyclerView, btn_missing_data)
+                openRecyclerView(recyclerView2, btn_completed_data)
+                completedToTopConstraint()
+
+            }else {
+                closeRecyclerView(recyclerView2, btn_missing_data)
+                openRecyclerView(recyclerView, btn_completed_data)
+                completedToBottomConstraint()
+
+            }
+        }
+
+
+    }
+
+    private fun completedToBottomConstraint() {
+        val constraintSet= ConstraintSet()
+        constraintSet.connect(R.id.missingCard,ConstraintSet.BOTTOM,R.id.completedCard,ConstraintSet.TOP)
+
+        /*constraintSet.clone(constraintView)
+        constraintSet.clear(R.id.completedCard, ConstraintSet.TOP)*/
+
+        constraintSet.applyTo(constraintView)
+
+    }
+
+    private fun completedToTopConstraint(){
+
+        val constraintSet= ConstraintSet()
+
+        constraintSet.clear(R.id.missingCard,ConstraintSet.BOTTOM)
+        constraintSet.setVerticalBias(R.id.completedCard,100.toFloat())
+        /*constraintSet.clone(constraintView)
+
+        constraintSet.connect(R.id.completedCard,ConstraintSet.TOP, R.id.linearLayout1, ConstraintSet.BOTTOM)
+        //constraintSet.setVerticalBias(R.id.completedCard,0.toFloat())*/
+
+        constraintSet.applyTo(constraintView)
+
+
+    }
+
+    private fun openRecyclerView(recyclerView: RecyclerView,imageView: ImageView) {
+        recyclerView.visibility = View.VISIBLE
+        imageView.setImageResource(R.drawable.ic_expand_less_black_24dp)
+    }
+
+    private fun closeRecyclerView(recyclerView: RecyclerView, imageView: ImageView) {
+
+        recyclerView.visibility = View.GONE
+        imageView.setImageResource(R.drawable.ic_expand_more_black_24dp)
     }
 
     private fun setupRecyclerView(){
-        layoutManager = LinearLayoutManager(this)
-        recyclerView.layoutManager = layoutManager
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView2.layoutManager = LinearLayoutManager(this)
 
         viewModel.purchases.observe(this) {
             recyclerView.adapter = ScannerAdapter(it, viewModel.products.value!!, viewModel.countries.value!!, viewModel)
+            recyclerView2.adapter = ScannerAdapter(it, viewModel.products.value!!, viewModel.countries.value!!, viewModel)
         }
     }
 
@@ -88,4 +177,6 @@ class ScannerView : AppCompatActivity() {
         }
     }
 }
+
+
 
