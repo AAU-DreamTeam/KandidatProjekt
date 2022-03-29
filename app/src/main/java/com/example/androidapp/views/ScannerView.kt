@@ -7,6 +7,7 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -30,6 +31,8 @@ import java.io.IOException
 
 class ScannerView : AppCompatActivity() {
     private val viewModel = ScannerViewModel()
+    private lateinit var completedCard: CardView
+    private lateinit var missingCard: CardView
 
 
     private lateinit var constraintView:ConstraintLayout
@@ -41,6 +44,8 @@ class ScannerView : AppCompatActivity() {
 
 
 
+        completedCard = findViewById(R.id.completedCard)
+        missingCard = findViewById(R.id.missingCard)
 
         constraintView= findViewById(R.id.scannerViewConstraint)
 
@@ -71,12 +76,12 @@ class ScannerView : AppCompatActivity() {
             if (recyclerView.isGone) {
                closeRecyclerView(recyclerView2, btn_completed_data)
                 openRecyclerView(recyclerView, btn_missing_data)
-                //completedToBottomConstraint()
+                completedToBottomConstraint()
 
             }else {
                 closeRecyclerView(recyclerView,btn_missing_data)
                 openRecyclerView(recyclerView2,btn_completed_data)
-                //completedToTopConstraint()
+                completedToTopConstraint()
 
             }
         }
@@ -102,10 +107,13 @@ class ScannerView : AppCompatActivity() {
 
     private fun completedToBottomConstraint() {
         val constraintSet= ConstraintSet()
-        constraintSet.connect(R.id.missingCard,ConstraintSet.BOTTOM,R.id.completedCard,ConstraintSet.TOP)
 
-        /*constraintSet.clone(constraintView)
-        constraintSet.clear(R.id.completedCard, ConstraintSet.TOP)*/
+        constraintSet.clone(constraintView)
+        constraintSet.clear(R.id.completedCard,ConstraintSet.TOP)
+        constraintSet.connect(R.id.missingCard, ConstraintSet.BOTTOM, R.id.completedCard, ConstraintSet.TOP)
+
+
+
 
         constraintSet.applyTo(constraintView)
 
@@ -115,12 +123,9 @@ class ScannerView : AppCompatActivity() {
 
         val constraintSet= ConstraintSet()
 
-        constraintSet.clear(R.id.missingCard,ConstraintSet.BOTTOM)
-        constraintSet.setVerticalBias(R.id.completedCard,100.toFloat())
-        /*constraintSet.clone(constraintView)
-
-        constraintSet.connect(R.id.completedCard,ConstraintSet.TOP, R.id.linearLayout1, ConstraintSet.BOTTOM)
-        //constraintSet.setVerticalBias(R.id.completedCard,0.toFloat())*/
+        constraintSet.clone(constraintView)
+        constraintSet.clear(R.id.missingCard, ConstraintSet.BOTTOM)
+        constraintSet.connect(R.id.completedCard,ConstraintSet.TOP,R.id.missingCard,ConstraintSet.BOTTOM)
 
         constraintSet.applyTo(constraintView)
 
