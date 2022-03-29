@@ -19,7 +19,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class EmissionView : Fragment() {
     private val viewModel: EmissionViewModel by activityViewModels()
-    private lateinit var toggleButton : MaterialButtonToggleGroup
     private lateinit var overviewView: OverviewView
     private lateinit var purchaseView: PurchaseView
     private lateinit var fragmentFL: FrameLayout
@@ -34,7 +33,6 @@ class EmissionView : Fragment() {
         scanButton=requireActivity().findViewById(R.id.floatingScan)
         overviewView = OverviewView()
         purchaseView = PurchaseView()
-        toggleButton = rootView.findViewById(R.id.toggleButton)
         fragmentFL = rootView.findViewById(R.id.fragment_fl)
 
         viewModel.loadData()
@@ -51,18 +49,6 @@ class EmissionView : Fragment() {
 
     }
 
-    private fun setUpToggleButton() {
-        toggleButton.addOnButtonCheckedListener { toggleButton, checkedId, isChecked ->
-            if(isChecked) {
-                when(checkedId) {
-                    //R.id.btn_overview -> childFragmentManager.beginTransaction().replace(fragmentFL.id, overviewView).commit()
-                    //R.id.btn_list -> childFragmentManager.beginTransaction().replace(fragmentFL.id, listView).commit()
-                }
-            } else if (toggleButton.checkedButtonId == View.NO_ID) {
-                toggleButton.check(checkedId)
-            }
-        }
-    }
 
     private fun setUpScanButton() {
         val resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
