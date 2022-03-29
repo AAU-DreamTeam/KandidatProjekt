@@ -21,7 +21,7 @@ class EmissionView : Fragment() {
     private val viewModel: EmissionViewModel by activityViewModels()
     private lateinit var toggleButton : MaterialButtonToggleGroup
     private lateinit var overviewView: OverviewView
-    private lateinit var listView: ListView
+    private lateinit var purchaseView: PurchaseView
     private lateinit var fragmentFL: FrameLayout
     private lateinit var scanButton: FloatingActionButton
     private lateinit var prevButton: MaterialButton
@@ -33,7 +33,8 @@ class EmissionView : Fragment() {
         viewModel.initiate(requireContext())
         scanButton=requireActivity().findViewById(R.id.floatingScan)
         overviewView = OverviewView()
-        listView = ListView()
+        purchaseView = PurchaseView()
+        toggleButton = rootView.findViewById(R.id.toggleButton)
         fragmentFL = rootView.findViewById(R.id.fragment_fl)
 
         viewModel.loadData()

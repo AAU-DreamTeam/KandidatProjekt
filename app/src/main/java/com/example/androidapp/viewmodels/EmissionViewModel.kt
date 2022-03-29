@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel
 import com.example.androidapp.models.enums.MONTH
 import com.example.androidapp.models.Purchase
 import com.example.androidapp.models.StoreItem
+import com.example.androidapp.models.Trip
 import com.example.androidapp.repositories.PurchaseRepository
 import com.example.androidapp.repositories.StoreItemRepository
 import java.util.*
@@ -28,8 +29,8 @@ class EmissionViewModel: ViewModel()  {
     private val _purchases = MutableLiveData<List<Purchase>>()
     val purchases: LiveData<List<Purchase>> get() = _purchases
 
-    private val _trips = MutableLiveData<MutableList<Pair<String, MutableList<Purchase>>>>(mutableListOf())
-    val trips: LiveData<MutableList<Pair<String, MutableList<Purchase>>>> get() = _trips
+    private val _trips = MutableLiveData<List<Trip>>()
+    val trips: LiveData<List<Trip>> get() = _trips
 
     private val _totalEmission = MutableLiveData<Double>()
     val totalEmission: LiveData<Double> get() = _totalEmission
@@ -70,6 +71,7 @@ class EmissionViewModel: ViewModel()  {
         _emissionList.value = mutableListOf(_weeklyEmission.value,_monthlyEmission.value)
 
         _purchases.value = purchaseRepository!!.loadAllPurchases()
+        _trips.value = purchaseRepository!!.loadAllTrips()
         //extractTrips()
 
         calcTotalEmission()
