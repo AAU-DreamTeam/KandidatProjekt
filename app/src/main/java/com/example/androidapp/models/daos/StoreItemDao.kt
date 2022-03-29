@@ -64,7 +64,7 @@ class StoreItemDao(private val dbManager: DBManager) {
                        "${CountryDao.ALL_COLUMNS} " +            // 17
                 "FROM $TABLE " +
                 "INNER JOIN ${ProductDao.TABLE} ON $COLUMN_PRODUCT_ID = ${ProductDao.TABLE}.${ProductDao.COLUMN_ID} " +
-                "INNER JOIN ${CountryDao.TABLE} ON $COLUMN_COUNTRY_ID = ${CountryDao.TABLE}.${CountryDao.COLUMN_ID} " +
+                "INNER JOIN ${CountryDao.TABLE} ON ${StoreItemDao.TABLE}.${COLUMN_COUNTRY_ID} = ${CountryDao.TABLE}.${CountryDao.COLUMN_ID} " +
                 "WHERE $COLUMN_RECEIPT_TEXT = '$formattedReceiptText';"
 
         dbManager.select(query) {

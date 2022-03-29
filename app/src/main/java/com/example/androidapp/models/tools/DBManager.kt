@@ -23,7 +23,7 @@ class DBManager(context: Context?) : SQLiteOpenHelper(context, "FoodEmission.db"
         val createCountryTableStmnt = "CREATE TABLE country(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, transportEmission REAL NOT NULL, GHPenalty BOOLEAN NOT NULL CHECK(GHPenalty IN (0, 1)));"
         db.execSQL(createCountryTableStmnt)
 
-        val createProductTableStmnt = "CREATE TABLE product(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, cultivation REAL NOT NULL, iluc REAL NOT NULL, processing REAL NOT NULL, packaging REAL NOT NULL, retail REAL NOT NULL, GHCultivated BOOLEAN NOT NULL CHECK(GHCultivated IN (0, 1)));"
+        val createProductTableStmnt = "CREATE TABLE product(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, cultivation REAL NOT NULL, iluc REAL NOT NULL, processing REAL NOT NULL, packaging REAL NOT NULL, retail REAL NOT NULL, GHCultivated BOOLEAN NOT NULL CHECK(GHCultivated IN (0, 1)), countryID INTEGER NOT NULL, weight REAL NOT NULL);"
         db.execSQL(createProductTableStmnt)
 
         val createStoreItemTableStmnt = "CREATE TABLE storeItem(id INTEGER PRIMARY KEY AUTOINCREMENT, productID INTEGER NOT NULL, countryID INTEGER NOT NULL, receiptText TEXT NOT NULL, organic BOOLEAN NOT NULL CHECK(organic IN (0, 1)), packaged BOOLEAN NOT NULL CHECK(packaged IN (0, 1)), weight REAL NOT NULL, store TEXT NOT NULL, FOREIGN KEY(productID) REFERENCES product(id), FOREIGN KEY(countryID) REFERENCES country(id));"
@@ -31,6 +31,8 @@ class DBManager(context: Context?) : SQLiteOpenHelper(context, "FoodEmission.db"
 
         val createPurchaseTableStmnt = "CREATE TABLE purchase(id INTEGER PRIMARY KEY AUTOINCREMENT, storeItemID INTEGER NOT NULL, timestamp TEXT NOT NULL, week INTEGER NOT NULL, quantity INTEGER NOT NULL, FOREIGN KEY(storeItemID) REFERENCES storeItem(id));"
         db.execSQL(createPurchaseTableStmnt)
+
+
     }
 
     private fun insertCountryData(db: SQLiteDatabase) {
@@ -53,21 +55,21 @@ class DBManager(context: Context?) : SQLiteOpenHelper(context, "FoodEmission.db"
     }
 
     private fun insertProductData(db: SQLiteDatabase) {
-        insertProduct(db, "Tomat",0.07,0.01,0.0,0.14,0.01,true)
-        insertProduct(db, "Agurk", 0.05,0.01,0.0,0.14,0.01, true)
-        insertProduct(db, "Salat", 0.08, 0.02,0.0,0.06,0.01,false)
-        insertProduct(db, "Rødkål",0.1, 0.02, 0.0,0.06,0.01,false)
-        insertProduct(db, "Hvidkål",0.1, 0.02, 0.0,0.06,0.01,false)
-        insertProduct(db, "Æble",0.18,0.02,0.0,0.14,0.01,false)
-        insertProduct(db, "Spidskål",0.1,0.02,0.0,0.06,0.01,false)
-        insertProduct(db, "Blomkål",0.15,0.04,0.0,0.06,0.01,false)
-        insertProduct(db, "Champignon",0.01,0.01,0.0,0.26,0.0,true)
-        insertProduct(db, "Peberfrugt", 0.25,0.03,0.0,0.14,0.01,true)
-        insertProduct(db, "Broccoli",0.15,0.04,0.0,0.06,0.01,false)
-        insertProduct(db, "Gulerod",0.11,0.02,0.0,0.06,0.01,false)
+        insertProduct(db, "Tomat",0.07,0.01,0.0,0.14,0.01,true, 3, 500.0 )
+        insertProduct(db, "Agurk", 0.05,0.01,0.0,0.14,0.01, true, 5,  150.0)
+        insertProduct(db, "Salat", 0.08, 0.02,0.0,0.06,0.01,false, 3,  400.0)
+        insertProduct(db, "Rødkål",0.1, 0.02, 0.0,0.06,0.01,false, 5,  750.0)
+        insertProduct(db, "Hvidkål",0.1, 0.02, 0.0,0.06,0.01,false, 5,  750.0)
+        insertProduct(db, "Æble",0.18,0.02,0.0,0.14,0.01,false, 5,  1000.0)
+        insertProduct(db, "Spidskål",0.1,0.02,0.0,0.06,0.01,false, 5,  750.0)
+        insertProduct(db, "Blomkål",0.15,0.04,0.0,0.06,0.01,false, 3,  750.0)
+        insertProduct(db, "Champignon",0.01,0.01,0.0,0.26,0.0,true, 2,  500.0)
+        insertProduct(db, "Peberfrugt", 0.25,0.03,0.0,0.14,0.01,true, 3,  175.0)
+        insertProduct(db, "Broccoli",0.15,0.04,0.0,0.06,0.01,false, 5,  250.0)
+        insertProduct(db, "Gulerod",0.11,0.02,0.0,0.06,0.01,false, 5,  1000.0)
     }
 
-    private  fun insertProduct(db: SQLiteDatabase, name: String, cultivation: Double, iluc: Double, processing: Double, packaging: Double, retail: Double, GHCultivated: Boolean ): Long {
+    private  fun insertProduct(db: SQLiteDatabase, name: String, cultivation: Double, iluc: Double, processing: Double, packaging: Double, retail: Double, GHCultivated: Boolean, countryID: Int, weight: Double ): Long {
         val contentValues = ContentValues()
 
         contentValues.put("name", name)
@@ -77,12 +79,14 @@ class DBManager(context: Context?) : SQLiteOpenHelper(context, "FoodEmission.db"
         contentValues.put("packaging", packaging)
         contentValues.put("retail", retail)
         contentValues.put("GHCultivated", GHCultivated)
+        contentValues.put("countryId", countryID)
+        contentValues.put("weight", weight)
 
         return db.insert("product", null, contentValues)
     }
 
     private fun insertStoreItemData(db: SQLiteDatabase){
-        insertStoreItem(db, 6, 1,"ebler lose italien", false, false, 0.110)
+        /*insertStoreItem(db, 6, 1,"ebler lose italien", false, false, 0.110)
         insertStoreItem(db, 6, 5,"ebler lose danmark", false, false, 0.110)
         insertStoreItem(db, 6, 5,"ebler oko danmark", true, true, 1.0)
         insertStoreItem(db, 6, 1,"oko bakke ebler", true, true, 0.660)
@@ -154,7 +158,7 @@ class DBManager(context: Context?) : SQLiteOpenHelper(context, "FoodEmission.db"
         insertStoreItem(db, 2, 3,"udl. agurk", false, false, 0.300)
         insertStoreItem(db, 2, 3,"oko agurk levevis", true, true, 0.300)
         insertStoreItem(db, 2, 5,"oko agurk dk", true, true, 0.300)
-        insertStoreItem(db, 2, 3,"skoleagurker", false, true, 0.300)
+        insertStoreItem(db, 2, 3,"skoleagurker", false, true, 0.300)*/
     }
 
     private fun insertStoreItem(db: SQLiteDatabase, productID: Int, countryID: Int, receiptText: String, organic: Boolean, packaged: Boolean, weight: Double, store: String = "Føtex"): Long {

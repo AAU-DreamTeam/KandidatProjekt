@@ -148,8 +148,8 @@ class ScannerView : AppCompatActivity() {
         recyclerView2.layoutManager = LinearLayoutManager(this)
 
         viewModel.purchases.observe(this) {
-            recyclerView.adapter = ScannerAdapter(it, viewModel.products.value!!, viewModel.countries.value!!, viewModel)
-            recyclerView2.adapter = ScannerAdapter(it, viewModel.products.value!!, viewModel.countries.value!!, viewModel)
+            recyclerView.adapter = ScannerAdapter(it, viewModel.products.value!!, viewModel.countries.value!!, viewModel,this.resources)
+            recyclerView2.adapter = ScannerAdapter(it, viewModel.products.value!!, viewModel.countries.value!!, viewModel,this.resources)
         }
     }
 

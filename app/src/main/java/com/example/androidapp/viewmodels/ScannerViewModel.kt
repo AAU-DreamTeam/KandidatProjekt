@@ -88,6 +88,9 @@ class ScannerViewModel: ViewModel() {
     fun onProductChanged(index: Int, value: Product){
         _purchases.value!![index].storeItem.product = value
     }
+    fun getPurchase(index: Int): Purchase {
+        return _purchases.value!![index]
+    }
 
     fun onQuantityChanged(index: Int, value: Int){
         _purchases.value!![index].quantity = value
