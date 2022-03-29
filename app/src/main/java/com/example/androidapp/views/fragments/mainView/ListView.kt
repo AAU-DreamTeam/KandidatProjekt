@@ -28,8 +28,8 @@ class ListView : Fragment() {
 
         purchaseList.layoutManager = LinearLayoutManager(requireContext())
 
-        viewModel.purchases.observe(viewLifecycleOwner, { list ->
+        viewModel.purchases.observe(viewLifecycleOwner) { list ->
             purchaseList.adapter = EmissionListAdapter(requireContext(), list, viewModel)
-        })
+        }
     }
 }

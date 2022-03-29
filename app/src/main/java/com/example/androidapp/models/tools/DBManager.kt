@@ -29,7 +29,7 @@ class DBManager(context: Context?) : SQLiteOpenHelper(context, "FoodEmission.db"
         val createStoreItemTableStmnt = "CREATE TABLE storeItem(id INTEGER PRIMARY KEY AUTOINCREMENT, productID INTEGER NOT NULL, countryID INTEGER NOT NULL, receiptText TEXT NOT NULL, organic BOOLEAN NOT NULL CHECK(organic IN (0, 1)), packaged BOOLEAN NOT NULL CHECK(packaged IN (0, 1)), weight REAL NOT NULL, store TEXT NOT NULL, FOREIGN KEY(productID) REFERENCES product(id), FOREIGN KEY(countryID) REFERENCES country(id));"
         db.execSQL(createStoreItemTableStmnt)
 
-        val createPurchaseTableStmnt = "CREATE TABLE purchase(id INTEGER PRIMARY KEY AUTOINCREMENT, storeItemID INTEGER NOT NULL, timestamp TEXT NOT NULL, quantity INTEGER NOT NULL, FOREIGN KEY(storeItemID) REFERENCES storeItem(id));"
+        val createPurchaseTableStmnt = "CREATE TABLE purchase(id INTEGER PRIMARY KEY AUTOINCREMENT, storeItemID INTEGER NOT NULL, timestamp TEXT NOT NULL, week INTEGER NOT NULL, quantity INTEGER NOT NULL, FOREIGN KEY(storeItemID) REFERENCES storeItem(id));"
         db.execSQL(createPurchaseTableStmnt)
     }
 
@@ -189,6 +189,19 @@ class DBManager(context: Context?) : SQLiteOpenHelper(context, "FoodEmission.db"
         cursor.close()
 
         return results
+    }
+
+    fun <T> select(query: String, producer: (cursor: Cursor) -> T): T? {
+        val db = readableDatabase
+        val cursor = db.rawQuery(query, null)
+        var result: T? = null
+
+        if (cursor.moveToFirst()) {
+            result = producer(cursor)
+        }
+        cursor.close()
+
+        return result
     }
 
     fun select(query: String, producer: (cursor: Cursor) -> (Unit)) {

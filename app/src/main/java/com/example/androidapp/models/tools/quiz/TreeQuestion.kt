@@ -4,7 +4,7 @@ import kotlin.math.roundToInt
 import kotlin.random.Random
 
 class TreeQuestion(emission: Double): Question {
-    private val absorptionPerDay = 0.041
+    private val absorptionPerDay = 0.060
     override val actualValue = (emission / absorptionPerDay).roundToInt()
     override val quizValue = calcQuizValue()
     override var result: Boolean? = null

@@ -1,15 +1,14 @@
 package com.example.androidapp.views
 
-import android.opengl.Visibility
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import androidx.core.content.ContextCompat
 import androidx.core.text.HtmlCompat
 import com.example.androidapp.R
 import com.example.androidapp.models.tools.quiz.QuestionAnswer
+import com.example.androidapp.models.tools.quiz.QuestionType
 import com.example.androidapp.models.tools.quiz.QuizMaster
 import kotlinx.android.synthetic.main.activity_game_view.*
 
@@ -48,6 +47,13 @@ class GameView : AppCompatActivity() {
 
             circle.icon = ContextCompat.getDrawable(this, R.drawable.ic_question_mark_black_24dp)
             circle.setBackgroundColor(ContextCompat.getColor(this, R.color.grey))
+
+            when(it.getType()) {
+                QuestionType.TREE -> backgroundImage.setImageResource(R.mipmap.ic_tree_foreground)
+                QuestionType.CAR -> backgroundImage.setImageResource(R.mipmap.ic_car_foreground)
+                QuestionType.TRAIN -> backgroundImage.setImageResource(R.mipmap.ic_train_foreground)
+                QuestionType.PLANE -> backgroundImage.setImageResource(R.mipmap.ic_plane_foreground)
+            }
         }
 
         viewModel.currentQuestionResult.observe(this) {
@@ -69,25 +75,23 @@ class GameView : AppCompatActivity() {
 
         viewModel.remainingQuestions.observe(this) {
             if (it == 0) {
-                btn_next.text = "Afslut"
-                btn_next.setOnClickListener{
+                btnNext.text = "Afslut"
+                btnNext.setOnClickListener{
                     finish()
                 }
             }
         }
 
-        btn_above.setOnClickListener{
+        btnAbove.setOnClickListener{
             QuizMaster.submitAnswer(QuestionAnswer.ABOVE)
         }
 
-        btn_below.setOnClickListener{
+        btnBelow.setOnClickListener{
             QuizMaster.submitAnswer(QuestionAnswer.BELLOW)
         }
 
-        btn_next.setOnClickListener{
-            if (!QuizMaster.nextQuestion()) {
-
-            }
+        btnNext.setOnClickListener{
+            QuizMaster.nextQuestion()
         }
     }
 }
