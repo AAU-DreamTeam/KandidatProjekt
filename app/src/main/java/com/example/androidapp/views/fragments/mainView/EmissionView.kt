@@ -30,12 +30,14 @@ class EmissionView : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val rootView = inflater.inflate(R.layout.fragment_emission, container, false)
-
         viewModel.initiate(requireContext())
+        scanButton=requireActivity().findViewById(R.id.floatingScan)
         overviewView = OverviewView()
         listView = ListView()
         fragmentFL = rootView.findViewById(R.id.fragment_fl)
+
         viewModel.loadData()
+        setUpScanButton()
 
         childFragmentManager.beginTransaction().replace(fragmentFL.id, overviewView).commit()
 
@@ -64,6 +66,7 @@ class EmissionView : Fragment() {
     private fun setUpScanButton() {
         val resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             viewModel.loadData()
+            overviewView.setQuizMaster()
         }
 
         scanButton.setOnClickListener{

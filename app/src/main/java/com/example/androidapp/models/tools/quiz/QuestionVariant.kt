@@ -9,6 +9,7 @@ interface QuestionVariant {
     val actualValueStr: String
     val quizValueStr: String
     val roundToNearest: Int
+    val iconStr: String
     var hasBeenAsked: Boolean
 
     fun submit(answer: QuestionAnswer): Boolean {
@@ -27,14 +28,24 @@ interface QuestionVariant {
             QuestionType.TREE -> 0.060
         }
     }
+    fun iconStr():String{
+        if(hasBeenAsked){
+            return actualValueStr
+        }
+        return "?$iconStr"
+    }
 
     fun QuestionVariant.calcQuizValue() : Int {
         var value: Int
 
-        do {
-            value = ((Random.nextInt(1, 2 * actualValue) + roundToNearest) / roundToNearest) * roundToNearest
-        } while (value == actualValue)
+        if(actualValue >= 1){
+            do {
+                value = ((Random.nextInt(1, 2 * actualValue) + roundToNearest) / roundToNearest) * roundToNearest
+            } while (value == actualValue)
 
+        }else{
+            value = 0
+        }
         return value
     }
 }

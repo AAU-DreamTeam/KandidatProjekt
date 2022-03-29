@@ -12,6 +12,7 @@ class EmissionHoursVariant(emission: Double, questionType: QuestionType): Questi
     override var hasBeenAsked = false
     override val quizValue: Int
     override val quizEffect: Double
+    override val iconStr = " timer"
     override val actualValueStr: String
     override val quizValueStr: String
 
@@ -22,32 +23,28 @@ class EmissionHoursVariant(emission: Double, questionType: QuestionType): Questi
         val actualValueMinutes = actualValueSeconds / secondsPerMinute
         val actualValueHours = actualValueSeconds / secondsPerHour
 
-        when {
-            actualValueHours >= 1 -> {
+        if(actualValueHours >= 1) {
                 unitSingular = "time"
                 unitPlural = "timer"
                 roundToNearest = 2
                 actualValue = actualValueHours
                 quizValue = calcQuizValue()
                 quizEffect = emissionPerSecond * secondsPerHour * quizValue
-            }
-            actualValueMinutes >= 1 -> {
+            }else if(actualValueMinutes >= 1){
                 unitSingular = "minut"
                 unitPlural = "minutter"
                 roundToNearest = 15
                 actualValue = actualValueMinutes
                 quizValue = calcQuizValue()
                 quizEffect = emissionPerSecond * secondsPerMinute * quizValue
-            }
-            else -> {
-                unitSingular = "sekund"
+            }else{
+                unitSingular = "sekunder"
                 unitPlural = "sekunder"
                 roundToNearest = 15
                 actualValue = actualValueSeconds
                 quizValue = calcQuizValue()
                 quizEffect = emissionPerSecond * quizValue
             }
-        }
 
         actualValueStr = valueToString(actualValue)
         quizValueStr = valueToString(quizValue)

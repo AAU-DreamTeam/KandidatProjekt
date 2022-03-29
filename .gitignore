@@ -25,3 +25,6 @@ local.properties
 .idea/vcs.xml
 .idea/workspace.xml~
 build.gradle
+build.gradle
+gradle/wrapper/gradle-wrapper.properties
+build.gradle

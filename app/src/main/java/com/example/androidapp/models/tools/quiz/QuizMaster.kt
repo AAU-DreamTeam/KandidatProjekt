@@ -81,6 +81,7 @@ object QuizMaster : ViewModel() {
 
     fun setEmission(emission: Double) {
         _emission.value = emission
+        reset()
         generateQuestions()
     }
 
@@ -104,7 +105,7 @@ object QuizMaster : ViewModel() {
     }
 
     fun reset() {
-        _questions.value!!.clear()
-        indices = null
+        _questions.value?.clear()
+        indices?.clear()
     }
 }

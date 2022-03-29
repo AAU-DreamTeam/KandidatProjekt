@@ -8,10 +8,10 @@ class EmissionKilometersVariant(emission: Double, questionType: QuestionType): Q
     override val roundToNearest = 10
     override val quizValue = calcQuizValue()
     override val quizEffect = quizValue * emissionPerKM
+    override val iconStr = " km"
     override var hasBeenAsked = false
     override val actualValueStr get() = if (!hasBeenAsked) valueToString(-1) else valueToString(actualValue)
     override val quizValueStr = valueToString(quizValue)
-
     private fun valueToString(value: Int): String {
         val unit = "km"
 

@@ -4,6 +4,7 @@ package com.example.androidapp.views.fragments.mainView
 import android.content.Context
 import android.content.Intent
 import android.graphics.Point
+import android.opengl.Visibility
 import android.os.Build
 import android.os.Bundle
 import android.view.*
@@ -49,16 +50,19 @@ class OverviewView : Fragment() {
         constraintView = rootView.findViewById(R.id.overview_constraint)
         co2Showcase = rootView.findViewById(R.id.co2Showcase)
 
-        setupDropDown()
+
         setHeight(rootView)
         setupButtons()
+        setQuizMaster()
         setupIcons(rootView,inflater,container)
+        setupDropDown()
 
         return rootView
     }
     override fun onResume(){
         super.onResume()
         setupPage()
+        observeIcons()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -75,17 +79,25 @@ class OverviewView : Fragment() {
             totalEmissionTV.text = emissionString
         }
     }
+    private fun observeIcons(){
+        val questions = QuizMaster.questions.value
+        if (questions != null) {
+            for (i in questions.indices) {
+                setupIconText(questions[i], topView.findViewById(i))
+            }
+        }
+
+    }
     private fun setupIcons(rootView: View,inflater: LayoutInflater,container: ViewGroup?) {
 
         val questions = QuizMaster.questions.value
         if (questions != null) {
             for (i in questions.indices) {
-                setupIcon(rootView, questions[i], i,inflater,container)
+                setupIcon(rootView, questions[i], i, inflater, container)
             }
-        }
-        QuizMaster.questions.observe(viewLifecycleOwner) { list ->
-            for (i in list.indices) {
-                setupIconObserve(list[i], topView.findViewById(i))
+
+            for (i in questions.indices) {
+                setupIconText(questions[i], topView.findViewById(i))
 
             }
         }
@@ -107,12 +119,16 @@ class OverviewView : Fragment() {
         constraintSet.applyTo(topView)
 
     }
-    private fun setupIconObserve(icon:Question,iconView:View){
+    private fun setupIconText(icon:Question,iconView:View){
         if (icon.getType() == QuestionType.TREE) {
-            iconView.findViewById<TextView>(R.id.icon_textView).text = icon.getVariant(QuestionVariantType.ABSORPTION_DAYS).actualValueStr
+            iconView.findViewById<TextView>(R.id.icon_textView).visibility=View.INVISIBLE
+            iconView.findViewById<TextView>(R.id.icon_textView2).text =
+                icon.getVariant(QuestionVariantType.ABSORPTION_DAYS).iconStr()
         } else {
-            iconView.findViewById<TextView>(R.id.icon_textView).text = icon.getVariant(QuestionVariantType.EMISSION_KILOMETERS).actualValueStr
-            iconView.findViewById<TextView>(R.id.icon_textView2).text = icon.getVariant(QuestionVariantType.EMISSION_HOURS).actualValueStr
+            iconView.findViewById<TextView>(R.id.icon_textView).text =
+                icon.getVariant(QuestionVariantType.EMISSION_KILOMETERS).iconStr()
+            iconView.findViewById<TextView>(R.id.icon_textView2).text =
+                icon.getVariant(QuestionVariantType.EMISSION_HOURS).iconStr()
         }
     }
 
@@ -145,9 +161,28 @@ class OverviewView : Fragment() {
                 val selected = parent.getItemAtPosition(position) as String
                 pos = intervals.indexOf(selected)
                 viewModel.loadData()
+                setQuizMaster()
+                observeIcons()
             }
         })
 
+    }
+    fun setQuizMaster(){
+        if(pos == 0){
+            val value = viewModel.weeklyEmission.value
+            if(value != null){
+                QuizMaster.setEmission(value)
+            }else{
+                QuizMaster.setEmission(0.0)
+            }
+        }else{
+            val value = viewModel.monthlyEmission.value
+            if(value != null){
+                QuizMaster.setEmission(value)
+            }else{
+                QuizMaster.setEmission(0.0)
+            }
+        }
     }
 
     private fun setupButtons(){
@@ -162,7 +197,8 @@ class OverviewView : Fragment() {
 
             @Override
             fun onClick(view: View){
-
+                setQuizMaster()
+                observeIcons()
             }
         })
 
