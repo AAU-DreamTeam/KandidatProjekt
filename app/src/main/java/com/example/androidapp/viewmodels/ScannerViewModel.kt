@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModel
 import com.example.androidapp.models.Country
 import com.example.androidapp.models.Product
 import com.example.androidapp.models.Purchase
+import com.example.androidapp.models.enums.COMPLETED
 import com.example.androidapp.repositories.CountryRepository
 import com.example.androidapp.repositories.ProductRepository
 import com.example.androidapp.repositories.PurchaseRepository
@@ -34,8 +35,11 @@ class ScannerViewModel: ViewModel() {
     private val _countries = MutableLiveData<List<Country>>(listOf())
     val countries: LiveData<List<Country>> get() = _countries
 
-    private val _purchases = MutableLiveData<MutableList<Purchase>>(mutableListOf())
-    val purchases: LiveData<MutableList<Purchase>> get() = _purchases
+    private val _missingPurchases = MutableLiveData<MutableList<Purchase>>(mutableListOf())
+    val missingPurchases: LiveData<MutableList<Purchase>> get() = _missingPurchases
+
+    private val _completedPurchases = MutableLiveData<MutableList<Purchase>>(mutableListOf())
+    val completedPurchases: LiveData<MutableList<Purchase>> get() = _completedPurchases
 
     fun initiate(context: Context) {
         if (purchaseRepository == null) {
@@ -53,7 +57,8 @@ class ScannerViewModel: ViewModel() {
 
     fun onPhotoTaken(imagePath: String){
         purchaseRepository!!.extractPurchases(imagePath) {
-            _purchases.value = it
+            _missingPurchases.value = it.filter { !it.completed }.toMutableList()
+            _completedPurchases.value = it.filter { it.completed }.toMutableList()
         }
     }
 
@@ -65,43 +70,112 @@ class ScannerViewModel: ViewModel() {
         _countries.value = countryRepository!!.loadCountries()
     }
 
-    fun onDeletePurchase(index: Int){
-        _purchases.value!!.removeAt(index)
+    fun onDeletePurchase(index: Int, currentList: COMPLETED){
+        if (currentList == COMPLETED.COMPLETED){
+            _completedPurchases.value!!.removeAt(index)
+
+        }else{
+            _missingPurchases.value!!.removeAt(index)
+        }
+    }
+    fun onCompletedChange(index: Int){
+        _completedPurchases.value!!.add(_missingPurchases.value!![index])
+        _missingPurchases.value!!.removeAt(index)
     }
 
-    fun onOrganicChanged(index: Int, value: Boolean) {
-        _purchases.value!![index].storeItem.organic = value
+    fun onOrganicChanged(index: Int, value: Boolean,currentList: COMPLETED) {
+        if (currentList == COMPLETED.COMPLETED){
+            _completedPurchases.value!![index].storeItem.organic = value
+
+        }else{
+            _missingPurchases.value!![index].storeItem.organic = value
+        }
     }
 
-    fun onPackagedChanged(index: Int, value: Boolean) {
-        _purchases.value!![index].storeItem.packaged = value
+    fun onPackagedChanged(index: Int, value: Boolean, currentList: COMPLETED) {
+        if (currentList == COMPLETED.COMPLETED){
+            _completedPurchases.value!![index].storeItem.packaged = value
+
+        }else{
+            _missingPurchases.value!![index].storeItem.packaged = value
+        }
     }
 
-    fun onReceiptTextChanged(index: Int, value: String){
-        _purchases.value!![index].storeItem.receiptText = value
+    fun onReceiptTextChanged(index: Int, value: String,currentList: COMPLETED){
+        if (currentList == COMPLETED.COMPLETED){
+            _completedPurchases.value!![index].storeItem.receiptText = value
+
+        }else{
+            _missingPurchases.value!![index].storeItem.receiptText = value
+        }
     }
 
-    fun onCountryChanged(index: Int, value: Country){
-        _purchases.value!![index].storeItem.country = value
+    fun onCountryChanged(index: Int, value: Country,currentList: COMPLETED){
+        if (currentList == COMPLETED.COMPLETED){
+            _completedPurchases.value!![index].storeItem.country = value
+
+        }else{
+            _missingPurchases.value!![index].storeItem.country = value
+        }
     }
 
-    fun onProductChanged(index: Int, value: Product){
-        _purchases.value!![index].storeItem.product = value
+    fun onProductChanged(index: Int, value: Product,currentList: COMPLETED){
+        if (currentList == COMPLETED.COMPLETED){
+            _completedPurchases.value!![index].storeItem.product = value
+
+        }else{
+            _missingPurchases.value!![index].storeItem.product = value
+        }
     }
-    fun getPurchase(index: Int): Purchase {
-        return _purchases.value!![index]
+    fun getPurchase(index: Int,currentList: COMPLETED): Purchase {
+        if (currentList == COMPLETED.COMPLETED){
+           return _completedPurchases.value!![index]
+
+        }else{
+           return _missingPurchases.value!![index]
+        }
     }
 
-    fun onQuantityChanged(index: Int, value: Int){
-        _purchases.value!![index].quantity = value
+    fun onQuantityChanged(index: Int, value: Int,currentList: COMPLETED){
+        if (currentList == COMPLETED.COMPLETED){
+            _completedPurchases.value!![index].quantity = value
+
+        }else{
+            _missingPurchases.value!![index].quantity = value
+        }
+    }
+    fun onQuantityDefaultChanged(index: Int,value: Boolean,currentList: COMPLETED){
+        if (currentList == COMPLETED.COMPLETED){
+            _completedPurchases.value!![index].quantityDefault = value
+
+        }else{
+            _missingPurchases.value!![index].quantityDefault = value
+        }
     }
 
-    fun onWeightChanged(index: Int, value: Double){
-        _purchases.value!![index].storeItem.weight = value
+    fun onWeightChanged(index: Int, value: Double,currentList: COMPLETED){
+        if (currentList == COMPLETED.COMPLETED){
+            _completedPurchases.value!![index].storeItem.weight = value
+
+        }else{
+            _missingPurchases.value!![index].storeItem.weight = value
+        }
+    }
+    fun onWeightDefaultChanged(index: Int,value: Boolean,currentList: COMPLETED){
+        if (currentList == COMPLETED.COMPLETED){
+            _completedPurchases.value!![index].storeItem.weightDefault = value
+
+        }else{
+            _missingPurchases.value!![index].storeItem.weightDefault = value
+        }
     }
 
     fun onSave(){
-        _saved.value = purchaseRepository!!.savePurchases(_purchases.value!!)
+        _saved.value = purchaseRepository!!.savePurchases(combineLists())
+    }
+    fun combineLists(): List<Purchase> {
+        return _completedPurchases.value!!.let { list1 -> _missingPurchases.value!!.let { list2 -> list1 + list2 } }
+
     }
 
     override fun onCleared() {

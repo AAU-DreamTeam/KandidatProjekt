@@ -10,7 +10,13 @@ class Purchase(val id: Int,
                val storeItem: StoreItem,
                val calendar: Calendar,
                var quantity: Int){
-    constructor(storeItem: StoreItem, calendar: Calendar, quantity: Int): this(0, storeItem, calendar, quantity)
+    var quantityDefault = false
+    constructor(storeItem: StoreItem, calendar: Calendar, quantity: Int): this(0, storeItem, calendar, quantity){
+        if(storeItem.product.name == "" || storeItem.weight == 0.0 || storeItem.country.name == "" || quantity == 0){
+            completed = false
+        }
+    }
+    var completed : Boolean = true
 
     var weight = storeItem.weight * quantity
         private set

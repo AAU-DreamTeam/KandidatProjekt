@@ -20,6 +20,7 @@ class StoreItem (val id: Int,
                 weight: Double,
                 store: String = "Føtex"): this(0, product, country, _receiptText, organic, packaged, weight, store)
 
+    var weightDefault = false
     var receiptText = _receiptText
     val emissionPerKg: Double get() = EmissionCalculator.calcEmission(this)
 

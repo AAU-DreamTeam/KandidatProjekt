@@ -15,6 +15,7 @@ import com.example.androidapp.models.Purchase
 import com.example.androidapp.viewmodels.ScannerViewModel
 import com.google.android.material.button.MaterialButtonToggleGroup
 import com.google.android.material.textfield.TextInputEditText
+import kotlinx.android.synthetic.main.activity_scanner.view.*
 import kotlinx.android.synthetic.main.card_layout_alt.view.*
 
 class ScannerAdapter(var purchases: List<Purchase>,
@@ -23,6 +24,14 @@ class ScannerAdapter(var purchases: List<Purchase>,
                      private val viewModel: ScannerViewModel,
                      val resources: Resources): RecyclerView.Adapter<ScannerAdapter.ViewHolder>() {
     val defaultTextColor = resources.getColor(R.color.defaultValue)
+    constructor(purchases: List<Purchase>, products: List<Product>, countries: List<Country>, viewModel: ScannerViewModel, resources: Resources, missing: Boolean) : this(purchases,products,countries,viewModel,resources) {
+        if(missing){
+            this.purchases = purchases.filter { !it.completed }
+        }else{
+            this.purchases = purchases.filter { it.completed }
+
+        }
+    }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val v = LayoutInflater.from(parent.context).inflate(R.layout.card_layout_alt, parent, false)
         return ViewHolder(v)
@@ -33,19 +42,27 @@ class ScannerAdapter(var purchases: List<Purchase>,
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val purchase = purchases[position]
 
-        setUpTitle(holder, purchase)
-        setUpToggleButton(holder, purchase)
-        setUpProductDropdown(holder, purchase)
-        setUpCountryDropdown(holder, purchase)
-        setUpAmountField(holder, purchase)
-        setUpWeightField(holder, purchase)
+        if (purchases.size > 0){
+            val purchase = purchases[position]
 
-        holder.deleteButton.setOnClickListener {
-            viewModel.onDeletePurchase(holder.adapterPosition)
-            notifyItemRemoved(holder.adapterPosition)
+            setUpTitle(holder, purchase)
+            setUpToggleButton(holder, purchase)
+            setUpProductDropdown(holder, purchase)
+            setUpCountryDropdown(holder, purchase)
+            setUpAmountField(holder, purchase)
+            setUpWeightField(holder, purchase)
+
+            holder.deleteButton.setOnClickListener {
+                viewModel.onDeletePurchase(holder.adapterPosition)
+                notifyItemRemoved(holder.adapterPosition)
+            }
+            holder.acceptButton.setOnClickListener{
+                viewModel.onCompletedChange(holder.adapterPosition,true)
+                notifyItemChanged(holder.adapterPosition)
+            }
         }
+
     }
 
     private fun setUpTitle(holder: ViewHolder, purchase: Purchase){
@@ -71,8 +88,9 @@ class ScannerAdapter(var purchases: List<Purchase>,
 
         holder.toggleButton.addOnButtonCheckedListener{ _, checkedId, isChecked ->
             when(checkedId) {
+                R.id.btn_packaged -> viewModel.onPackagedChanged(holder.adapterPosition, !isChecked)
                 R.id.btn_organic -> viewModel.onOrganicChanged(holder.adapterPosition, isChecked)
-                R.id.btn_packaged -> viewModel.onPackagedChanged(holder.adapterPosition, isChecked)
+
             }
         }
     }
@@ -102,43 +120,88 @@ class ScannerAdapter(var purchases: List<Purchase>,
         insertWeightDefault(holder,purchase)
     }
 
-    private fun insertCountryDefault(holder: ViewHolder,purchase: Purchase){
-        val countryName = purchase.storeItem.country.name
-        if(countryName == "" && purchase.storeItem.product.name != "" ){
-            val countryId = purchase.storeItem.product.countryId
-            viewModel.onCountryChanged(holder.adapterPosition,countries[countryId-1])
-            holder.country.setText(countries[countryId-1].name,false)
-            holder.country.setTextColor( defaultTextColor)
+
+    private fun insertCountryDefault(holder: ViewHolder,purchase: Purchase, firstTime: Boolean = false){
+
+        if(firstTime){
+            val countryName = purchase.storeItem.country.name
+            if((countryName == "" && purchase.storeItem.product.name != "") || purchase.storeItem.country.defaultValue ){
+                val countryId = purchase.storeItem.product.countryId
+                purchase.storeItem.country.defaultValue = true
+                countries[countryId-1].defaultValue = true
+                viewModel.onCountryChanged(holder.adapterPosition,countries[countryId-1])
+                holder.country.setText(countries[countryId-1].name,false)
+                holder.country.setTextColor( defaultTextColor)
+
+            }else{
+                holder.country.setText(purchase.storeItem.country.name, false)
+            }
+
         }else{
-            holder.country.setText(purchase.storeItem.country.name, false)
+            if(holder.country.currentTextColor == defaultTextColor || purchase.storeItem.country.defaultValue){
+                val countryId = purchase.storeItem.product.countryId
+                purchase.storeItem.country.defaultValue = true
+                countries[countryId-1].defaultValue = true
+                viewModel.onCountryChanged(holder.adapterPosition,countries[countryId-1])
+                holder.country.setText(countries[countryId-1].name,false)
+                holder.country.setTextColor( defaultTextColor)
+            }
         }
+    }
+
+    private fun insertWeightDefault(holder: ViewHolder,purchase: Purchase,firstTime: Boolean =false){
+        if(firstTime){
+            //Will always be zero if nothing is found
+            val weightString = purchase.storeItem.weightToString(true)
+            if((weightString == "" && purchase.storeItem.product.name != "") ||purchase.storeItem.weightDefault ){
+                val productWeight = purchase.storeItem.product.weight
+                holder.weight.setText(productWeight.toInt().toString())
+                holder.weight.setTextColor( defaultTextColor)
+                viewModel.onWeightChanged(holder.adapterPosition, productWeight/1000)
+                viewModel.onWeightDefaultChanged(holder.adapterPosition,true)
+                purchase.storeItem.weightDefault = true
+            }else{
+                holder.weight.setText(purchase.storeItem.weightToString(true))
+            }
+
+        }else{
+            if(holder.weight.currentTextColor == defaultTextColor ||purchase.storeItem.weightDefault){
+                val productWeight = purchase.storeItem.product.weight
+                holder.weight.setText(productWeight.toInt().toString() )
+                holder.weight.setTextColor( defaultTextColor)
+                viewModel.onWeightChanged(holder.adapterPosition, productWeight/1000)
+                viewModel.onWeightDefaultChanged(holder.adapterPosition,true)
+                purchase.storeItem.weightDefault = true
+            }
+        }
+
 
     }
-    private fun insertWeightDefault(holder: ViewHolder,purchase: Purchase){
-        //Will always be zero if nothing is found
-        val weightString = purchase.storeItem.weightToString(true)
-        if(weightString == "" && purchase.storeItem.product.name != "" ){
-            val productWeight = purchase.storeItem.product.weight
-            holder.weight.setText(productWeight.toInt().toString())
-            holder.weight.setTextColor( defaultTextColor)
-            viewModel.onWeightChanged(holder.adapterPosition, productWeight/1000)
+
+    private fun insertAmountDefault(holder: ViewHolder,purchase: Purchase,firstTime: Boolean = false){
+        if(firstTime){
+            //Will always be 0 if nothing is found
+            val quanity = purchase.quantity
+            if((quanity == 0 && purchase.storeItem.product.name != "") ||purchase.quantityDefault ){
+                holder.amount.setText("1")
+                holder.amount.setTextColor( defaultTextColor)
+                viewModel.onQuantityChanged(holder.adapterPosition, 1)
+                viewModel.onQuantityDefaultChanged(holder.adapterPosition,true)
+                purchase.quantityDefault = true
+
+            }else{
+                holder.amount.setText(purchase.quantityToString())
+            }
+
         }else{
-            holder.weight.setText(purchase.storeItem.weightToString(true))
+            if(holder.amount.currentTextColor == defaultTextColor||purchase.quantityDefault){
+                holder.amount.setText("1")
+                holder.amount.setTextColor( defaultTextColor)
+                viewModel.onQuantityChanged(holder.adapterPosition, 1)
+                viewModel.onQuantityDefaultChanged(holder.adapterPosition,true)
+                purchase.quantityDefault = true
+            }
         }
-
-    }
-
-    private fun insertAmountDefault(holder: ViewHolder,purchase: Purchase){
-        //Will always be 0 if nothing is found
-        val quanity = purchase.quantity
-        if(quanity == 0 && purchase.storeItem.product.name != "" ){
-            holder.amount.setText("1")
-            holder.amount.setTextColor( defaultTextColor)
-            viewModel.onQuantityChanged(holder.adapterPosition, 1)
-        }else{
-            holder.amount.setText(purchase.quantityToString())
-        }
-
     }
 
     private fun setUpCountryDropdown(holder: ViewHolder, purchase: Purchase) {
@@ -152,7 +215,7 @@ class ScannerAdapter(var purchases: List<Purchase>,
         }
 
 
-        insertCountryDefault(holder,purchase)
+        insertCountryDefault(holder,purchase,true)
 
         holder.country.setOnItemClickListener { parent, view, pos, id ->
             val country = parent.getItemAtPosition(pos) as Country
@@ -173,7 +236,7 @@ class ScannerAdapter(var purchases: List<Purchase>,
             holder.amount.setTextColor(Color.BLACK)
         }
 
-        insertAmountDefault(holder,purchase)
+        insertAmountDefault(holder,purchase,true)
 
     }
 
@@ -187,7 +250,7 @@ class ScannerAdapter(var purchases: List<Purchase>,
             }
             holder.weight.setTextColor(Color.BLACK)
         }
-        insertWeightDefault(holder,purchase)
+        insertWeightDefault(holder,purchase,true)
 
     }
 
@@ -199,6 +262,7 @@ class ScannerAdapter(var purchases: List<Purchase>,
         val weight: TextInputEditText = itemView.findViewById(R.id.weight_input)
         val amount: TextInputEditText = itemView.findViewById(R.id.amount_input)
         val title: TextInputEditText = itemView.findViewById(R.id.card_title)
+        val acceptButton: Button = itemView.findViewById(R.id.btn_accept)
 
         init {
             val productAdapter = ProductAdapter(itemView.context, R.layout.dropdown_item, products)

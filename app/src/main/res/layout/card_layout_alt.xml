@@ -204,9 +204,8 @@
             android:layout_margin="4dp">
 
 
-
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_save"
+                android:id="@+id/btn_accept"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
@@ -226,9 +225,9 @@
                 app:iconPadding="0dp"
                 app:iconSize="40dp"
                 app:iconTint="@color/black"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/btn_delete" />
+                app:layout_constraintEnd_toStartOf="@id/btn_delete"
+                app:layout_constraintStart_toStartOf="parent" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_delete"
@@ -237,8 +236,6 @@
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_margin="8dp"
-                android:layout_marginEnd="208dp"
-                android:layout_marginRight="208dp"
                 android:layout_marginBottom="8dp"
                 android:insetTop="0dp"
                 android:insetBottom="0dp"
@@ -251,9 +248,9 @@
                 app:iconPadding="0dp"
                 app:iconSize="40dp"
                 app:iconTint="@color/black"
-                app:layout_constraintStart_toEndOf="@+id/btn_save"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/btn_accept" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

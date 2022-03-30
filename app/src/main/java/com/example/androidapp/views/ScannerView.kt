@@ -33,6 +33,7 @@ class ScannerView : AppCompatActivity() {
     private val viewModel = ScannerViewModel()
     private lateinit var completedCard: CardView
     private lateinit var missingCard: CardView
+    var count = 0
 
 
     private lateinit var constraintView:ConstraintLayout
@@ -42,11 +43,8 @@ class ScannerView : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scanner)
 
-
-
         completedCard = findViewById(R.id.completedCard)
         missingCard = findViewById(R.id.missingCard)
-
         constraintView= findViewById(R.id.scannerViewConstraint)
 
         viewModel.initiate(this)
@@ -62,7 +60,11 @@ class ScannerView : AppCompatActivity() {
         }
 
         launchPhotoActivity()
+        setupExitButtons()
+        setupRecyclerListeners()
 
+    }
+    private fun setupExitButtons(){
         btn_cancel.setOnClickListener{
             finish()
         }
@@ -71,12 +73,14 @@ class ScannerView : AppCompatActivity() {
             viewModel.onSave()
         }
 
-
+    }
+    private fun setupRecyclerListeners(){
         linearLayout1.setOnClickListener {
             if (recyclerView.isGone) {
-               closeRecyclerView(recyclerView2, btn_completed_data)
+                closeRecyclerView(recyclerView2, btn_completed_data)
                 openRecyclerView(recyclerView, btn_missing_data)
                 completedToBottomConstraint()
+
 
             }else {
                 closeRecyclerView(recyclerView,btn_missing_data)
@@ -102,8 +106,8 @@ class ScannerView : AppCompatActivity() {
             }
         }
 
-
     }
+
 
     private fun completedToBottomConstraint() {
         val constraintSet= ConstraintSet()
@@ -147,9 +151,11 @@ class ScannerView : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView2.layoutManager = LinearLayoutManager(this)
 
-        viewModel.purchases.observe(this) {
-            recyclerView.adapter = ScannerAdapter(it, viewModel.products.value!!, viewModel.countries.value!!, viewModel,this.resources)
-            recyclerView2.adapter = ScannerAdapter(it, viewModel.products.value!!, viewModel.countries.value!!, viewModel,this.resources)
+        viewModel.completedPurchases.observe(this) {
+            recyclerView2.adapter = ScannerAdapter(it, viewModel.products.value!!, viewModel.countries.value!!, viewModel,this.resources,false)
+        }
+        viewModel.missingPurchases.observe(this) {
+            recyclerView.adapter = ScannerAdapter(it, viewModel.products.value!!, viewModel.countries.value!!, viewModel,this.resources,true)
         }
     }
 
