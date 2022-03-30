@@ -103,6 +103,11 @@ object QuizMaster : ViewModel() {
             throw IllegalArgumentException("Unable to find question of type ${questionType.name}.")
         }
     }
+    fun showQuestions(){
+        for(question in _questions.value!!){
+            question.showQuestion()
+        }
+    }
 
     fun reset() {
         _questions.value?.clear()

@@ -73,14 +73,18 @@ class ScannerViewModel: ViewModel() {
     fun onDeletePurchase(index: Int, currentList: COMPLETED){
         if (currentList == COMPLETED.COMPLETED){
             _completedPurchases.value!!.removeAt(index)
+            _completedPurchases.value = _completedPurchases.value!!
 
         }else{
             _missingPurchases.value!!.removeAt(index)
+            _missingPurchases.value = _missingPurchases.value!!
         }
     }
     fun onCompletedChange(index: Int){
         _completedPurchases.value!!.add(_missingPurchases.value!![index])
         _missingPurchases.value!!.removeAt(index)
+        _missingPurchases.value = _missingPurchases.value!!
+        _completedPurchases.value =_completedPurchases.value!!
     }
 
     fun onOrganicChanged(index: Int, value: Boolean,currentList: COMPLETED) {

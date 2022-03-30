@@ -21,7 +21,7 @@ class CountryDao(private val dbManager: DBManager) {
         val query =
                 "SELECT * " +
                 "FROM $TABLE " +
-                "WHERE '$receiptText' LIKE '%'||$COLUMN_NAME||'%';"
+                "WHERE \"$receiptText\" LIKE '%'||$COLUMN_NAME||'%';"
 
         dbManager.select(query) {
             result = produceCountry(it)

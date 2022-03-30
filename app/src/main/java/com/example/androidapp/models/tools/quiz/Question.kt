@@ -29,6 +29,11 @@ interface Question {
     }
 
     fun getType(): QuestionType
+    fun showQuestion(){
+        for (variant in variants){
+            variant.hasBeenAsked = true
+        }
+    }
 
     fun getQuestionLine(line: Int): String
 

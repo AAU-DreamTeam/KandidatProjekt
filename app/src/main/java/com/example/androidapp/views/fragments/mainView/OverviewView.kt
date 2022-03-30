@@ -193,16 +193,15 @@ class OverviewView : Fragment() {
         playButton.setOnClickListener{
             resultLauncher.launch(Intent(activity, GameView::class.java))
         }
-        showButton.setOnClickListener(View.OnClickListener() {
+        showButton.setOnClickListener {
+            setQuizMaster()
+            QuizMaster.showQuestions()
 
-            @Override
-            fun onClick(view: View){
-                setQuizMaster()
-                observeIcons()
-            }
-        })
+            observeIcons()
+        }
 
     }
+
     private fun setHeight(view: View){
 
         val height = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.DONUT) {

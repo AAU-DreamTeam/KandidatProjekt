@@ -20,7 +20,7 @@ class ProductDao(private val dbManager: DBManager) {
         var result = Product()
         val query =
                 "SELECT * FROM $TABLE " +
-                "WHERE '$receiptText' LIKE '%'||REPLACE(REPLACE(REPLACE(LOWER($COLUMN_NAME), 'å', 'a'), 'æ', 'e'), 'ø', 'o')||'%';"
+                "WHERE \"$receiptText\" LIKE '%'||REPLACE(REPLACE(REPLACE(LOWER($COLUMN_NAME), 'å', 'a'), 'æ', 'e'), 'ø', 'o')||'%';"
 
         dbManager.select(query) {
             result = produceProduct(it)

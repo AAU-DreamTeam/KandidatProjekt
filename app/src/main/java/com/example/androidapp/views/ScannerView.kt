@@ -23,6 +23,7 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.androidapp.R
+import com.example.androidapp.models.enums.COMPLETED
 import com.example.androidapp.viewmodels.ScannerViewModel
 import com.example.androidapp.views.adapters.ScannerAdapter
 import kotlinx.android.synthetic.main.activity_scanner.*
@@ -152,10 +153,10 @@ class ScannerView : AppCompatActivity() {
         recyclerView2.layoutManager = LinearLayoutManager(this)
 
         viewModel.completedPurchases.observe(this) {
-            recyclerView2.adapter = ScannerAdapter(it, viewModel.products.value!!, viewModel.countries.value!!, viewModel,this.resources,false)
+            recyclerView2.adapter = ScannerAdapter(it, viewModel.products.value!!, viewModel.countries.value!!, viewModel,this.resources,COMPLETED.COMPLETED)
         }
         viewModel.missingPurchases.observe(this) {
-            recyclerView.adapter = ScannerAdapter(it, viewModel.products.value!!, viewModel.countries.value!!, viewModel,this.resources,true)
+            recyclerView.adapter = ScannerAdapter(it, viewModel.products.value!!, viewModel.countries.value!!, viewModel,this.resources,COMPLETED.MISSING)
         }
     }
 
