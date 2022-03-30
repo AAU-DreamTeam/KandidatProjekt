@@ -1,21 +1,34 @@
 package com.example.androidapp.models.tools.quiz
 
 interface Question {
-    val quizValue: Int
-    val actualValue: Int
-    var result: Boolean?
     val CO2Str: String get() = "CO<sub><small><small>2</small></small></sub>"
-
-    fun getType() : QuestionType
+    val iconId: Int
+    val bgImageId: Int
+    val variants: MutableList<QuestionVariant>
+    val variantTypeToIndex: MutableMap<QuestionVariantType, Int>
+    val indices: MutableList<Int>
+    val numberOfVariants: Int
+    var currentIndex: Int
 
     fun submit(answer: QuestionAnswer): Boolean? {
-        result = when(answer){
-            QuestionAnswer.ABOVE -> quizValue < actualValue
-            QuestionAnswer.BELLOW -> quizValue > actualValue
-        }
-
-        return result
+        return variants[currentIndex].submit(answer)
     }
+
+    fun draw(){
+        currentIndex = indices.removeLast()
+    }
+
+    fun getVariant(variantType: QuestionVariantType): QuestionVariant {
+        val variantIndex = variantTypeToIndex[variantType]
+
+        if (variantIndex != null) {
+            return variants[variantIndex]
+        } else {
+            throw IllegalArgumentException("Unable to find variant of type ${variantType.name}.")
+        }
+    }
+
+    fun getType(): QuestionType
 
     fun getQuestionLine(line: Int): String
 
