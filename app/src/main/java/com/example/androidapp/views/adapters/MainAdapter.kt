@@ -6,6 +6,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.androidapp.views.fragments.mainView.DataView
 import com.example.androidapp.views.fragments.mainView.EmissionView
+import com.example.androidapp.views.fragments.mainView.GraphView
 
 class MainAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) : FragmentStateAdapter(fragmentManager, lifecycle) {
     override fun getItemCount(): Int = 2
@@ -13,6 +14,7 @@ class MainAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) : Frag
     override fun createFragment(position: Int): Fragment {
         return when (position) {
             0 -> EmissionView()
+            1 -> GraphView()
             else -> DataView()
         }
     }
