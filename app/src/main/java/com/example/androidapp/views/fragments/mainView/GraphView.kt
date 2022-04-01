@@ -25,7 +25,7 @@ import java.util.*
 class GraphView : Fragment() {
 
     private val viewModel: EmissionViewModel by activityViewModels()
-    private val dailyRecommendedEmission = 10f
+    private val weeklyRecommendedEmission = 1.5f*7
 
     private lateinit var topGraph : LineChart
     private lateinit var bottomGraph: LineChart
@@ -85,7 +85,7 @@ class GraphView : Fragment() {
     private fun getWeeklyRecommendedData(): MutableList<Entry> {
         var list = mutableListOf<Entry>()
         for (i in 0..6){
-            list.add(Entry(i.toFloat(),dailyRecommendedEmission))
+            list.add(Entry(i.toFloat(),weeklyRecommendedEmission))
         }
         return list
     }
