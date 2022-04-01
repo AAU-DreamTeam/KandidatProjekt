@@ -5,6 +5,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintSet
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.example.androidapp.R
@@ -17,6 +22,7 @@ import com.github.mikephil.charting.components.AxisBase
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.*
 import com.github.mikephil.charting.formatter.ValueFormatter
+import kotlinx.android.synthetic.main.fragment_graph_page.*
 import java.util.*
 
 
@@ -25,11 +31,14 @@ class GraphView : Fragment() {
     private val viewModel: EmissionViewModel by activityViewModels()
     private val weeklyRecommendedEmission = 1.5f*7
     private val maxDataPoints = 10
-    private val pos = 0
+    private var pos = 0
+    private val intervals = arrayListOf<String>("Ugentlig forbrug","Forbrug per uge")
 
     private lateinit var lineGraph : LineChart
     private lateinit var bottomGraph: LineChart
     private lateinit var barGraph: CombinedChart
+    private lateinit var dropDown : AutoCompleteTextView
+    private lateinit var constraintLayout: ConstraintLayout
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -42,8 +51,11 @@ class GraphView : Fragment() {
         lineGraph = rootView.findViewById(R.id.top_graph)
         bottomGraph = rootView.findViewById(R.id.bottom_graph)
         barGraph = rootView.findViewById(R.id.bar_graph)
+        dropDown = rootView.findViewById(R.id.dropdown_AutoText)
+        constraintLayout = rootView.findViewById(R.id.constraint_graph)
 
         setupGraphs()
+        setupDropDown()
 
 
         return rootView
@@ -110,7 +122,7 @@ class GraphView : Fragment() {
     }
     private fun getWeeklyRecommendedData(datapoints : Int): MutableList<Entry> {
         var list = mutableListOf<Entry>()
-        for (i in 0..6){
+        for (i in 0..datapoints-1){
             list.add(Entry(i.toFloat(),weeklyRecommendedEmission))
         }
         return list
@@ -184,18 +196,40 @@ class GraphView : Fragment() {
         }
         return newList
     }
-    private fun getDayString(day : Int): String {
-        when(day){
-            Calendar.MONDAY -> return "Mandag"
-            Calendar.TUESDAY -> return "Tirsdag"
-            Calendar.WEDNESDAY -> return "Onsdag"
-            Calendar.THURSDAY -> return "Torsdag"
-            Calendar.FRIDAY -> return "Fredag"
-            Calendar.SATURDAY -> return "Lørdag"
-            else ->{
-                return "Søndag"
+    private fun setupDropDown(){
+        val adapter: ArrayAdapter<Any?> = ArrayAdapter<Any?>(
+            this.requireContext(),
+            R.layout.dropdown_menu_popup_item,
+            intervals as List<Any?>
+        )
+
+        dropDown.setAdapter(adapter)
+        dropDown.setText(adapter.getItem(0).toString(),false)
+
+
+        dropDown.setOnItemClickListener(object : AdapterView.OnItemClickListener {
+            override fun onItemClick(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                val selected = parent.getItemAtPosition(position) as String
+                pos = intervals.indexOf(selected)
+                if (pos == 0 ){
+                    barGraph.visibility = BarChart.GONE
+                    top_graph.visibility = LineChart.VISIBLE
+                    val constraintSet = ConstraintSet()
+                    constraintSet.clone(constraintLayout)
+                    constraintSet.clear(R.id.line2,ConstraintSet.TOP)
+                    constraintSet.connect(R.id.line2,ConstraintSet.TOP,R.id.top_graph,ConstraintSet.BOTTOM)
+                    constraintSet.applyTo(constraintLayout)
+                }else{
+                    top_graph.visibility = LineChart.GONE
+                    barGraph.visibility = BarChart.VISIBLE
+                    val constraintSet = ConstraintSet()
+                    constraintSet.clone(constraintLayout)
+                    constraintSet.clear(R.id.line2,ConstraintSet.TOP)
+                    constraintSet.connect(R.id.line2,ConstraintSet.TOP,R.id.bar_graph,ConstraintSet.BOTTOM)
+                    constraintSet.applyTo(constraintLayout)
+                }
             }
-        }
+        })
 
     }
     class NumberToDaysFormatter : ValueFormatter() {
