@@ -15,11 +15,13 @@ import androidx.fragment.app.activityViewModels
 import com.example.androidapp.R
 import com.example.androidapp.models.Purchase
 import com.example.androidapp.viewmodels.EmissionViewModel
+import com.example.androidapp.views.AxisRenderers.BarXAxisRenderer
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.charts.CombinedChart
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.AxisBase
 import com.github.mikephil.charting.components.XAxis
+import com.github.mikephil.charting.components.YAxis.AxisDependency
 import com.github.mikephil.charting.data.*
 import com.github.mikephil.charting.formatter.ValueFormatter
 import kotlinx.android.synthetic.main.fragment_graph_page.*
@@ -35,7 +37,7 @@ class GraphView : Fragment() {
     private val intervals = arrayListOf<String>("Ugentlig forbrug","Forbrug per uge")
 
     private lateinit var lineGraph : LineChart
-    private lateinit var bottomGraph: LineChart
+    private lateinit var consumptionGraph: CombinedChart
     private lateinit var barGraph: CombinedChart
     private lateinit var dropDown : AutoCompleteTextView
     private lateinit var constraintLayout: ConstraintLayout
@@ -49,7 +51,7 @@ class GraphView : Fragment() {
         val rootView = inflater.inflate(R.layout.fragment_graph_page, container, false)
 
         lineGraph = rootView.findViewById(R.id.top_graph)
-        bottomGraph = rootView.findViewById(R.id.bottom_graph)
+        consumptionGraph = rootView.findViewById(R.id.bottom_graph)
         barGraph = rootView.findViewById(R.id.bar_graph)
         dropDown = rootView.findViewById(R.id.dropdown_AutoText)
         constraintLayout = rootView.findViewById(R.id.constraint_graph)
@@ -66,7 +68,9 @@ class GraphView : Fragment() {
 
     }
     private fun updateGraphs() {
+        updateLineGraph()
         updateBarGraph()
+        updateConsumptionGraph()
     }
     private fun updateLineGraph() {
         val dataSet = LineDataSet(getWeeklyData(),"Dit Co2 forbrug")
@@ -96,12 +100,43 @@ class GraphView : Fragment() {
         barGraph.data = data
 
     }
+    private fun updateConsumptionGraph(){
+        val dataSet : BarDataSet
+        if(pos ==0){
+             dataSet = BarDataSet(getWeeklyConsumptionData(),"Dit ugelige Co2 forbrug")
+
+        }else{
+            dataSet = BarDataSet(getMonthlyConsumptionData(),"")
+        }
+        val recomendedLine = LineDataSet(getWeeklyRecommendedData(maxDataPoints), "Anbefalet ugeligt Co2 forbrug af Sundhedsstyrelsen")
+        recomendedLine.color = Color.RED
+        recomendedLine.setDrawValues(false)
+        dataSet.setDrawValues(false)
+        recomendedLine.setDrawCircles(false)
+        recomendedLine.lineWidth = 5f
+        dataSet.color = Color.BLACK
+        val data = CombinedData()
+        data.setData(BarData(dataSet))
+        data.setData(LineData(recomendedLine))
+        barGraph.data = data
+
+    }
+    private fun setupConsumptionGraph(){
+        updateConsumptionGraph()
+        consumptionGraph.xAxis.valueFormatter = NumberToWeekFormatter()
+        consumptionGraph.axisRight.isEnabled = false
+        consumptionGraph.xAxis.position = XAxis.XAxisPosition.BOTTOM
+        consumptionGraph.description.isEnabled = false
+        consumptionGraph.minimumHeight = 400
+    }
 
     private fun setupGraphs() {
         setupLineGraph()
         setupBarGraph()
+        setupConsumptionGraph()
     }
     private fun setupBarGraph(){
+        //barGraph.setXAxisRenderer(BarXAxisRenderer(barGraph.viewPortHandler,barGraph.xAxis,barGraph.getTransformer(AxisDependency.LEFT)))
         updateBarGraph()
         barGraph.xAxis.valueFormatter = NumberToWeekFormatter()
         barGraph.axisRight.isEnabled = false
@@ -139,6 +174,52 @@ class GraphView : Fragment() {
             ) && it.calendar.get(Calendar.YEAR) == currentDay.get(Calendar.YEAR)
         }))
     }
+
+    private  fun getWeeklyConsumptionData(): MutableList<BarEntry>? {
+        val purchases= viewModel.purchases.value
+
+        val currentDay = Calendar.getInstance()
+
+        return extractConsumptionDataWeekly(purchases!!.filter {
+            it.calendar.get(Calendar.WEEK_OF_YEAR) == currentDay.get(
+                Calendar.WEEK_OF_YEAR
+            ) && it.calendar.get(Calendar.YEAR) == currentDay.get(Calendar.YEAR)
+        })
+    }
+    private  fun getMonthlyConsumptionData(): MutableList<BarEntry> {
+        val purchases= viewModel.purchases.value!!
+
+        val currentDay = Calendar.getInstance()
+        val newList : MutableList<Entry> = mutableListOf()
+        var newYear =0
+        for (i in 0..maxDataPoints-1){
+            var weekOfYear = currentDay.get(Calendar.WEEK_OF_YEAR)-i
+            if (weekOfYear < 1){
+                weekOfYear = currentDay.get(Calendar.WEEK_OF_YEAR)-i+52
+                newYear = 1
+            }
+            val purchaseList = purchases.filter {
+                it.calendar.get(Calendar.YEAR) == currentDay.get(Calendar.YEAR)-newYear &&
+                        it.calendar.get(Calendar.WEEK_OF_YEAR) == weekOfYear
+            }
+            newList.add(Entry(i.toFloat(),summerizeWeek(purchaseList)))
+        }
+        return entryListToBarEntryList(newList)
+    }
+    private fun extractConsumptionDataWeekly(purchaseList: List<Purchase>): MutableList<BarEntry> {
+        val newList : MutableList<BarEntry> = mutableListOf()
+        var day = Calendar.SUNDAY
+        for (i in 0..6 ) {
+            var sum = 0.0
+            for (purchase in purchaseList) {
+
+
+            }
+            newList.add(BarEntry(i.toFloat(),sum.toFloat()))
+        }
+        return newList
+    }
+
     private  fun getBarData(): MutableList<BarEntry> {
         val purchases= viewModel.purchases.value!!
 
@@ -228,6 +309,7 @@ class GraphView : Fragment() {
                     constraintSet.connect(R.id.line2,ConstraintSet.TOP,R.id.bar_graph,ConstraintSet.BOTTOM)
                     constraintSet.applyTo(constraintLayout)
                 }
+                updateConsumptionGraph()
             }
         })
 
