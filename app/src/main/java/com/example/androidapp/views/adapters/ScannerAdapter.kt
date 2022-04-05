@@ -1,8 +1,10 @@
 package com.example.androidapp.views.adapters
 
+import android.content.Context
 import android.content.res.Resources
 import android.graphics.Color
 import android.opengl.Visibility
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +12,7 @@ import android.widget.*
 import androidx.core.widget.doAfterTextChanged
 import androidx.recyclerview.widget.RecyclerView
 import com.example.androidapp.R
+import android.widget.Toast
 import com.example.androidapp.models.Country
 import com.example.androidapp.models.Product
 import com.example.androidapp.models.Purchase
@@ -19,6 +22,7 @@ import com.google.android.material.button.MaterialButtonToggleGroup
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.android.synthetic.main.activity_scanner.view.*
 import kotlinx.android.synthetic.main.card_layout_alt.view.*
+
 
 class ScannerAdapter(var purchases: List<Purchase>,
                      val products: List<Product>,
@@ -54,13 +58,21 @@ class ScannerAdapter(var purchases: List<Purchase>,
 
     }
     private fun setupButtons(holder:ViewHolder){
+        val toast1 = Toast.makeText(holder.itemView.context, "Varen er blevet fjernet fra listen.", Toast.LENGTH_SHORT)
+        val toast2 = Toast.makeText(holder.itemView.context, "Varen er flyttet til \"Udfyldte\" .", Toast.LENGTH_SHORT)
+
         if(currentList == COMPLETED.COMPLETED){
             holder.acceptButton.visibility = Button.GONE
         }
         holder.deleteButton.setOnClickListener {
+            toast1.setGravity(Gravity.TOP,0,0)
+            toast1.show()
             viewModel.onDeletePurchase(holder.adapterPosition,currentList)
+
         }
         holder.acceptButton.setOnClickListener{
+            toast2.setGravity(Gravity.TOP,0,0)
+            toast2.show()
             viewModel.onCompletedChange(holder.adapterPosition)
 
         }
