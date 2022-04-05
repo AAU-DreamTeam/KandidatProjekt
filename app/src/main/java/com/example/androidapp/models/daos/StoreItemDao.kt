@@ -135,7 +135,6 @@ class StoreItemDao(private val dbManager: DBManager) {
     }
 
     private fun loadId(storeItem: StoreItem): Long{
-        var id: Long = dbManager.INVALID_ID
         val query =
                 "SELECT $TABLE.$COLUMN_ID " +
                 "FROM $TABLE " +
@@ -147,11 +146,9 @@ class StoreItemDao(private val dbManager: DBManager) {
                       "$COLUMN_WEIGHT = ${storeItem.weight} AND " +          // 4
                       "$COLUMN_STORE = '${storeItem.store}';"           // 5
 
-        dbManager.select(query){
-            id = it.getLong(0)
-        }
-
-        return id
+        return dbManager.select<Long>(query){
+            it.getLong(0)
+        }?: dbManager.INVALID_ID
     }
 
     fun saveStoreItem(storeItem: StoreItem): Long {
