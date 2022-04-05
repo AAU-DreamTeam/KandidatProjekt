@@ -34,7 +34,6 @@ class ScannerView : AppCompatActivity() {
     private val viewModel = ScannerViewModel()
     private lateinit var completedCard: CardView
     private lateinit var missingCard: CardView
-    var count = 0
 
 
     private lateinit var constraintView:ConstraintLayout
@@ -56,7 +55,7 @@ class ScannerView : AppCompatActivity() {
             if (it) {
                 finish()
             } else {
-                Toast.makeText(this, "Kan ikke gemme før alle felter er udfyldt", Toast.LENGTH_SHORT).show()
+                makeToast("Kan ikke gemme før alle felter er udfyldt")
             }
         }
 
@@ -68,13 +67,21 @@ class ScannerView : AppCompatActivity() {
     private fun setupExitButtons(){
         btn_cancel.setOnClickListener{
             finish()
+            makeToast("Dit indkøb er ikke blevet gemt")
         }
 
         btn_save.setOnClickListener {
             viewModel.onSave()
+           makeToast("Dit indkøb er blevet gemt.")
         }
 
     }
+
+    private fun makeToast(text: String ) {
+        return Toast.makeText(applicationContext, text, Toast.LENGTH_SHORT).show()
+    }
+
+
     private fun setupRecyclerListeners(){
         linearLayout1.setOnClickListener {
             if (recyclerView.isGone) {
@@ -90,7 +97,6 @@ class ScannerView : AppCompatActivity() {
 
             }
         }
-
 
 
         linearLayout2.setOnClickListener {
@@ -117,9 +123,6 @@ class ScannerView : AppCompatActivity() {
         constraintSet.clear(R.id.completedCard,ConstraintSet.TOP)
         constraintSet.connect(R.id.missingCard, ConstraintSet.BOTTOM, R.id.completedCard, ConstraintSet.TOP)
 
-
-
-
         constraintSet.applyTo(constraintView)
 
     }
@@ -133,8 +136,6 @@ class ScannerView : AppCompatActivity() {
         constraintSet.connect(R.id.completedCard,ConstraintSet.TOP,R.id.missingCard,ConstraintSet.BOTTOM)
 
         constraintSet.applyTo(constraintView)
-
-
     }
 
     private fun openRecyclerView(recyclerView: RecyclerView,imageView: ImageView) {
