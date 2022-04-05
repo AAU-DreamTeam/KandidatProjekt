@@ -4,6 +4,7 @@ import android.content.Context
 import android.database.Cursor
 import com.example.androidapp.models.tools.DBManager
 import com.example.androidapp.models.Product
+import com.example.androidapp.models.enums.PRODUCT_CATEGORY
 
 class ProductDao(private val dbManager: DBManager) {
     constructor(context: Context): this(DBManager(context))
@@ -31,7 +32,7 @@ class ProductDao(private val dbManager: DBManager) {
 
     companion object {
         const val TABLE = "product"
-        const val COLUMN_COUNT = 8
+        const val COLUMN_COUNT = 9
 
         const val COLUMN_ID = "id"
         private const val COLUMN_ID_POSITION = 0
@@ -39,27 +40,31 @@ class ProductDao(private val dbManager: DBManager) {
         const val COLUMN_NAME = "name"
         private const val COLUMN_NAME_POSITION = 1
 
+        const val COLUMN_PRODUCT_CATEGORY = "productCategory"
+        private const val COLUMN_PRODUCT_CATEGORY_POSITION = 2
+
         const val COLUMN_CULTIVATION = "cultivation"
-        private const val COLUMN_CULTIVATION_POSITION = 2
+        private const val COLUMN_CULTIVATION_POSITION = 3
 
         const val COLUMN_ILUC = "iluc"
-        private const val COLUMN_ILUC_POSITION = 3
+        private const val COLUMN_ILUC_POSITION = 4
 
         const val COLUMN_PROCESSING = "processing"
-        private const val COLUMN_PROCESSING_POSITION = 4
+        private const val COLUMN_PROCESSING_POSITION = 5
 
         const val COLUMN_PACKAGING = "packaging"
-        private const val COLUMN_PACKAGING_POSITION = 5
+        private const val COLUMN_PACKAGING_POSITION = 6
 
         const val COLUMN_RETAIL = "retail"
-        private const val COLUMN_RETAIL_POSITION = 6
+        private const val COLUMN_RETAIL_POSITION = 7
 
         const val COLUMN_GHCULTIVATED = "GHCultivated"
-        private const val COLUMN_GHCULTIVATED_POSITION = 7
+        private const val COLUMN_GHCULTIVATED_POSITION = 8
 
         const val ALL_COLUMNS =
                 "$TABLE.$COLUMN_ID, " +                // 6
                 "$TABLE.$COLUMN_NAME, " +              // 7
+                "$TABLE.$COLUMN_PRODUCT_CATEGORY, " +              // 7
                 "$TABLE.$COLUMN_CULTIVATION, " +       // 8
                 "$TABLE.$COLUMN_ILUC, " +              // 9
                 "$TABLE.$COLUMN_PROCESSING, " +        // 10
@@ -71,6 +76,7 @@ class ProductDao(private val dbManager: DBManager) {
             return Product(
                     cursor.getInt(startIndex + COLUMN_ID_POSITION),
                     cursor.getString(startIndex + COLUMN_NAME_POSITION),
+                    PRODUCT_CATEGORY.values()[cursor.getInt(startIndex + COLUMN_PRODUCT_CATEGORY_POSITION)],
                     cursor.getDouble(startIndex + COLUMN_CULTIVATION_POSITION),
                     cursor.getDouble(startIndex + COLUMN_ILUC_POSITION),
                     cursor.getDouble(startIndex + COLUMN_PROCESSING_POSITION),

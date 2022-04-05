@@ -1,5 +1,5 @@
 package com.example.androidapp.models.enums
 
 enum class PRODUCT_CATEGORY {
-    NONE, POULTRY, BEEF, PORK, FISH, VEGAN, LAMB
+    NONE, POULTRY, BEEF, PORK, VEGAN, LAMB
 }
