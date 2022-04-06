@@ -17,10 +17,14 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.fragment.app.activityViewModels
 import androidx.viewpager2.widget.ViewPager2
 import com.example.androidapp.R
 import com.example.androidapp.models.tools.quiz.QuizMaster
+import com.example.androidapp.viewmodels.EmissionViewModel
 import com.example.androidapp.views.adapters.MainAdapter
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayout
 
 
@@ -40,12 +44,6 @@ class MainView : AppCompatActivity() {
         setUpTabs()
         setUpViewPager()
 
-        QuizMaster.setEmission(3.0)
-        val resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-
-        }
-
- //       resultLauncher.launch(Intent(this, GameView::class.java))
     }
 
     private fun setUpTabs(){

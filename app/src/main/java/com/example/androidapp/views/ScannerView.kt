@@ -6,12 +6,24 @@ import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.cardview.widget.CardView
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.FileProvider
+import androidx.core.view.isGone
+import androidx.core.view.isInvisible
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.androidapp.R
+import com.example.androidapp.models.enums.COMPLETED
 import com.example.androidapp.viewmodels.ScannerViewModel
 import com.example.androidapp.views.adapters.ScannerAdapter
 import kotlinx.android.synthetic.main.activity_scanner.*
@@ -20,11 +32,20 @@ import java.io.IOException
 
 class ScannerView : AppCompatActivity() {
     private val viewModel = ScannerViewModel()
-    private var layoutManager: RecyclerView.LayoutManager?=null
+    private lateinit var completedCard: CardView
+    private lateinit var missingCard: CardView
+
+
+    private lateinit var constraintView:ConstraintLayout
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scanner)
+
+        completedCard = findViewById(R.id.completedCard)
+        missingCard = findViewById(R.id.missingCard)
+        constraintView= findViewById(R.id.scannerViewConstraint)
 
         viewModel.initiate(this)
         viewModel.loadCountries()
@@ -34,28 +55,109 @@ class ScannerView : AppCompatActivity() {
             if (it) {
                 finish()
             } else {
-                Toast.makeText(this, "Kan ikke gemme før alle felter er udfyldt", Toast.LENGTH_SHORT).show()
+                makeToast("Kan ikke gemme før alle felter er udfyldt")
             }
         }
 
         launchPhotoActivity()
+        setupExitButtons()
+        setupRecyclerListeners()
 
+    }
+    private fun setupExitButtons(){
         btn_cancel.setOnClickListener{
             finish()
+            makeToast("Dit indkøb er ikke blevet gemt")
         }
 
         btn_save.setOnClickListener {
             viewModel.onSave()
+           makeToast("Dit indkøb er blevet gemt.")
         }
 
     }
 
-    private fun setupRecyclerView(){
-        layoutManager = LinearLayoutManager(this)
-        recyclerView.layoutManager = layoutManager
+    private fun makeToast(text: String ) {
+        return Toast.makeText(applicationContext, text, Toast.LENGTH_SHORT).show()
+    }
 
-        viewModel.purchases.observe(this) {
-            recyclerView.adapter = ScannerAdapter(it, viewModel.products.value!!, viewModel.countries.value!!, viewModel)
+
+    private fun setupRecyclerListeners(){
+        linearLayout1.setOnClickListener {
+            if (recyclerView.isGone) {
+                closeRecyclerView(recyclerView2, btn_completed_data)
+                openRecyclerView(recyclerView, btn_missing_data)
+                completedToBottomConstraint()
+
+
+            }else {
+                closeRecyclerView(recyclerView,btn_missing_data)
+                openRecyclerView(recyclerView2,btn_completed_data)
+                completedToTopConstraint()
+
+            }
+        }
+
+
+        linearLayout2.setOnClickListener {
+            if (recyclerView2.isGone) {
+                closeRecyclerView(recyclerView, btn_missing_data)
+                openRecyclerView(recyclerView2, btn_completed_data)
+                completedToTopConstraint()
+
+            }else {
+                closeRecyclerView(recyclerView2, btn_missing_data)
+                openRecyclerView(recyclerView, btn_completed_data)
+                completedToBottomConstraint()
+
+            }
+        }
+
+    }
+
+
+    private fun completedToBottomConstraint() {
+        val constraintSet= ConstraintSet()
+
+        constraintSet.clone(constraintView)
+        constraintSet.clear(R.id.completedCard,ConstraintSet.TOP)
+        constraintSet.connect(R.id.missingCard, ConstraintSet.BOTTOM, R.id.completedCard, ConstraintSet.TOP)
+
+        constraintSet.applyTo(constraintView)
+
+    }
+
+    private fun completedToTopConstraint(){
+
+        val constraintSet= ConstraintSet()
+
+        constraintSet.clone(constraintView)
+        constraintSet.clear(R.id.missingCard, ConstraintSet.BOTTOM)
+        constraintSet.connect(R.id.completedCard,ConstraintSet.TOP,R.id.missingCard,ConstraintSet.BOTTOM)
+
+        constraintSet.applyTo(constraintView)
+    }
+
+    private fun openRecyclerView(recyclerView: RecyclerView,imageView: ImageView) {
+        recyclerView.visibility = View.VISIBLE
+        imageView.setImageResource(R.drawable.ic_expand_less_black_24dp)
+    }
+
+    private fun closeRecyclerView(recyclerView: RecyclerView, imageView: ImageView) {
+
+        recyclerView.visibility = View.GONE
+        imageView.setImageResource(R.drawable.ic_expand_more_black_24dp)
+    }
+
+    private fun setupRecyclerView(){
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView2.layoutManager = LinearLayoutManager(this)
+
+        viewModel.completedPurchases.observe(this) {
+            recyclerView2.adapter = ScannerAdapter(it, viewModel.products.value!!, viewModel.countries.value!!, viewModel,this.resources,COMPLETED.COMPLETED)
+        }
+        viewModel.missingPurchases.observe(this) {
+            recyclerView.adapter = ScannerAdapter(it, viewModel.products.value!!, viewModel.countries.value!!, viewModel,this.resources,COMPLETED.MISSING)
         }
     }
 
@@ -88,4 +190,6 @@ class ScannerView : AppCompatActivity() {
         }
     }
 }
+
+
 

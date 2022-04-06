@@ -24,7 +24,7 @@ class PurchaseDao(context: Context) {
                     "FROM $TABLE " +
                     "INNER JOIN ${StoreItemDao.TABLE} ON $COLUMN_STORE_ITEM_ID = ${StoreItemDao.TABLE}.${StoreItemDao.COLUMN_ID} " +
                     "INNER JOIN ${ProductDao.TABLE} ON ${StoreItemDao.COLUMN_PRODUCT_ID} = ${ProductDao.TABLE}.${ProductDao.COLUMN_ID} " +
-                    "INNER JOIN ${CountryDao.TABLE} ON ${StoreItemDao.COLUMN_COUNTRY_ID} = ${CountryDao.TABLE}.${CountryDao.COLUMN_ID} " +
+                    "INNER JOIN ${CountryDao.TABLE} ON ${StoreItemDao.TABLE}.${StoreItemDao.COLUMN_COUNTRY_ID} = ${CountryDao.TABLE}.${CountryDao.COLUMN_ID} " +
                     "ORDER BY $TABLE.$COLUMN_TIMESTAMP DESC;"
 
         return dbManager.selectMultiple(query){
@@ -42,8 +42,8 @@ class PurchaseDao(context: Context) {
                     "${CountryDao.ALL_COLUMNS} " +
                     "FROM $TABLE " +
                     "INNER JOIN ${StoreItemDao.TABLE} ON $COLUMN_STORE_ITEM_ID = ${StoreItemDao.TABLE}.${StoreItemDao.COLUMN_ID} " +
-                    "INNER JOIN ${ProductDao.TABLE} ON ${StoreItemDao.COLUMN_PRODUCT_ID} = ${ProductDao.TABLE}.${ProductDao.COLUMN_ID} " +
-                    "INNER JOIN ${CountryDao.TABLE} ON ${StoreItemDao.COLUMN_COUNTRY_ID} = ${CountryDao.TABLE}.${CountryDao.COLUMN_ID} " +
+                    "INNER JOIN ${ProductDao.TABLE} ON  ${StoreItemDao.TABLE}.${StoreItemDao.COLUMN_PRODUCT_ID} = ${ProductDao.TABLE}.${ProductDao.COLUMN_ID} " +
+                    "INNER JOIN ${CountryDao.TABLE} ON ${StoreItemDao.TABLE}.${StoreItemDao.COLUMN_COUNTRY_ID} = ${CountryDao.TABLE}.${CountryDao.COLUMN_ID} " +
                     "WHERE strftime('%Y', $COLUMN_TIMESTAMP) = '$year' AND strftime('%m', $COLUMN_TIMESTAMP) = '$month' " +
                     "ORDER BY ${ProductDao.TABLE}.${ProductDao.COLUMN_ID}, ${StoreItemDao.COLUMN_ORGANIC}, ${StoreItemDao.COLUMN_PACKAGED}, ${CountryDao.TABLE}.${CountryDao.COLUMN_ID};"
 
@@ -63,7 +63,7 @@ class PurchaseDao(context: Context) {
                     "FROM $TABLE " +
                     "INNER JOIN ${StoreItemDao.TABLE} ON $COLUMN_STORE_ITEM_ID = ${StoreItemDao.TABLE}.${StoreItemDao.COLUMN_ID} " +
                     "INNER JOIN ${ProductDao.TABLE} ON ${StoreItemDao.COLUMN_PRODUCT_ID} = ${ProductDao.TABLE}.${ProductDao.COLUMN_ID} " +
-                    "INNER JOIN ${CountryDao.TABLE} ON ${StoreItemDao.COLUMN_COUNTRY_ID} = ${CountryDao.TABLE}.${CountryDao.COLUMN_ID} " +
+                    "INNER JOIN ${CountryDao.TABLE} ON ${StoreItemDao.TABLE}.${StoreItemDao.COLUMN_COUNTRY_ID} = ${CountryDao.TABLE}.${CountryDao.COLUMN_ID} " +
                     "WHERE strftime('%Y', $COLUMN_TIMESTAMP) = '$year' AND $COLUMN_WEEK = $week " +
                     "ORDER BY ${ProductDao.TABLE}.${ProductDao.COLUMN_ID}, ${StoreItemDao.COLUMN_ORGANIC}, ${StoreItemDao.COLUMN_PACKAGED}, ${CountryDao.TABLE}.${CountryDao.COLUMN_ID};"
 
@@ -80,7 +80,7 @@ class PurchaseDao(context: Context) {
                     "SELECT MIN(${EmissionCalculator.sqlEmissionPerKgFormula()}) " +
                             "FROM ${StoreItemDao.TABLE} " +
                             "INNER JOIN ${ProductDao.TABLE} ON ${StoreItemDao.COLUMN_PRODUCT_ID} = ${ProductDao.TABLE}.${ProductDao.COLUMN_ID} " +
-                            "INNER JOIN ${CountryDao.TABLE} ON ${StoreItemDao.COLUMN_COUNTRY_ID} = ${CountryDao.TABLE}.${CountryDao.COLUMN_ID} " +
+                            "INNER JOIN ${CountryDao.TABLE} ON ${StoreItemDao.TABLE}.${StoreItemDao.COLUMN_COUNTRY_ID} = ${CountryDao.TABLE}.${CountryDao.COLUMN_ID} " +
                             "WHERE ${ProductDao.TABLE}.${ProductDao.COLUMN_ID} = ${purchase.storeItem.product.id};"
 
             dbManager.select(query) {
@@ -281,7 +281,7 @@ class PurchaseDao(context: Context) {
                     "FROM $TABLE " +
                     "INNER JOIN ${StoreItemDao.TABLE} ON $COLUMN_STORE_ITEM_ID = ${StoreItemDao.TABLE}.${StoreItemDao.COLUMN_ID} " +
                     "INNER JOIN ${ProductDao.TABLE} ON ${StoreItemDao.COLUMN_PRODUCT_ID} = ${ProductDao.TABLE}.${ProductDao.COLUMN_ID} " +
-                    "INNER JOIN ${CountryDao.TABLE} ON ${StoreItemDao.COLUMN_COUNTRY_ID} = ${CountryDao.TABLE}.${CountryDao.COLUMN_ID} " +
+                    "INNER JOIN ${CountryDao.TABLE} ON ${StoreItemDao.TABLE}.${StoreItemDao.COLUMN_COUNTRY_ID} = ${CountryDao.TABLE}.${CountryDao.COLUMN_ID} " +
                     "ORDER BY $TABLE.$COLUMN_TIMESTAMP DESC;"
 
         return dbManager.select<List<Trip>>(query) {

@@ -5,6 +5,7 @@ class Country(val id: Int,
               val transportEmission: Double,
               val ghPenalty: Boolean){
 
+    var defaultValue = false
     constructor(name: String, transportEmission: Double, ghPenalty: Boolean): this(0, name, transportEmission, ghPenalty)
     constructor(): this(0, "", 0.0, false)
 

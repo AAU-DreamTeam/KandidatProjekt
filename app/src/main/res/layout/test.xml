@@ -13,12 +13,12 @@
         android:id="@+id/missingCard"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/completedCard"
+
+
         app:layout_constraintStart_toStartOf="parent"
+
         app:layout_constraintTop_toTopOf="parent"
         >
-
-
 
         <LinearLayout
             android:id="@+id/linear1"
@@ -39,7 +39,7 @@
                     android:id="@+id/textview1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Mangler data ">
+                    android:text="Missing data">
 
                 </TextView>
 
@@ -64,7 +64,7 @@
                 android:layout_marginBottom="0dp"
                 android:background="@drawable/border"
                 android:gravity="center_vertical"
-                android:visibility="visible"
+                android:visibility="gone"
                 tools:itemCount="50" />
 
         </LinearLayout>
@@ -78,6 +78,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@id/btn_save"
+        app:layout_constraintTop_toBottomOf="@+id/missingCard"
         >
 
         <LinearLayout
@@ -101,7 +102,7 @@
                     android:id="@+id/textview2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Udfyldte">
+                    android:text="Completed data">
 
                 </TextView>
 
@@ -125,10 +126,11 @@
                 android:layout_marginBottom="0dp"
                 android:background="@drawable/border"
                 android:gravity="center_vertical"
-                android:visibility="gone"
+                android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/linearLayout2" />
+                app:layout_constraintTop_toBottomOf="@id/linearLayout2"
+                tools:itemCount="50" />
 
 
         </LinearLayout>

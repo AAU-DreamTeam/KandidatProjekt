@@ -15,4 +15,6 @@
     <color name="green">#06FF01</color>
     <color name="red">#FF0101</color>
     <color name="toggleBtn">#D60E15</color>
+    <color name="defaultValue">#F17516</color>
+
 </resources>

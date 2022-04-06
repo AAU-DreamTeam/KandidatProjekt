@@ -21,7 +21,7 @@ class ProductDao(private val dbManager: DBManager) {
         var result = Product()
         val query =
                 "SELECT * FROM $TABLE " +
-                "WHERE '$receiptText' LIKE '%'||REPLACE(REPLACE(REPLACE(LOWER($COLUMN_NAME), 'å', 'a'), 'æ', 'e'), 'ø', 'o')||'%';"
+                "WHERE \"$receiptText\" LIKE '%'||REPLACE(REPLACE(REPLACE(LOWER($COLUMN_NAME), 'å', 'a'), 'æ', 'e'), 'ø', 'o')||'%';"
 
         dbManager.select(query) {
             result = produceProduct(it)
@@ -32,7 +32,7 @@ class ProductDao(private val dbManager: DBManager) {
 
     companion object {
         const val TABLE = "product"
-        const val COLUMN_COUNT = 9
+        const val COLUMN_COUNT = 11
 
         const val COLUMN_ID = "id"
         private const val COLUMN_ID_POSITION = 0
@@ -61,6 +61,12 @@ class ProductDao(private val dbManager: DBManager) {
         const val COLUMN_GHCULTIVATED = "GHCultivated"
         private const val COLUMN_GHCULTIVATED_POSITION = 8
 
+        const val COLUMN_COUNTRYID = "countryId"
+        private const val COLUMN_COUNTRYID_POSITION = 9
+
+        const val COLUMN_WEIGHT = "weight"
+        private const val COLUMN_WEIGHT_POSITION = 10
+
         const val ALL_COLUMNS =
                 "$TABLE.$COLUMN_ID, " +                // 6
                 "$TABLE.$COLUMN_NAME, " +              // 7
@@ -70,7 +76,10 @@ class ProductDao(private val dbManager: DBManager) {
                 "$TABLE.$COLUMN_PROCESSING, " +        // 10
                 "$TABLE.$COLUMN_PACKAGING, " +         // 11
                 "$TABLE.$COLUMN_RETAIL, " +            // 12
-                "$TABLE.$COLUMN_GHCULTIVATED"      // 13
+                "$TABLE.$COLUMN_GHCULTIVATED, "+      // 13
+                "$TABLE.$COLUMN_COUNTRYID, "+      // 14
+                "$TABLE.$COLUMN_WEIGHT "      // 15
+
 
         fun produceProduct(cursor: Cursor, startIndex: Int = 0): Product {
             return Product(
@@ -82,7 +91,10 @@ class ProductDao(private val dbManager: DBManager) {
                     cursor.getDouble(startIndex + COLUMN_PROCESSING_POSITION),
                     cursor.getDouble(startIndex + COLUMN_PACKAGING_POSITION),
                     cursor.getDouble(startIndex + COLUMN_RETAIL_POSITION),
-                    cursor.getInt(startIndex + COLUMN_GHCULTIVATED_POSITION) != 0
+                    cursor.getInt(startIndex + COLUMN_GHCULTIVATED_POSITION) != 0,
+                    cursor.getInt(startIndex + COLUMN_COUNTRYID_POSITION),
+                    cursor.getDouble(startIndex + COLUMN_WEIGHT_POSITION)
+
             )
         }
     }

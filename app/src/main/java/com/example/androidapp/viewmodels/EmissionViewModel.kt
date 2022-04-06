@@ -1,6 +1,8 @@
 package com.example.androidapp.viewmodels
 
 import android.content.Context
+import android.os.Build
+import androidx.core.util.Pair
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -45,6 +47,9 @@ class EmissionViewModel: ViewModel()  {
     private val _emissionReduction = MutableLiveData<Double>()
     val emissionReduction: LiveData<Double> get() = _emissionReduction
 
+    private val _emissionList = MutableLiveData<MutableList<Double?>>()
+    val emissionList: LiveData<MutableList<Double?>> get() = _emissionList
+
     fun initiate(context: Context) {
         if (purchaseRepository == null) {
             purchaseRepository = PurchaseRepository(context)
@@ -62,6 +67,8 @@ class EmissionViewModel: ViewModel()  {
         _year.value = calendar.get(Calendar.YEAR).toString()
         _monthlyEmission.value = purchaseRepository!!.loadEmissionFromYearMonth(calendar)
         _weeklyEmission.value = purchaseRepository!!.loadEmissionFromYearWeek(calendar)
+
+        _emissionList.value = mutableListOf(_weeklyEmission.value,_monthlyEmission.value)
 
         _purchases.value = purchaseRepository!!.loadAllPurchases()
         _trips.value = purchaseRepository!!.loadAllTrips()
@@ -113,8 +120,10 @@ class EmissionViewModel: ViewModel()  {
     private fun calcTotalEmission(){
         var emissionSum  = 0.0
 
-        purchases.value!!.forEach{
-            emissionSum += it.emission
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            purchases.value!!.forEach{
+                emissionSum += it.emission
+            }
         }
 
         _totalEmission.value = emissionSum
