@@ -5,6 +5,8 @@ import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper;
+import com.example.androidapp.models.daos.CountryDao
+import com.example.androidapp.models.daos.ProductDao
 import com.example.androidapp.models.enums.PRODUCT_CATEGORY
 import java.util.*
 
@@ -185,83 +187,470 @@ class DBManager(context: Context?) : SQLiteOpenHelper(context, "FoodEmission.db"
     }
 
     private fun insertStoreItemData(db: SQLiteDatabase){
-        insertStoreItem(db, 6, 1,"ebler lose italien", false, false, 0.110)
-        insertStoreItem(db, 6, 5,"ebler lose danmark", false, false, 0.110)
-        insertStoreItem(db, 6, 5,"ebler oko danmark", true, true, 1.0)
-        insertStoreItem(db, 6, 1,"oko bakke ebler", true, true, 0.660)
-        insertStoreItem(db, 6, 1,"oko. pose ebler", true, true, 1.0)
-        insertStoreItem(db, 6, 5,"danske ebler", false, true, 1.5)
-        insertStoreItem(db, 6, 5,"oko. danske bakke ebler", true, true, 0.660)
-        insertStoreItem(db, 6, 5,"danske ebler", false, true, 0.880)
-        insertStoreItem(db, 6, 1,"oko. pink lady", true, true, 0.312)
-        insertStoreItem(db, 6, 5,"pigeon ebler", false, true, 0.750)
-        insertStoreItem(db, 6, 5,"danske belle de boskoop", false, true, 0.660)
-        insertStoreItem(db, 6, 1,"pink lady ebler", false, true, 1.0)
+        // Agurk
+        insertStoreItem(db, "Agurk", "Danmark", "agurk danmark", false, true, 1 * 0.3)
+        insertStoreItem(db, "Agurk", "Danmark", "agurk dansk oko danmark", true, true, 1 * 0.3)
+        insertStoreItem(db, "Agurk", "Spanien", "agurk oko spanien", true, true, 1 * 0.3)
 
-        insertStoreItem(db, 11, 3,"broccoli", false, true, 0.450)
-        insertStoreItem(db, 11, 1,"oko danske broccoli", true, true, 0.450)
+// Ananas
+        insertStoreItem(db, "Ananas", "Ecuador", "ananas ecuador", false, false, 1 * 1.200)
 
-        insertStoreItem(db, 9, 5,"oko champignon hvide, skar", true, true, 0.100)
-        insertStoreItem(db, 9, 5,"oko champignon skiver/mix", true, true, 0.100)
-        insertStoreItem(db, 9, 5,"oko champignon hvide", true, true, 0.200)
-        insertStoreItem(db, 9, 5,"oko champignon brune", true, true, 0.400)
-        insertStoreItem(db, 9, 2,"champignon rodskarne", false, true, 0.500)
+// And
+        insertStoreItem(db, "And", "Frankrig", "berberiandebryst frankrig", false, true, 0.3)
 
-        insertStoreItem(db, 10, 6,"snackpeber sod rod", false, true, 0.500)
-        insertStoreItem(db, 10, 4,"mix snack peber", false, true, 0.400)
-        insertStoreItem(db, 10, 3,"oko peber california", true, true, 0.300)
-        insertStoreItem(db, 10, 3,"lamuyo peber", false, true, 0.600)
-        insertStoreItem(db, 10, 4,"lose peberfrugter", false, false, 0.180)
-        insertStoreItem(db, 10, 5,"rod peber", false, true, 0.360)
+// Appelsin
+        insertStoreItem(db, "Appelsin", "Spanien", "appelsiner oko spanien", true, true, 1.50)
+        insertStoreItem(db, "Appelsin", "Spanien", "appelsiner spanien", false, true, 2.0)
+        insertStoreItem(db, "Appelsin", "Spanien", "appelsiner spanien", false, false, 1 * 0.160)
+        insertStoreItem(db, "Appelsin", "Egypten", "appelsiner egypten", false, false, 1 * 0.160)
+        insertStoreItem(db, "Appelsin", "Sydafrika", "appelsiner sydafrika", false, false, 1 * 0.160)
 
-        insertStoreItem(db, 12, 5,"oko gulerodder", true, true, 0.800)
-        insertStoreItem(db, 12, 5,"danske gulerodder", false, true, 1.0)
-        insertStoreItem(db, 12, 5,"oko. danske gulerodder", true, true, 1.0)
-        insertStoreItem(db, 12, 5,"gulerodder", false, true, 1.0)
-        insertStoreItem(db, 12, 5,"orangerodder", false, true, 0.500)
-        insertStoreItem(db, 12, 5,"orangerodder", true, true, 0.250)
-        insertStoreItem(db, 12, 5,"orangerodder", false, true, 0.200)
+// Artiskok
+        insertStoreItem(db, "Artiskok", "Frankrig", "artiskok frankrig", false, false, 1 * 0.150)
+        insertStoreItem(db, "Artiskok", "Spanien", "artiskok spanien", false, false, 1 * 0.150)
 
-        insertStoreItem(db, 1, 6,"tomater i spand", false, true, 0.500)
-        insertStoreItem(db, 1, 5,"oko tomater san marzano", true, true, 0.200)
-        insertStoreItem(db, 1, 3,"oko tomater cherry", true, true, 0.250)
-        insertStoreItem(db, 1, 5,"oko tomater intensity", true, true, 0.250)
-        insertStoreItem(db, 1, 4,"intensity tom. princip", false, true, 0.300)
-        insertStoreItem(db, 1, 5,"oko runde tomater", true, true, 0.500)
-        insertStoreItem(db, 1, 6,"cherrytomater mix", false, true, 0.500)
-        insertStoreItem(db, 1, 4,"gusto tomater", false, true, 0.450)
-        insertStoreItem(db, 1, 3,"cocktailtomat", false, true, 0.500)
-        insertStoreItem(db, 1, 5,"danske mix tomater", false, true, 0.325)
-        insertStoreItem(db, 1, 6,"lose tomater", false, false, 0.075)
-        insertStoreItem(db, 1, 5,"san marzano", false, true, 0.250)
-        insertStoreItem(db, 1, 5,"tomater ida", false, true, 0.200)
-        insertStoreItem(db, 1, 5,"blommetomater", false, true, 0.500)
-        insertStoreItem(db, 1, 5,"oko intensity gule", true, true, 0.250)
-        insertStoreItem(db, 1, 3,"oko tomater allure", true, true, 0.200)
+// Asparges
+        insertStoreItem(db, "Asparges", "Italien", "gronne asparges i bundt italien", false, true, 0.5)
+        insertStoreItem(db, "Asparges", "Spanien", "gronne asparges i bundt spanien", false, true, 0.5)
 
-        insertStoreItem(db, 3, 3,"oko iceberg levevis", true, true, 0.400)
-        insertStoreItem(db, 3, 3,"iceberg", false, true, 0.400)
+// Aubergine
+        insertStoreItem(db, "Aubergine", "Holland", "aubergine holland", false, false, 1 * 0.250)
+        insertStoreItem(db, "Aubergine", "Spanien", "aubergine oko spanien", true, true, 1 * 0.250)
 
-        insertStoreItem(db, 8, 1,"oko blomkal", true, true, 0.450)
-        insertStoreItem(db, 8, 1,"blomkal", false, false, 0.450)
+// Avocado
+        insertStoreItem(db, "Avocado", "Chile", "spisemodne avocadoer chile", false, true, 6 * 0.150)
+        insertStoreItem(db, "Avocado", "Chile", "spisemodne avocadoer i bakke oko chile", true, true, 3 * 0.150)
+        insertStoreItem(db, "Avocado", "Colombia", "spisemodne avocadoer colombia", false, true, 6 * 0.150)
+        insertStoreItem(db, "Avocado", "Colombia", "spisemodne avocadoer i bakke oko colombia", true, true, 3 * 0.150)
+        insertStoreItem(db, "Avocado", "Israel", "spisemodne avocadoer i bakke oko israel", true, true, 3 * 0.150)
+        insertStoreItem(db, "Avocado", "Mexico", "spisemodne avocadoer mexico", false, true, 6 * 0.150)
 
-        insertStoreItem(db, 4, 5,"oko rodkal", true, true, 1.5)
-        insertStoreItem(db, 4, 5,"rodkal", false, true, 1.5)
+// Banan
+        insertStoreItem(db, "Banan", "Equador", "bananer 4 pak oko ecuador", true, true, 4 * 0.110)
 
-        insertStoreItem(db, 5, 5,"oko hvidkal", true, true, 1.5)
-        insertStoreItem(db, 5, 5,"danske hvidkal", false, false, 1.5)
+// Basilikum
+        insertStoreItem(db, "Basilikum", "Danmark", "basilikum danmark", false, true, 1 * 0.100)
+        insertStoreItem(db, "Basilikum", "Danmark", "basilikum oko danmark", true, true, 1 * 0.100)
 
-        insertStoreItem(db, 7, 5,"oko spidskal", true, true, 0.700)
-        insertStoreItem(db, 7, 5,"oko spidskal rod", true, true, 0.700)
+// Bladselleri
+        insertStoreItem(db, "Bladselleri", "Danmark", "bladselleri i bundt danmark", false, true, 1 * 0.3)
+        insertStoreItem(db, "Bladselleri", "Italien", "bladselleri i bundt italien", false, true, 1 * 0.3)
+        insertStoreItem(db, "Bladselleri", "Italien", "bladselleri i bundt oko italien", true, true, 0.3)
+        insertStoreItem(db, "Bladselleri", "Spanien", "bladselleri i bundt oko spanien", true, true, 0.3)
+        insertStoreItem(db, "Bladselleri", "Spanien", "bladselleri i bundt spanien", false, true, 1 * 0.3)
 
-        insertStoreItem(db, 2, 3,"udl. agurk", false, false, 0.300)
-        insertStoreItem(db, 2, 3,"oko agurk levevis", true, true, 0.300)
-        insertStoreItem(db, 2, 5,"oko agurk dk", true, true, 0.300)
-        insertStoreItem(db, 2, 3,"skoleagurker", false, true, 0.300)
+// Blomkål
+        insertStoreItem(db, "Blomkål", "Italien", "blomkal italien", false, false, 1 * 0.450)
+        insertStoreItem(db, "Blomkål", "Italien", "blomkal oko italien", true, true, 1 * 0.450)
+        insertStoreItem(db, "Blomkål", "Spanien", "blomkal oko spanien", true, true, 1 * 0.450)
+        insertStoreItem(db, "Blomkål", "Spanien", "blomkal spanien", false, false, 1 * 0.450)
+
+// Blomme
+        insertStoreItem(db, "Blomme", "Chile", "blommer chile", false, true, 0.5)
+        insertStoreItem(db, "Blomme", "Sydafrika", "blommer sydafrika", false, true, 0.5)
+
+// Blåbær
+        insertStoreItem(db, "Blåbær", "Argentina", "blaber oko argentina", true, true, 0.125)
+        insertStoreItem(db, "Blåbær", "Chile", "blaber chile", false, true, 0.125)
+        insertStoreItem(db, "Blåbær", "Chile", "blaber oko chile", true, true, 0.125)
+        insertStoreItem(db, "Blåbær", "Peru", "blaber oko peru", true, true, 0.125)
+        insertStoreItem(db, "Blåbær", "Peru", "blaber peru", false, true, 0.125)
+        insertStoreItem(db, "Blåbær", "Polen", "blaber oko polen", true, true, 0.125)
+        insertStoreItem(db, "Blåbær", "Polen", "blaber polen", false, true, 0.3)
+        insertStoreItem(db, "Blåbær", "Sydafrika", "blaber sydafrika", false, true, 0.125)
+
+// Broccoli
+        insertStoreItem(db, "Broccoli", "Italien", "broccoli italien", false, false, 0.5)
+        insertStoreItem(db, "Broccoli", "Italien", "broccoli oko italien", true, true, 0.35)
+        insertStoreItem(db, "Broccoli", "Spanien", "broccoli oko spanien", true, true, 0.35)
+        insertStoreItem(db, "Broccoli", "Spanien", "broccoli spanien", false, false, 0.5)
+
+// Brombær
+        insertStoreItem(db, "Brombær", "Belgien", "bromber belgien", false, true, 0.125)
+        insertStoreItem(db, "Brombær", "Holland", "bromber holland", false, true, 0.125)
+        insertStoreItem(db, "Brombær", "Marokko", "bromber marokko", false, true, 0.125)
+        insertStoreItem(db, "Brombær", "Mexico", "bromber mexico", false, true, 0.125)
+        insertStoreItem(db, "Brombær", "Portugal", "bromber portugal", false, true, 0.125)
+
+// Bønnespirer
+        insertStoreItem(db, "Bønnespirer", "Danmark", "babyspirer oko", true, true, 0.15)
+        insertStoreItem(db, "Bønnespirer", "Danmark", "bonnespirer oko", false, true, 0.15)
+
+// Champignon
+        insertStoreItem(db, "Champignon", "Danmark", "brune champignon oko danmark", true, true, 0.2)
+        insertStoreItem(db, "Champignon", "Polen", "hvide champignon polen", false, true, 0.5)
+
+// Chili
+        insertStoreItem(db, "Chili", "Holland", "chilimix oko holland", true, true, 0.07)
+        insertStoreItem(db, "Chili", "Holland", "habanero chili holland", false, true, 0.03)
+        insertStoreItem(db, "Chili", "Mozambique", "chilimix oko mozambique", true, true, 0.07)
+        insertStoreItem(db, "Chili", "Mozambique", "habanero chili mozambique", false, true, 0.03)
+        insertStoreItem(db, "Chili", "Spanien", "chilimix oko spanien", true, true, 0.07)
+        insertStoreItem(db, "Chili", "Spanien", "habanero chili spanien", false, true, 0.03)
+
+// Citron
+        insertStoreItem(db, "Citron", "Italien", "citroner oko italien", true, true, 2 * 0.085)
+        insertStoreItem(db, "Citron", "Italien", "citroner ubehandlede italien", false, true, 2 * 0.085)
+        insertStoreItem(db, "Citron", "Spanien", "citroner oko spanien", true, true, 2 * 0.085)
+        insertStoreItem(db, "Citron", "Spanien", "citroner ubehandlede spanien", false, true, 2 * 0.085)
+
+// Dild
+        insertStoreItem(db, "Dild", "Danmark", "dild danmark", false, true, 1 * 0.020)
+        insertStoreItem(db, "Dild", "Holland", "dild holland", false, true, 1 * 0.020)
+        insertStoreItem(db, "Dild", "Italien", "dild italien", false, true, 1 * 0.020)
+        insertStoreItem(db, "Dild", "Kenya", "dild kenya", false, true, 1 * 0.020)
+        insertStoreItem(db, "Dild", "Spanien", "dild spanien", false, true, 1 * 0.020)
+
+// Fennikel
+        insertStoreItem(db, "Fennikel", "Danmark", "fennikel oko danmark", true, true, 1 * 0.200)
+        insertStoreItem(db, "Fennikel", "Italien", "fennikel oko italien", true, true, 1 * 0.200)
+
+// Forårsløg
+        insertStoreItem(db, "Forårsløg", "Egypten", "forarslog i bundt egypten", false, false, 1 * 0.100)
+        insertStoreItem(db, "Forårsløg", "Marokko", "forarslog i bundt marokko", false, false, 1 * 0.100)
+        insertStoreItem(db, "Forårsløg", "Senegal", "forarslog i bundt senegal", false, false, 1 * 0.100)
+        insertStoreItem(db, "Forårsløg", "Egypten", "forarslog i bundt egypten", true, true, 1 * 0.100)
+        insertStoreItem(db, "Forårsløg", "Marokko", "forarslog i bundt marokko", true, true, 1 * 0.100)
+        insertStoreItem(db, "Forårsløg", "Senegal", "forarslog i bundt senegal", true, true, 1 * 0.100)
+
+// Grapefrugt
+        insertStoreItem(db, "Grapefrugt", "Italien", "grapefrugter italien", false, true, 2.0)
+        insertStoreItem(db, "Grapefrugt", "Spanien", "grapefrugter spanien", false, true, 2.0)
+        insertStoreItem(db, "Grapefrugt", "Spanien", "rod grapefrugt oko spanien", false, false, 1 * 0.350)
+
+// Grisefilet
+        insertStoreItem(db, "Grisefilet", "Danmark", "kotelet m. ben oko danmark", true, true, 0.25)
+        insertStoreItem(db, "Grisefilet", "Danmark", "koteletter danmark", false, true, 0.40)
+
+// Grisekød, hakket
+        insertStoreItem(db, "Grisekød, hakket", "Danmark", "hakket grisekod 8-12% fedt friland oko danmark", true, true, 0.008)
+        insertStoreItem(db, "Grisekød, hakket", "Danmark", "hakket grisekod 8-12% fedt", false, true, 0.008)
+
+// Grisekød, nakkefilet (nakkekotelet)
+        insertStoreItem(db, "Grisekød, nakkefilet (nakkekotelet)", "Danmark", "nakkefilet danmark", false, true, 1.50)
+        insertStoreItem(db, "Grisekød, nakkefilet (nakkekotelet)", "Danmark", "nakkekoteletter oko danmark", true, true, 0.27)
+
+// Grisekød, svinekam med svær
+        insertStoreItem(db, "Grisekød, svinekam med svær", "Danmark", "fleskesteg krogmodnet danmark", false, true, 1.1)
+        insertStoreItem(db, "Grisekød, svinekam med svær", "Danmark", "fleskesteg oko danmark", true, true, 1.0)
+
+// Græskar
+        insertStoreItem(db, "Græskar", "Spanien", "butternut squash oko spanien", true, false, 1 * 1.000)
+        insertStoreItem(db, "Græskar", "Sydafrika", "hokkaido greskar oko sydafrika", true, false, 1 * 1.000)
+
+// Grønkål
+        insertStoreItem(db, "Grønkål", "Danmark", "baby gronkal ", false, true, 0.075)
+
+// Grøntsagsbøffer
+        insertStoreItem(db, "Grøntsagsbøffer", "Danmark", "plantebaserede boffer danmark", false, true, 0.24)
+
+// Gulerod
+        insertStoreItem(db, "Gulerod", "Danmark", "gulerodder oko danmark", true, true, 0.5)
+        insertStoreItem(db, "Gulerod", "Danmark", "snackgulerodder danmark", false, true, 0.5)
+        insertStoreItem(db, "Gulerod", "Italien", "gulerodder m. top italien", false, false, 1 * 0.065)
+
+/// Hakket kylling
+        insertStoreItem(db, "Hakket kylling", "Danmark", "hakket kyllingekod 3-7% fedt danmark", false, true, 0.003)
+        insertStoreItem(db, "Hakket kylling", "Danmark", "hakket kyllingekod 3-6% fedt fritgående oko", true, true, 0.003)
+
+// Hakket lammekød
+        insertStoreItem(db, "Hakket lammekød", "Tyskland", "hakket lammekod 10-12% fedt tyskland", false, true, 0.01)
+
+// Hindbær
+        insertStoreItem(db, "Hindbær", "Marokko", "hindber marokko", false, true, 0.125)
+        insertStoreItem(db, "Hindbær", "Portugal", "hindber portugal", false, true, 0.125)
+        insertStoreItem(db, "Hindbær", "Spanien", "hindber oko spanien", true, true, 0.2)
+        insertStoreItem(db, "Hindbær", "Spanien", "hindber spanien", false, true, 0.25)
+
+// Honningmelon
+        insertStoreItem(db, "Honningmelon", "Brasilien", "dinomelon brasilien", false, false, 1 * 0.8)
+        insertStoreItem(db, "Honningmelon", "Costa Rica", "gul honningmelon costa rica", false, false, 1 * 0.8)
+
+// Hvidkål
+        insertStoreItem(db, "Hvidkål", "Danmark", "hvidkal danmark", false, false, 1 * 1.0)
+
+// Hvidløg
+        insertStoreItem(db, "Hvidløg", "Kina", "hvidlog kina", false, true, 0.25)
+        insertStoreItem(db, "Hvidløg", "Spanien", "hvidlog spanien", false, true, 0.18)
+
+// Høne
+        insertStoreItem(db, "Høne", "Polen", "suppehone polen", false, true, 0.8)
+
+// Icebergsalat
+        insertStoreItem(db, "Icebergsalat", "Spanien", "icebergsalat oko spanien", true, true, 1 * 0.4)
+        insertStoreItem(db, "Icebergsalat", "Spanien", "icebergsalat spanien", false, true, 1 * 0.4)
+
+// Ingefær, rod
+        insertStoreItem(db, "Ingefær, rod", "Kina", "ingefer kina", false, true, 0.2)
+        insertStoreItem(db, "Ingefær, rod", "Peru", "ingefer oko peru", true, true, 0.2)
+        insertStoreItem(db, "Ingefær, rod", "Peru", "ingefer peru", false, true, 0.2)
+
+// Jordbær
+        insertStoreItem(db, "Jordbær", "Belgien", "jordber belgien", false, true, 0.4)
+        insertStoreItem(db, "Jordbær", "Egypten", "jordber egypten", false, true, 0.4)
+        insertStoreItem(db, "Jordbær", "Holland", "jordber holland", false, true, 0.4)
+        insertStoreItem(db, "Jordbær", "Marokko", "jordber marokko", false, true, 0.4)
+        insertStoreItem(db, "Jordbær", "Spanien", "jordber oko spanien", true, true, 0.225)
+        insertStoreItem(db, "Jordbær", "Spanien", "jordber spanien", false, true, 0.4)
+
+// Kalkun
+        insertStoreItem(db, "Kalkun", "Tyskland", "kalkunbrystfilet tyskland", false, true, 0.8)
+
+// Kalv og flæsk, hakket
+        insertStoreItem(db, "Kalv og flæsk, hakket", "Danmark", "hakket grise- og oksekod 8-12% fedt oko ", false, true, 0.40)
+        insertStoreItem(db, "Kalv og flæsk, hakket", "Danmark", "hakket grise- og kalvekod 14-18% fedt danmark", false, true, 0.60)
+
+// Kalvekød
+        insertStoreItem(db, "Kalvekød", "Danmark", "kalvesteg m. chili danmark", false, true, 0.30)
+        insertStoreItem(db, "Kalvekød", "Holland", "kalvemorbrad 1-1,7 kg holland", false, true, 1.0)
+        insertStoreItem(db, "Kalvekød", "Tyskland", "kalvemorbrad 1-1,7 kg tyskland", false, true, 1.0)
+
+// Karse
+        insertStoreItem(db, "Karse", "Danmark", "brondkarse oko danmark", true, true, 1 * 0.1)
+        insertStoreItem(db, "Karse", "Danmark", "karse, lille bakke", false, true, 1 * 0.1)
+
+// Kartoffel
+        insertStoreItem(db, "Kartoffel", "Danmark", "kartofler oko danmark", true, true, 1.0)
+        insertStoreItem(db, "Kartoffel", "Danmark", "vildmose kartofler danmark", false, true, 2.0)
+        insertStoreItem(db, "Kartoffel", "Egypten", "kartofler oko egypten", true, true, 1.0)
+        insertStoreItem(db, "Kartoffel", "Egypten", "nemme kartofler egypten", false, true, 0.8)
+        insertStoreItem(db, "Kartoffel", "England", "bagekartofler oko england", true, true, 1.20)
+        insertStoreItem(db, "Kartoffel", "Frankrig", "babykartofler frankrig", false, true, 0.7)
+        insertStoreItem(db, "Kartoffel", "Italien", "bagekartofler oko italien", true, true, 1.20)
+        insertStoreItem(db, "Kartoffel", "Spanien", "babykartofler spanien", false, true, 0.7)
+
+// Kidney bønner
+        insertStoreItem(db, "Kidney bønner", "Kina", "kidneybonner oko kina", true, true, 0.15)
+        insertStoreItem(db, "Kidney bønner", "Kina", "kidneybonner kina", false, true, 0.240)
+
+// Kikærter
+        insertStoreItem(db, "Kikærter", "Tyrkiet", "kikerter oko tyrkiet", true, true, 0.41)
+        insertStoreItem(db, "Kikærter", "Tyrkiet", "kikerter tyrkiet", false, true, 0.24)
+
+// Kiwi
+        insertStoreItem(db, "Kiwi", "Chile", "kiwi oko chile", true, true, 0.5)
+        insertStoreItem(db, "Kiwi", "Italien", "kiwi oko italien", true, true, 0.5)
+
+// Knoldselleri
+        insertStoreItem(db, "Knoldselleri", "Danmark", "knoldselleri danmark", false, false, 1 * 0.8)
+        insertStoreItem(db, "Knoldselleri", "Danmark", "knoldselleri oko danmark", true, true, 1 * 0.8)
+
+// Kylling, bryst
+        insertStoreItem(db, "Kylling, bryst", "Danmark", "kyllingestrimler danmark", false, true, 0.3)
+        insertStoreItem(db, "Kylling, bryst", "Danmark", "kyllingebrystfilet fritgaende oko", true, true, 0.225)
+
+// Kylling, hel
+        insertStoreItem(db, "Kylling, hel", "Danmark", "hel kylling fritgaende danmark", false, true, 1.20)
+        insertStoreItem(db, "Kylling, hel", "Danmark", "hel kylling fritgaende oko danmark", false, true, 1.20)
+        insertStoreItem(db, "Kylling, hel", "Frankrig", "hel kylling friland frankrig", false, true, 1.30)
+
+// Kylling, lår
+        insertStoreItem(db, "Kylling, lår", "Danmark", "kyllingelarmix danmark", false, true, 0.6)
+        insertStoreItem(db, "Kylling, lår", "Danmark", "kyllingeoverlar oko danmark", true, true, 1.0)
+
+// Lammekød
+        insertStoreItem(db, "Lammekød", "New Zealand", "lammeculotte new zealand", false, true, 0.275)
+
+// Lammekølle
+        insertStoreItem(db, "Lammekølle", "Chile", "lammekolle chile", false, true, 1.90)
+
+// Lime
+        insertStoreItem(db, "Lime", "Brasilien", "limefrugter oko brasilien", true, true, 4 * 0.110)
+        insertStoreItem(db, "Lime", "Brasilien", "limefrugter, ubehandlede brasilien", false, true, 6 * 0.110)
+        insertStoreItem(db, "Lime", "Colombia", "limefrugter oko colombia", true, true, 4 * 0.110)
+        insertStoreItem(db, "Lime", "Colombia", "limefrugter, ubehandlede colombia", false, true, 6 * 0.110)
+        insertStoreItem(db, "Lime", "Peru", "limefrugter oko peru", true, true, 4 * 0.110)
+        insertStoreItem(db, "Lime", "Peru", "limefrugter, ubehandlede peru", false, true, 6 * 0.110)
+        insertStoreItem(db, "Lime", "Vietnam", "limefrugter oko vietnam", true, true, 4 * 0.110)
+        insertStoreItem(db, "Lime", "Vietnam", "limefrugter, ubehandlede vietnam", false, true, 6 * 0.110)
+
+// Linser, tørrede
+        insertStoreItem(db, "Linser, tørrede", "Tyrkiet", "gronne linser tyrkiet", true, true, 0.4)
+        insertStoreItem(db, "Linser, tørrede", "Tyrkiet", "belugalinser oko tyrkiet", true, true, 0.4)
+
+// Løg
+        insertStoreItem(db, "Løg", "Danmark", "skalottelog oko danmark", true, true, 0.2)
+        insertStoreItem(db, "Løg", "Danmark", "log danmark", false, true, 1.0)
+        insertStoreItem(db, "Løg", "Egypten", "log oko egypten", true, true, 0.75)
+        insertStoreItem(db, "Løg", "Holland", "blandede log oko holland", true, true, 0.4)
+
+// Majskolbe
+        insertStoreItem(db, "Majskolbe", "Holland", "majskolber oko holland", true, true, 0.4)
+
+// Mango
+        insertStoreItem(db, "Mango", "Brasilien", "mango brasilien", false, false, 1 * 0.3)
+        insertStoreItem(db, "Mango", "Brasilien", "mango, spisemodne brasilien", false, true, 2 * 0.3)
+        insertStoreItem(db, "Mango", "Den Dominikanske Republik", "mango den dominikanske republik", false, false, 1 * 0.3)
+        insertStoreItem(db, "Mango", "Den Dominikanske Republik", "mango, spisemodne den dominikanske republik", false, true, 2 * 0.3)
+        insertStoreItem(db, "Mango", "Peru", "mango i tern oko peru", true, true, 0.25)
+        insertStoreItem(db, "Mango", "Peru", "mango peru", false, false, 1 * 0.3)
+        insertStoreItem(db, "Mango", "Peru", "mango, spisemodne peru", false, true, 2 * 0.3)
+
+// Medisterpølse
+        insertStoreItem(db, "Medisterpølse", "Danmark", "baconmedister danmark", false, true, 0.75)
+        insertStoreItem(db, "Medisterpølse", "Danmark", "medister oko danmark", true, true, 0.35)
+
+// Okseculotte
+        insertStoreItem(db, "Okseculotte", "Danmark", "okseculotte danmark", false, true, 1.30)
+        insertStoreItem(db, "Okseculotte", "Holland", "okseculotte holland", false, true, 1.30)
+        insertStoreItem(db, "Okseculotte", "Tyskland", "okseculotte tyskland", false, true, 1.30)
+
+// Okseinderlår
+        insertStoreItem(db, "Okseinderlår", "Danmark", "okseinderlar danmark", false, true, 1.0)
+        insertStoreItem(db, "Okseinderlår", "Holland", "okseinderlar holland", false, true, 1.0)
+        insertStoreItem(db, "Okseinderlår", "Tyskland", "okseinderlar tyskland", false, true, 1.0)
+
+// Oksekød, hakket
+        insertStoreItem(db, "Oksekød, hakket", "Danmark", "hakket oksekod 4-7% fedt danmark", false, true, 0.004)
+        insertStoreItem(db, "Oksekød, hakket", "Frankrig", "hakket oksekod 8-12% fedt oko frankrig", true, true, 0.008)
+        insertStoreItem(db, "Oksekød, hakket", "Holland", "hakket oksekod 4-7% fedt holland", false, true, 0.004)
+        insertStoreItem(db, "Oksekød, hakket", "Tyskland", "hakket oksekod 4-7% fedt tyskland", false, true, 0.004)
+        insertStoreItem(db, "Oksekød, hakket", "Tyskland", "hakket oksekod 8-12% fedt oko tyskland", true, true, 0.008)
+        insertStoreItem(db, "Oksekød, hakket", "Østrig", "hakket oksekod 8-12% fedt oko ostrig", true, true, 0.008)
+
+// Oksemørbrad
+        insertStoreItem(db, "Oksemørbrad", "Danmark", "oksemorbrad danmark", false, true, 1.5)
+        insertStoreItem(db, "Oksemørbrad", "Danmark", "oksemorbrad oko danmark", true, true, 0.5)
+        insertStoreItem(db, "Oksemørbrad", "Holland", "oksemorbrad holland", false, true, 1.5)
+        insertStoreItem(db, "Oksemørbrad", "Tyskland", "oksemorbrad tyskland", false, true, 1.5)
+
+// Peberfrugt
+        insertStoreItem(db, "Peberfrugt", "Holland", "california peberfrugter oko holland", true, true, 0.3)
+        insertStoreItem(db, "Peberfrugt", "Holland", "lose rød peberfrugter holland", false, false, 1 * 0.180)
+        insertStoreItem(db, "Peberfrugt", "Holland", "sod rød snackpeber kernefri holland", false, true, 0.3)
+        insertStoreItem(db, "Peberfrugt", "Israel", "california peberfrugter oko israel", true, true, 0.3)
+        insertStoreItem(db, "Peberfrugt", "Israel", "rod snackpeber oko israel", true, true, 0.18)
+        insertStoreItem(db, "Peberfrugt", "Marokko", "sod rød snackpeber kernefri marokko", false, true, 0.3)
+        insertStoreItem(db, "Peberfrugt", "Spanien", "california peberfrugter oko spanien", true, true, 0.3)
+        insertStoreItem(db, "Peberfrugt", "Spanien", "lose rød peberfrugter spanien", false, false, 1 * 0.180)
+        insertStoreItem(db, "Peberfrugt", "Spanien", "sod rød snackpeber kernefri spanien", false, true, 0.3)
+
+// Persille
+        insertStoreItem(db, "Persille", "Danmark", "bredbladet persille oko danmark", true, true, 0.05)
+        insertStoreItem(db, "Persille", "Danmark", "kruspersille danmark", false, true, 1 * 0.050)
+        insertStoreItem(db, "Persille", "Italien", "bredbladet persille oko italien", true, true, 0.05)
+        insertStoreItem(db, "Persille", "Spanien", "bredbladet persille oko spanien", true, true, 0.05)
+        insertStoreItem(db, "Persille", "Spanien", "hakket persille spanien", false, true, 0.15)
+
+// Persillerod
+        insertStoreItem(db, "Persillerod", "Danmark", "persillerod oko danmark", true, true, 0.5)
+
+// Porre
+        insertStoreItem(db, "Porre", "Danmark", "porrer i bundt danmark", false, true, 3 * 0.15)
+
+// Portobello
+        insertStoreItem(db, "Portobello", "Danmark", "portobello svampe oko danmark", true, true, 0.25)
+
+// Purløg
+        insertStoreItem(db, "Purløg", "Danmark", "purlog danmark", false, true, 1 * 0.1)
+
+// Pære
+        insertStoreItem(db, "Pære", "Holland", "perer holland", false, true, 6 * 0.15)
+        insertStoreItem(db, "Pære", "Sydafrika", "perer sydafrika", false, true, 6 * 0.15)
+        insertStoreItem(db, "Pære", "Italien", "perer oko italien", true, true, 0.5)
+        insertStoreItem(db, "Pære", "Spanien", "perer oko spanien", true, true, 0.5)
+        insertStoreItem(db, "Pære", "Holland", "perer oko holland", true, true, 0.5)
+// Quinoa
+        insertStoreItem(db, "Quinoa", "Peru", "sort quinoa oko peru", true, true, 0.35)
+
+// Radise
+        insertStoreItem(db, "Radise", "Holland", "radiser holland", false, true, 0.25)
+        insertStoreItem(db, "Radise", "Marokko", "radiser oko marokko", true, true, 0.25)
+
+// Rosenkål
+        insertStoreItem(db, "Rosenkål", "Holland", "rosenkal holland", false, true, 0.35)
+        insertStoreItem(db, "Rosenkål", "Marokko", "rosenkal marokko", false, true, 0.35)
+
+// Rødbede
+        insertStoreItem(db, "Rødbede", "Danmark", "rodbeder oko danmark", true, true, 1.0)
+
+// Rødkål
+        insertStoreItem(db, "Rødkål", "Holland", "rod spidskal oko holland", true, true, 1 * 1.0)
+        insertStoreItem(db, "Rødkål", "Portugal", "rod spidskal oko portugal", true, true, 1 * 1.0)
+        insertStoreItem(db, "Rødkål", "Spanien", "rod spidskal oko spanien", true, true, 1 * 1.0)
+
+// Savoykål
+        insertStoreItem(db, "Savoykål", "Italien", "savoykal oko italien", true, true, 1 * 1.0)
+
+// Skinkeschnitzel
+        insertStoreItem(db, "Skinkeschnitzel", "Danmark", "skinkeschnitzler danmark", false, true, 0.29)
+
+// Sorte bønner
+        insertStoreItem(db, "Sorte bønner", "Kina", "sorte bonner oko kina", true, true, 0.24)
+        insertStoreItem(db, "Sorte bønner", "Kina", "sorte bonner kina", false, true, 0.24)
+
+// Spidskål
+        insertStoreItem(db, "Spidskål", "Danmark", "spidskal oko danmark", true, true, 1 * 0.7)
+        insertStoreItem(db, "Spidskål", "Holland", "spidskal holland", false, true, 1 * 0.7)
+        insertStoreItem(db, "Spidskål", "Holland", "spidskal oko holland", true, true, 1 * 0.7)
+        insertStoreItem(db, "Spidskål", "Portugal", "spidskal oko portugal", true, true, 1 * 0.7)
+        insertStoreItem(db, "Spidskål", "Portugal", "spidskal portugal", false, true, 1 * 0.7)
+        insertStoreItem(db, "Spidskål", "Spanien", "spidskal oko spanien", true, true, 1 * 0.7)
+        insertStoreItem(db, "Spidskål", "Spanien", "spidskal spanien", false, true, 1 * 0.7)
+
+// Spinat
+        insertStoreItem(db, "Spinat", "Danmark", "skyllet spinat oko danmark", true, true, 0.2)
+        insertStoreItem(db, "Spinat", "Danmark", "spinat danmark", false, true, 0.25)
+        insertStoreItem(db, "Spinat", "Spanien", "spinat spanien", false, true, 0.25)
+
+// Squash
+        insertStoreItem(db, "Squash", "Spanien", "squash oko spanien", true, false, 1 * 0.28)
+        insertStoreItem(db, "Squash", "Spanien", "squash spanien", false, false, 1 * 0.28)
+
+// Sukkerært
+        insertStoreItem(db, "Sukkerært", "Guatemala", "sukkererter guatemala", false, true, 0.125)
+        insertStoreItem(db, "Sukkerært", "Kenya", "sukkererter kenya", false, true, 0.125)
+        insertStoreItem(db, "Sukkerært", "Zimbabwe", "sukkererter zimbabwe", false, true, 0.125)
+
+// Svinemørbrad
+        insertStoreItem(db, "Svinemørbrad", "Danmark", "svinemorbrad danmark", false, true, 0.50)
+
+// Tomat
+        insertStoreItem(db, "Tomat", "Danmark", "ida tomater danmark", false, true, 0.2)
+        insertStoreItem(db, "Tomat", "Holland", "gusto tomater holland", false, true, 0.45)
+        insertStoreItem(db, "Tomat", "Holland", "tomater oko holland", true, true, 0.5)
+        insertStoreItem(db, "Tomat", "Marokko", "cherry blomme tomatmix marokko", false, true, 0.5)
+        insertStoreItem(db, "Tomat", "Spanien", "gusto tomater spanien", false, true, 0.45)
+        insertStoreItem(db, "Tomat", "Spanien", "tomater oko spanien", true, true, 0.5)
+
+// Vandmelon
+        insertStoreItem(db, "Vandmelon", "Brasilien", "vandmelon brasilien", false, false, 1 * 0.700)
+        insertStoreItem(db, "Vandmelon", "Costa Rica", "vandmelon costa rica", false, false, 1 * 0.700)
+
+// Vegansk fars
+        insertStoreItem(db, "Vegansk fars", "Danmark", "plantebaseret fars hakket vegansk danmark", false, true, 0.35)
+
+// Vindrue
+        insertStoreItem(db, "Vindrue", "Brasilien", "rode druer brasilien", false, true, 0.5)
+        insertStoreItem(db, "Vindrue", "Chile", "rode druer chile", false, true, 0.5)
+        insertStoreItem(db, "Vindrue", "Indien", "rode druer indien", false, true, 0.5)
+        insertStoreItem(db, "Vindrue", "Namibia", "rode druer namibia", false, true, 0.5)
+        insertStoreItem(db, "Vindrue", "Peru", "rode druer peru", false, true, 0.5)
+        insertStoreItem(db, "Vindrue", "Sydafrika", "rode druer sydafrika", false, true, 0.5)
+
+// Æble
+        insertStoreItem(db, "Æble", "Ambrosia", "ebler oko ambrosia", true, true, 1.0)
+        insertStoreItem(db, "Æble", "Chile", "ebler chile", false, true, 1.0)
+        insertStoreItem(db, "Æble", "Elstar", "ebler elstar", false, true, 1.50)
+        insertStoreItem(db, "Æble", "Frankrig", "ebler frankrig", false, true, 1.0)
+        insertStoreItem(db, "Æble", "Frankrig", "ebler oko frankrig", true, true, 4 * 0.150)
+        insertStoreItem(db, "Æble", "Ingrid Marie", "ebler ingrid marie", false, true, 1.50)
+        insertStoreItem(db, "Æble", "Inored", "ebler oko inored", true, true, 6 * 0.150)
+        insertStoreItem(db, "Æble", "Italien", "ebler oko italien", true, true, 4 * 0.150)
+        insertStoreItem(db, "Æble", "Italien", "ebler, royal gala italien", false, true, 8 * 0.150)
+        insertStoreItem(db, "Æble", "Nicoter", "ebler oko nicoter", true, true, 1.0)
+        insertStoreItem(db, "Æble", "Royal Gala", "ebler oko royal gala", true, true, 1.0)
+
+// Ærter
+        insertStoreItem(db, "Ærter", "Danmark", "erter oko danmark", true, true, 0.4)
+        insertStoreItem(db, "Ærter", "Italien", "erter italien", false, true, 0.45)
+        insertStoreItem(db, "Ærter", "Portugal", "erter portugal", false, true, 0.45)
     }
 
-    private fun insertStoreItem(db: SQLiteDatabase, productID: Int, countryID: Int, receiptText: String, organic: Boolean, packaged: Boolean, weight: Double, store: String = "Føtex"): Long {
+    private fun insertStoreItem(db: SQLiteDatabase, productName: String, countryName: String, receiptText: String, organic: Boolean, packaged: Boolean, weight: Double, store: String = "Føtex"): Long {
         val contentValues = ContentValues()
+        val productID = getProductID(db, productName)
+        val countryID = getCountryID(db, countryName)
 
         contentValues.put("productID", productID)
         contentValues.put("countryID", countryID)
@@ -272,6 +661,22 @@ class DBManager(context: Context?) : SQLiteOpenHelper(context, "FoodEmission.db"
         contentValues.put("store", store)
 
         return db.insert("storeItem", null, contentValues)
+    }
+
+    private fun getCountryID(db: SQLiteDatabase, countryName: String): Long{
+        val query = "SELECT ${CountryDao.COLUMN_ID} FROM ${CountryDao.TABLE} WHERE ${CountryDao.COLUMN_NAME} = '$countryName';"
+
+        return select(query, db) {
+            it.getLong(0)
+        }!!
+    }
+
+    private fun getProductID(db: SQLiteDatabase, productName: String): Long{
+        val query = "SELECT ${ProductDao.COLUMN_ID} FROM ${ProductDao.TABLE} WHERE ${ProductDao.COLUMN_NAME} = '$productName';"
+
+        return select(query, db) {
+            it.getLong(0)
+        }!!
     }
 
     fun insert(table: String, contentValues: ContentValues): Long {
@@ -294,8 +699,9 @@ class DBManager(context: Context?) : SQLiteOpenHelper(context, "FoodEmission.db"
         return results
     }
 
-    fun <T> select(query: String, producer: (cursor: Cursor) -> T): T? {
-        val db = readableDatabase
+    fun <T> select(query: String, database: SQLiteDatabase? = null, producer: (cursor: Cursor) -> T): T? {
+        val db = database ?: readableDatabase
+
         val cursor = db.rawQuery(query, null)
         var result: T? = null
 

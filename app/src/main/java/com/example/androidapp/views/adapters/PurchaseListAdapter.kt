@@ -38,6 +38,8 @@ class PurchaseListAdapter(val context: Context, var purchases: List<Purchase>): 
         holder.packagedTV.text = if (purchase.storeItem.packaged) "Nej" else "Ja"
         holder.countryTV.text = purchase.storeItem.country.name
         holder.weightTV.text = "${(purchase.weight * 1000).toInt()} g"
+
+
     }
 
     override fun getItemCount(): Int {

@@ -98,42 +98,58 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="8dp"
+                android:weightSum="4">
 
                 <LinearLayout
                     android:id="@+id/organicLL"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:layout_weight="1"
                     android:gravity="center"
-                    android:orientation="vertical"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                    android:orientation="vertical">
 
                     <TextView
                         style="@style/TextStyle16"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="0dp"
-                        android:text="Øko:"
-                        tools:layout_editor_absoluteX="144dp" />
+                        android:layout_marginStart="0dp"
+                        android:layout_marginLeft="0dp"
+                        android:layout_marginTop="0dp"
+                        android:layout_marginEnd="-1dp"
+                        android:layout_marginRight="-1dp"
+                        android:layout_marginBottom="-1dp"
+                        android:background="@drawable/cell"
+                        android:gravity="center"
+                        android:padding="8dp"
+                        android:text="Øko:" />
 
                     <TextView
                         android:id="@+id/organicTV"
                         style="@style/TextStyle14"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="0dp"
-                        android:text="Nej"
-                        tools:layout_editor_absoluteX="144dp" />
+                        android:layout_marginStart="0dp"
+                        android:layout_marginLeft="0dp"
+                        android:layout_marginTop="-1dp"
+                        android:layout_marginEnd="-1dp"
+                        android:layout_marginRight="-1dp"
+                        android:layout_marginBottom="0dp"
+                        android:background="@drawable/cell"
+                        android:gravity="center"
+                        android:padding="8dp"
+                        android:text="Nej" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/packagedLL"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:layout_weight="1"
                     android:gravity="center"
                     android:orientation="vertical"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -144,26 +160,41 @@
 
                     <TextView
                         style="@style/TextStyle16"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="0dp"
-                        android:text="Løs:"
-                        tools:layout_editor_absoluteX="144dp" />
+                        android:layout_marginStart="0dp"
+                        android:layout_marginLeft="0dp"
+                        android:layout_marginTop="0dp"
+                        android:layout_marginEnd="0dp"
+                        android:layout_marginRight="0dp"
+                        android:layout_marginBottom="-1dp"
+                        android:background="@drawable/cell"
+                        android:gravity="center"
+                        android:padding="8dp"
+                        android:text="Løs:" />
 
                     <TextView
                         android:id="@+id/packagedTV"
                         style="@style/TextStyle14"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="0dp"
-                        android:text="Nej"
-                        tools:layout_editor_absoluteX="144dp" />
+                        android:layout_marginStart="0dp"
+                        android:layout_marginLeft="0dp"
+                        android:layout_marginTop="-1dp"
+                        android:layout_marginEnd="0dp"
+                        android:layout_marginRight="0dp"
+                        android:layout_marginBottom="0dp"
+                        android:background="@drawable/cell"
+                        android:gravity="center"
+                        android:padding="8dp"
+                        android:text="Nej" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/countryLL"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:layout_weight="1"
                     android:gravity="center"
                     android:orientation="vertical"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -174,24 +205,41 @@
 
                     <TextView
                         style="@style/TextStyle16"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="0dp"
+                        android:layout_marginStart="-1dp"
+                        android:layout_marginLeft="-1dp"
+                        android:layout_marginTop="0dp"
+                        android:layout_marginEnd="0dp"
+                        android:layout_marginRight="0dp"
+                        android:layout_marginBottom="-1dp"
+                        android:background="@drawable/cell"
+                        android:gravity="center"
+                        android:padding="8dp"
                         android:text="Land:" />
 
                     <TextView
                         android:id="@+id/countryTV"
                         style="@style/TextStyle14"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="0dp"
+                        android:layout_marginStart="-1dp"
+                        android:layout_marginLeft="-1dp"
+                        android:layout_marginTop="-1dp"
+                        android:layout_marginEnd="0dp"
+                        android:layout_marginRight="0dp"
+                        android:layout_marginBottom="0dp"
+                        android:background="@drawable/cell"
+                        android:gravity="center"
+                        android:padding="8dp"
                         android:text="Marokko" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/weightLL"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:layout_weight="1"
                     android:gravity="center"
                     android:orientation="vertical"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -200,20 +248,36 @@
 
                     <TextView
                         style="@style/TextStyle16"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="0dp"
+                        android:layout_marginStart="-1dp"
+                        android:layout_marginLeft="-1dp"
+                        android:layout_marginTop="0dp"
+                        android:layout_marginEnd="0dp"
+                        android:layout_marginRight="0dp"
+                        android:layout_marginBottom="-1dp"
+                        android:background="@drawable/cell"
+                        android:gravity="center"
+                        android:padding="8dp"
                         android:text="Vægt:" />
 
                     <TextView
                         android:id="@+id/weightTV"
                         style="@style/TextStyle14"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="0dp"
+                        android:layout_marginStart="-1dp"
+                        android:layout_marginLeft="-1dp"
+                        android:layout_marginTop="-1dp"
+                        android:layout_marginEnd="0dp"
+                        android:layout_marginRight="0dp"
+                        android:layout_marginBottom="0dp"
+                        android:background="@drawable/cell"
+                        android:gravity="center"
+                        android:padding="8dp"
                         android:text="1000 g" />
                 </LinearLayout>
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
