@@ -1,5 +1,7 @@
 package com.example.androidapp.models
 
+import android.text.Spanned
+import androidx.core.text.HtmlCompat
 import com.example.androidapp.models.tools.EmissionCalculator
 import java.util.*
 
@@ -34,6 +36,14 @@ class StoreItem (val id: Int,
 
     fun weightToString(inGrams: Boolean = false): String {
         return if (hasValidWeight()) (if (inGrams) (weight * 1000).toInt().toString() else weight.toString()) else ""
+    }
+
+    fun emissionToString(): Spanned{
+        return HtmlCompat.fromHtml("%.2f ".format(emissionPerKg).replace('.', ',') + "kg CO<sub><small><small>2</small></small></sub> pr. kg", HtmlCompat.FROM_HTML_MODE_LEGACY)
+    }
+
+    fun altEmissionDifference(): Int {
+        return (((emissionPerKg - altEmission.second) / emissionPerKg) * 100).toInt()
     }
 
     override fun toString(): String {

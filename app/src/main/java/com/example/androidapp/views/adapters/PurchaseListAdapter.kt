@@ -37,23 +37,23 @@ class PurchaseListAdapter(val context: AppCompatActivity, var purchases: List<Pu
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val purchase = purchases[position]
-        val emission = HtmlCompat.fromHtml("%.2f ".format(purchase.emission).replace('.', ',') + "kg CO<sub><small><small>2</small></small></sub>", HtmlCompat.FROM_HTML_MODE_LEGACY)
         val storeItemEmission = purchase.storeItem.emissionPerKg
         val storeItemAltEmission = purchase.storeItem.altEmission.second
 
         holder.productTV.text = purchase.storeItem.product.name
-        holder.emissionTV.text = emission
+        holder.emissionTV.text = purchase.emissionToString()
+        holder.emissionPerKgTV.text = purchase.storeItem.emissionToString()
         holder.organicTV.text = if (purchase.storeItem.organic) "Ja" else "Nej"
         holder.packagedTV.text = if (purchase.storeItem.packaged) "Nej" else "Ja"
         holder.countryTV.text = purchase.storeItem.country.name
-        holder.weightTV.text = "${(purchase.weight * 1000).toInt()} g"
+        holder.weightTV.text = purchase.weightToStringG()
 
         if (storeItemEmission == storeItemAltEmission) {
             holder.alternativeHeaderTV.text = "Der findes ingen bedre alternativer"
             holder.buttonAlternatives.visibility = View.GONE
         } else {
             holder.alternativeHeaderTV.text = "Der findes et alternativ som er"
-            holder.buttonAlternatives.text = "${(((storeItemEmission - purchase.storeItem.altEmission.second) / purchase.storeItem.emissionPerKg) * 100).toInt()}% BEDRE"
+            holder.buttonAlternatives.text = "${purchase.storeItem.altEmissionDifference()}% BEDRE"
 
             holder.buttonAlternatives.setOnClickListener{
                 AlternativesViewModel.storeItem = purchase.storeItem
@@ -68,9 +68,10 @@ class PurchaseListAdapter(val context: AppCompatActivity, var purchases: List<Pu
     }
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val alternativeHeaderTV = view.alternativeHeaderTV
+        val alternativeHeaderTV: TextView = view.alternativeHeaderTV
         val productTV: TextView = view.productTV
         val emissionTV: TextView = view.emissionTV
+        val emissionPerKgTV: TextView = view.emissionPerKgTV
         val organicTV: TextView = view.organicTV
         val packagedTV: TextView = view.packagedTV
         val countryTV: TextView = view.countryTV

@@ -1,5 +1,7 @@
 package com.example.androidapp.models
 
+import android.text.Spanned
+import androidx.core.text.HtmlCompat
 import java.text.SimpleDateFormat
 import java.time.DayOfWeek
 import java.time.Month
@@ -38,6 +40,10 @@ class Purchase(val id: Int,
 
     override fun toString(): String {
         return "${"%.3f".format(weight).replace('.', ',')} kg, $storeItem"
+    }
+
+    fun emissionToString(): Spanned {
+        return HtmlCompat.fromHtml("%.2f ".format(emission).replace('.', ',') + "kg CO<sub><small><small>2</small></small></sub>", HtmlCompat.FROM_HTML_MODE_LEGACY)
     }
 
     fun weightToStringKg(): String {
