@@ -89,23 +89,29 @@
                 android:background="@android:color/darker_gray" android:id="@+id/line"
                 app:layout_constraintStart_toStartOf="parent" android:layout_marginTop="12dp"
                 app:layout_constraintTop_toBottomOf="@+id/overviewView"/>
+
         <Button
-                android:id="@+id/button_play"
-                android:textColor="@color/black"
-                android:layout_height="wrap_content"
-                app:backgroundTint="@color/colorButton"
-                android:layout_width="wrap_content"
-                android:text="@string/play_button"
-                app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="90dp"
-                app:layout_constraintTop_toBottomOf="@+id/materialCardView2" android:layout_marginTop="4dp"/>
+            android:id="@+id/button_play"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="4dp"
+            android:text="@string/play_button"
+            android:textColor="@color/black"
+            app:backgroundTint="@color/colorButton"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/materialCardView2" />
+
         <Button
-                android:id="@+id/button_showNumbers"
-                android:layout_height="wrap_content"
-                app:backgroundTint="@color/colorButton"
-                android:textColor="@color/black"
-                android:layout_width="wrap_content"
-                android:text="@string/show_button"
-                app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="143dp"
-                app:layout_constraintTop_toBottomOf="@+id/button_play"/>
+            android:id="@+id/button_showNumbers"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="62dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/show_button"
+            android:textColor="@color/black"
+            app:backgroundTint="@color/colorButton"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/button_play" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

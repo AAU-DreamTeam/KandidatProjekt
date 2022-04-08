@@ -40,14 +40,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginStart="8dp"
-            android:hint="Personer i husstanden"
-            >
+            android:hint="Personer">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/number_of_people_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="number" />
+                android:inputType="number"
+                android:text="1" />
 
         </com.google.android.material.textfield.TextInputLayout>
 

@@ -9,7 +9,7 @@ import com.github.mikephil.charting.utils.Transformer
 import com.github.mikephil.charting.utils.Utils
 import com.github.mikephil.charting.utils.ViewPortHandler
 
-class ConsumptionXAxisRenderer(
+class ImageXAxisRenderer(
         viewPortHandler: ViewPortHandler?,
         xAxis: XAxis?,
         transformer: Transformer?,
@@ -68,9 +68,9 @@ class ConsumptionXAxisRenderer(
                             x += width / 2
                         }
                     }
-                    drawImage(c, imageList[i], x.toInt(), pos.toInt(),iconHeight,iconWidth)
+                    drawImage(c, imageList[i/2], x.toInt(), pos.toInt(),iconHeight,iconWidth)
                 }
-                i += 1
+                i += 2
             }
         }
 
