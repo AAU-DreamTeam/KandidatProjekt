@@ -49,9 +49,8 @@ class PurchaseListAdapter(val context: AppCompatActivity, var purchases: List<Pu
         holder.buttonAlternatives.text = "${(((storeItemEmission - purchase.storeItem.altEmission.second) / purchase.storeItem.emissionPerKg) * 100).toInt()}% BEDRE"
 
         holder.buttonAlternatives.setOnClickListener{
-            val resultLauncher = context.registerForActivityResult(ActivityResultContracts.StartActivityForResult()){}
             AlternativesViewModel.storeItem = purchase.storeItem
-            resultLauncher.launch(Intent(context, AlternativesView::class.java))
+            it.context.startActivity(Intent(context, AlternativesView::class.java))
         }
     }
 

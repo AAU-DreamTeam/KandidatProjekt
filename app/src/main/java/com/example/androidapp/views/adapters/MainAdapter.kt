@@ -4,7 +4,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.example.androidapp.views.fragments.mainView.DataView
 import com.example.androidapp.views.fragments.mainView.EmissionView
 import com.example.androidapp.views.fragments.mainView.GraphView
 import com.example.androidapp.views.fragments.mainView.PurchaseView

@@ -26,7 +26,7 @@ import com.example.androidapp.views.GameView
 
 class OverviewView : Fragment() {
     private val viewModel: EmissionViewModel by activityViewModels()
-    private val intervals = arrayListOf<String>("Ugentligt CO2 forbrug","Månedligt CO2 forbrug")
+    private val intervals = arrayListOf("Ugentligt CO2 forbrug","Månedligt CO2 forbrug")
     private lateinit var totalEmissionTV: TextView
     private lateinit var gameTV: TextView
     private lateinit var playButton: Button
@@ -34,7 +34,7 @@ class OverviewView : Fragment() {
     private lateinit var topView: ConstraintLayout
     private lateinit var constraintView: ConstraintLayout
     private lateinit var co2Showcase: AutoCompleteTextView
-    private var pos =0
+    private var pos = 0
     private val iconPerLine = 3
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -132,7 +132,7 @@ class OverviewView : Fragment() {
         }
     }
 
-    fun setupPage(){
+    private fun setupPage(){
         if(viewModel.purchases.value?.isNotEmpty() == false ){
             gameTV.text= resources.getString(R.string.game_no_products_text)
             playButton.visibility= View.INVISIBLE
@@ -156,15 +156,14 @@ class OverviewView : Fragment() {
         co2Showcase.setText(adapter.getItem(0).toString(),false)
 
 
-        co2Showcase.setOnItemClickListener(object : AdapterView.OnItemClickListener {
-            override fun onItemClick(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+        co2Showcase.onItemClickListener =
+            AdapterView.OnItemClickListener { parent, view, position, id ->
                 val selected = parent.getItemAtPosition(position) as String
                 pos = intervals.indexOf(selected)
                 viewModel.loadData()
                 setQuizMaster()
                 observeIcons()
             }
-        })
 
     }
     fun setQuizMaster(){
@@ -199,17 +198,16 @@ class OverviewView : Fragment() {
 
             observeIcons()
         }
-
     }
 
     private fun setHeight(view: View){
-
         val height = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.DONUT) {
             //view.resources.displayMetrics.heightPixels
             findScreenSize(view)
         } else {
             2000
         }
+
         topView.layoutParams.height = (height*0.35).toInt()
         topView.requestLayout()
     }

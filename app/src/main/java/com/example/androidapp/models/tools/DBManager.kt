@@ -77,17 +77,6 @@ class DBManager(context: Context?) : SQLiteOpenHelper(context, "FoodEmission.db"
         insertCountry(db, "Guatemala", 1.9488758, false)//37
         insertCountry(db, "Zimbabwe", 1.3174058, false)//38
         insertCountry(db, "Bulgarien", 0.0849031172, false)//39
-        //insertCountry(db, "",, false)//40
-        //insertCountry(db, "",, false)//41
-        //insertCountry(db, "",, false)//42
-        //insertCountry(db, "",, false)//43
-        //insertCountry(db, "",, false)//44
-        //insertCountry(db, "",, false)//45
-        //insertCountry(db, "",, false)//46
-
-
-
-
     }
 
     private fun insertCountry(db: SQLiteDatabase, name: String, emission: Double, GHPenalty: Boolean) : Long {
@@ -106,7 +95,7 @@ class DBManager(context: Context?) : SQLiteOpenHelper(context, "FoodEmission.db"
         insertProduct(db, "And", PRODUCT_CATEGORY.POULTRY, 1.60, 0.43, 0.00, 0.14, 0.00, false,4,300.0)
         insertProduct(db, "Appelsin", PRODUCT_CATEGORY.VEGETABLES, 0.10, 0.02, 0.00, 0.06, 0.01, true,3,160.0)
         insertProduct(db, "Artiskok", PRODUCT_CATEGORY.VEGETABLES, 0.27, 0.05, 0.00, 0.06, 0.01, false,1,150.0)
-        insertProduct(db, "Asparges, grønne", PRODUCT_CATEGORY.VEGETABLES, 0.27, 0.10, 0.00, 0.06, 0.01, false,3,500.0)
+        insertProduct(db, "Asparges", PRODUCT_CATEGORY.VEGETABLES, 0.27, 0.10, 0.00, 0.06, 0.01, false,3,500.0)
         insertProduct(db, "Aubergine", PRODUCT_CATEGORY.VEGETABLES, 0.16, 0.02, 0.00, 0.14, 0.01, true,8,250.0)
         insertProduct(db, "Avocado", PRODUCT_CATEGORY.VEGETABLES, 0.32, 0.06, 0.00, 0.14, 0.01, true,9,150.0)
         insertProduct(db, "Banan", PRODUCT_CATEGORY.VEGETABLES, 0.21, 0.02, 0.00, 0.14, 0.01, true,7,110.0)
@@ -134,7 +123,7 @@ class DBManager(context: Context?) : SQLiteOpenHelper(context, "FoodEmission.db"
         insertProduct(db, "Græskar", PRODUCT_CATEGORY.VEGETABLES, 0.14, 0.04, 0.00, 0.06, 0.01, false,8,1000.0)
         insertProduct(db, "Grønkål", PRODUCT_CATEGORY.VEGETABLES, 0.10, 0.02, 0.00, 0.06, 0.01, false,4,250.0)
         insertProduct(db, "Grønne bønner", PRODUCT_CATEGORY.GRAINLEGUME, 0.20, 0.04, 0.00, 0.14, 0.01, true,8,250.0)
-        insertProduct(db, "Grønne linser", PRODUCT_CATEGORY.GRAINLEGUME, 0.85, 0.33, 0.00, 0.20, 0.01, false,12,400.0)
+        insertProduct(db, "Linser, tørrede", PRODUCT_CATEGORY.GRAINLEGUME, 0.85, 0.33, 0.00, 0.20, 0.01, false,12,400.0)
         insertProduct(db, "Grøntsagsbøffer", PRODUCT_CATEGORY.GRAINLEGUME, 0.34, 0.10, 0.33, 0.24, 0.03, false,4,226.0)
         insertProduct(db, "Gulerod", PRODUCT_CATEGORY.VEGETABLES, 0.11, 0.02, 0.00, 0.06, 0.01, false,4,1000.0)
         insertProduct(db, "Gås", PRODUCT_CATEGORY.POULTRY, 1.60, 0.43, 0.00, 0.14, 0.00, false,4,2500.0)
@@ -186,13 +175,12 @@ class DBManager(context: Context?) : SQLiteOpenHelper(context, "FoodEmission.db"
         insertProduct(db, "Portobello", PRODUCT_CATEGORY.VEGETABLES, 0.01, 0.01, 0.00, 0.14, 0.01, false,10,250.0)
         insertProduct(db, "Purløg", PRODUCT_CATEGORY.VEGETABLES, 0.16, 0.04, 0.00, 0.06, 0.01, false,4,100.0)
         insertProduct(db, "Pære", PRODUCT_CATEGORY.VEGETABLES, 0.15, 0.03, 0.00, 0.14, 0.01, false,4,150.0)
-        insertProduct(db, "Quinoa, sort", PRODUCT_CATEGORY.GRAINLEGUME, 1.04, 0.63, 0.00, 0.20, 0.01, false,9,300.0)
+        insertProduct(db, "Quinoa", PRODUCT_CATEGORY.GRAINLEGUME, 1.04, 0.63, 0.00, 0.20, 0.01, false,9,300.0)
         insertProduct(db, "Rabarber", PRODUCT_CATEGORY.VEGETABLES, 0.13, 0.03, 0.00, 0.06, 0.01, false,4,100.0)
         insertProduct(db, "Radise", PRODUCT_CATEGORY.VEGETABLES, 0.13, 0.03, 0.00, 0.14, 0.01, false,4,250.0)
         insertProduct(db, "Ribs", PRODUCT_CATEGORY.VEGETABLES, 0.25, 0.08, 0.00, 0.14, 0.01, false,4,125.0)
         insertProduct(db, "Rosenkål", PRODUCT_CATEGORY.VEGETABLES, 0.10, 0.02, 0.00, 0.06, 0.01, false,4,350.0)
         insertProduct(db, "Rødbede", PRODUCT_CATEGORY.VEGETABLES, 0.17, 0.01, 0.00, 0.06, 0.01, false,4,1000.0)
-        insertProduct(db, "Røde linser", PRODUCT_CATEGORY.GRAINLEGUME, 0.85, 0.33, 0.00, 0.20, 0.01, false,12,400.0)
         insertProduct(db, "Rødkål", PRODUCT_CATEGORY.VEGETABLES, 0.10, 0.02, 0.00, 0.06, 0.01, false,4,100.0)
         insertProduct(db, "Icebergsalat", PRODUCT_CATEGORY.VEGETABLES, 0.08, 0.02, 0.00, 0.06, 0.01, false,3,400.0)
         insertProduct(db, "Savoykål", PRODUCT_CATEGORY.VEGETABLES, 0.10, 0.02, 0.00, 0.06, 0.01, false,4,800.0)
@@ -205,6 +193,7 @@ class DBManager(context: Context?) : SQLiteOpenHelper(context, "FoodEmission.db"
         insertProduct(db, "Spinat", PRODUCT_CATEGORY.VEGETABLES, 0.12, 0.03, 0.00, 0.06, 0.01, false,4,200.0)
         insertProduct(db, "Squash", PRODUCT_CATEGORY.VEGETABLES, 0.14, 0.04, 0.00, 0.06, 0.01, true,8,280.0)
         insertProduct(db, "Stikkelsbær", PRODUCT_CATEGORY.VEGETABLES, 0.21, 0.09, 0.00, 0.14, 0.01, false,10,250.0)
+        insertProduct(db, "Tofu", PRODUCT_CATEGORY.GRAINLEGUME, 0.18, 0.11, 0.91, 0.26, 0.00, false, 39, 200.0)
         insertProduct(db, "Tomat", PRODUCT_CATEGORY.VEGETABLES, 0.07, 0.01, 0.00, 0.14, 0.01, true,3,500.0)
         insertProduct(db, "Tranebær", PRODUCT_CATEGORY.VEGETABLES, 0.15, 0.03, 0.00, 0.14, 0.01, false,14,250.0)
         insertProduct(db, "Vandmelon", PRODUCT_CATEGORY.VEGETABLES, 0.03, 0.01, 0.00, 0.00, 0.01, false,3,700.0)

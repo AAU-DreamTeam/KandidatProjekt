@@ -17,6 +17,8 @@ class AlternativesView : AppCompatActivity() {
 
         alternativeListRV.layoutManager = LinearLayoutManager(this)
 
+        AlternativesViewModel.initiate(this)
+
         AlternativesViewModel.alternatives.observe(this) { list ->
             alternativeListRV.adapter = AlternativesAdapter(this, AlternativesViewModel.storeItem!!, list)
         }

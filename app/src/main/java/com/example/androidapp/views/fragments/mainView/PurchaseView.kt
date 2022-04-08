@@ -5,13 +5,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.androidapp.R
 import com.example.androidapp.viewmodels.EmissionViewModel
-import com.example.androidapp.views.adapters.EmissionListAdapter
 import com.example.androidapp.views.adapters.TripListAdapter
-import kotlinx.android.synthetic.main.fragment_list.*
 import kotlinx.android.synthetic.main.fragment_purchase_view.*
 
 class PurchaseView : Fragment() {
@@ -30,7 +29,7 @@ class PurchaseView : Fragment() {
         tripListRV.layoutManager = LinearLayoutManager(requireContext())
 
         viewModel.trips.observe(viewLifecycleOwner) { list ->
-            tripListRV.adapter = TripListAdapter(requireContext(), list)
+            tripListRV.adapter = TripListAdapter(requireContext() as AppCompatActivity, list)
         }
     }
 }

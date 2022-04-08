@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,7 +16,7 @@ import com.example.androidapp.models.Purchase
 import com.example.androidapp.models.Trip
 import kotlinx.android.synthetic.main.trip_list_item.view.*
 
-class TripListAdapter(val context: Context, var trips: List<Trip>):  RecyclerView.Adapter<TripListAdapter.ViewHolder>(){
+class TripListAdapter(val context: AppCompatActivity, var trips: List<Trip>):  RecyclerView.Adapter<TripListAdapter.ViewHolder>(){
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
             LayoutInflater.from(context).inflate(
@@ -66,7 +67,7 @@ class TripListAdapter(val context: Context, var trips: List<Trip>):  RecyclerVie
             collapseIcon.setImageResource(R.drawable.ic_expand_less_black_24dp)
         }
 
-        fun setUpPurchases(context: Context, purchases: List<Purchase>){
+        fun setUpPurchases(context: AppCompatActivity, purchases: List<Purchase>){
             if (!purchasesLoaded) {
                 purchaseListRV.layoutManager = LinearLayoutManager(context)
                 purchaseListRV.adapter = PurchaseListAdapter(context, purchases)

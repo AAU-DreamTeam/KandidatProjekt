@@ -20,19 +20,16 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 class EmissionView : Fragment() {
     private val viewModel: EmissionViewModel by activityViewModels()
     private lateinit var overviewView: OverviewView
-    private lateinit var purchaseView: PurchaseView
     private lateinit var fragmentFL: FrameLayout
     private lateinit var scanButton: FloatingActionButton
-    private lateinit var prevButton: MaterialButton
-    private lateinit var nextButton: MaterialButton
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val rootView = inflater.inflate(R.layout.fragment_emission, container, false)
+
         viewModel.initiate(requireContext())
-        scanButton=requireActivity().findViewById(R.id.floatingScan)
+        scanButton = requireActivity().findViewById(R.id.floatingScan)
         overviewView = OverviewView()
-        purchaseView = PurchaseView()
         fragmentFL = rootView.findViewById(R.id.fragment_fl)
 
         viewModel.loadData()
@@ -44,12 +41,6 @@ class EmissionView : Fragment() {
         return rootView
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-    }
-
-
     private fun setUpScanButton() {
         val resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             viewModel.loadData()
@@ -58,16 +49,6 @@ class EmissionView : Fragment() {
 
         scanButton.setOnClickListener{
             resultLauncher.launch(Intent(activity, ScannerView::class.java))
-        }
-    }
-
-    private fun setUpMonthButtons(){
-        prevButton.setOnClickListener {
-            viewModel.onViewPrev()
-        }
-
-        nextButton.setOnClickListener {
-            viewModel.onViewNext()
         }
     }
 }
