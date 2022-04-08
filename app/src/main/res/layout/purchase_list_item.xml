@@ -289,9 +289,11 @@
                 android:layout_marginRight="8dp"
                 android:layout_marginBottom="8dp"
                 android:gravity="center"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:paddingBottom="8dp">
 
                 <TextView
+                    android:id="@+id/alternativeHeaderTV"
                     style="@style/TextStyle16"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -304,9 +306,9 @@
                     style="@style/TextStyle18"
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
-                    android:layout_margin="8dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginRight="8dp"
+                    android:layout_marginBottom="0dp"
                     android:insetTop="0dp"
                     android:insetBottom="0dp"
                     android:minWidth="0dp"

@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.androidapp.R
 import com.example.androidapp.models.Purchase
 import com.example.androidapp.models.StoreItem
+import com.example.androidapp.models.enums.PRODUCT_CATEGORY
 import kotlinx.android.synthetic.main.alternative_list_item.view.*
 
 class AlternativesAdapter(val context: Context, val storeItem: StoreItem, var alternatives: List<StoreItem>): RecyclerView.Adapter<AlternativesAdapter.ViewHolder>() {
@@ -32,9 +33,14 @@ class AlternativesAdapter(val context: Context, val storeItem: StoreItem, var al
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = alternatives[position]
-        val emission = HtmlCompat.fromHtml("%.1f ".format(item.emissionPerKg).replace('.', ',') + "kg CO<sub><small><small>2</small></small></sub>", HtmlCompat.FROM_HTML_MODE_LEGACY)
+        val emission = HtmlCompat.fromHtml("%.2f ".format(item.emissionPerKg).replace('.', ',') + "kg CO<sub><small><small>2</small></small></sub> pr. kg", HtmlCompat.FROM_HTML_MODE_LEGACY)
 
-        holder.productTV.text = item.product.name
+        if (item.product.productCategory ==  PRODUCT_CATEGORY.VEGETABLES) {
+            holder.productTV.visibility = View.GONE
+        } else {
+            holder.productTV.text = item.product.name
+        }
+
         holder.differenceTV.text = "${(((storeItem.emissionPerKg - item.emissionPerKg) / storeItem.emissionPerKg) * 100).toInt()}% bedre"
         holder.emissionTV.text = emission
         holder.organicTV.text = if (item.organic) "Ja" else "Nej"

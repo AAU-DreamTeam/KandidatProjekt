@@ -3,6 +3,7 @@ package com.example.androidapp.models.daos
 import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
+import android.util.Log
 import com.example.androidapp.models.tools.DBManager
 import com.example.androidapp.models.tools.EmissionCalculator
 import com.example.androidapp.models.StoreItem
@@ -57,8 +58,10 @@ class StoreItemDao(private val dbManager: DBManager) {
                     "INNER JOIN ${ProductDao.TABLE} ON $COLUMN_PRODUCT_ID = ${ProductDao.TABLE}.${ProductDao.COLUMN_ID} " +
                     "INNER JOIN ${CountryDao.TABLE} ON $TABLE.$COLUMN_COUNTRY_ID = ${CountryDao.TABLE}.${CountryDao.COLUMN_ID} " +
                     "WHERE $COLUMN_PRODUCT_ID = ${storeItem.product.id} " +
-                    "GROUP BY $TABLE.$COLUMN_ORGANIC, $TABLE.$COLUMN_PACKAGED;"
+                    "GROUP BY $TABLE.$COLUMN_ORGANIC, $TABLE.$COLUMN_PACKAGED " +
+                    "HAVING EMISSION < ${storeItem.emissionPerKg};"
 
+        println(query)
         return dbManager.selectMultiple(query) {
             produceStoreItem(it)
         }
