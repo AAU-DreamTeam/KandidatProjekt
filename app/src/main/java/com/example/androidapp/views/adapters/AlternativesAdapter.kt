@@ -35,13 +35,13 @@ class AlternativesAdapter(val context: Context, val storeItem: StoreItem, var al
         val item = alternatives[position]
         val emission = HtmlCompat.fromHtml("%.2f ".format(item.emissionPerKg).replace('.', ',') + "kg CO<sub><small><small>2</small></small></sub> pr. kg", HtmlCompat.FROM_HTML_MODE_LEGACY)
 
-        if (item.product.productCategory ==  PRODUCT_CATEGORY.VEGETABLES) {
+        if (storeItem.product.productCategory ==  PRODUCT_CATEGORY.VEGETABLES) {
             holder.productTV.visibility = View.GONE
         } else {
             holder.productTV.text = item.product.name
         }
 
-        holder.differenceTV.text = "${(((storeItem.emissionPerKg - item.emissionPerKg) / storeItem.emissionPerKg) * 100).toInt()}% bedre"
+        holder.differenceTV.text = "${item.difference(storeItem)}% bedre"
         holder.emissionTV.text = emission
         holder.organicTV.text = if (item.organic) "Ja" else "Nej"
         holder.packagedTV.text = if (item.packaged) "Nej" else "Ja"

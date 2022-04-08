@@ -42,8 +42,12 @@ class StoreItem (val id: Int,
         return HtmlCompat.fromHtml("%.2f ".format(emissionPerKg).replace('.', ',') + "kg CO<sub><small><small>2</small></small></sub> pr. kg", HtmlCompat.FROM_HTML_MODE_LEGACY)
     }
 
-    fun altEmissionDifference(): Int {
-        return (((emissionPerKg - altEmission.second) / emissionPerKg) * 100).toInt()
+    fun altEmissionDifference(): Spanned {
+        return HtmlCompat.fromHtml("%.2f ".format(((emissionPerKg - altEmission.second) / emissionPerKg) * 100).replace('.', ','), HtmlCompat.FROM_HTML_MODE_LEGACY)
+    }
+
+    fun difference(compare: StoreItem): Spanned {
+        return HtmlCompat.fromHtml("%.2f ".format((((compare.emissionPerKg - emissionPerKg) / compare.emissionPerKg) * 100)).replace('.', ','), HtmlCompat.FROM_HTML_MODE_LEGACY)
     }
 
     override fun toString(): String {
