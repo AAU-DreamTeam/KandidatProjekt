@@ -284,8 +284,20 @@ class PurchaseDao(context: Context) {
                     "INNER JOIN ${CountryDao.TABLE} ON ${StoreItemDao.TABLE}.${StoreItemDao.COLUMN_COUNTRY_ID} = ${CountryDao.TABLE}.${CountryDao.COLUMN_ID} " +
                     "ORDER BY $TABLE.$COLUMN_TIMESTAMP DESC;"
 
-        return dbManager.select<List<Trip>>(query) {
+        val trips = dbManager.select<List<Trip>>(query) {
             produceTrip(it)
         } ?: listOf()
+
+        getAltEmissions(trips)
+
+        return trips
+    }
+
+    private fun getAltEmissions(trips: List<Trip>){
+        for (trip in trips) {
+            for (purchase in trip.purchases) {
+                StoreItemDao(dbManager).loadAltEmission(purchase.storeItem)
+            }
+        }
     }
 }

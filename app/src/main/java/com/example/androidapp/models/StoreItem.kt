@@ -23,6 +23,7 @@ class StoreItem (val id: Int,
     var weightDefault = false
     var receiptText = _receiptText
     val emissionPerKg: Double get() = EmissionCalculator.calcEmission(this)
+    var altEmission: Pair<Int, Double> = Pair(0, emissionPerKg)
 
     fun hasValidWeight(): Boolean {
         return weight > 0.0

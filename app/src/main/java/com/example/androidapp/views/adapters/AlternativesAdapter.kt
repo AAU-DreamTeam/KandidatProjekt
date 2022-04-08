@@ -11,8 +11,14 @@ import com.example.androidapp.models.Purchase
 import com.example.androidapp.models.StoreItem
 import kotlinx.android.synthetic.main.alternative_list_item.view.*
 
-class AlternativesAdapter(val context: Context, val purchase: Purchase, var alternatives: List<StoreItem>): RecyclerView.Adapter<AlternativesAdapter.ViewHolder>() {
+class AlternativesAdapter(val context: Context, val storeItem: StoreItem, var alternatives: List<StoreItem>): RecyclerView.Adapter<AlternativesAdapter.ViewHolder>() {
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val productTV = view.productTV
+        val differenceTV = view.differenceTV
+        val emissionTV = view.emissionTV
+        val organicTV = view.organicTV
+        val packagedTV = view.packagedTV
+        val countryTV = view.countryTV
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -25,11 +31,15 @@ class AlternativesAdapter(val context: Context, val purchase: Purchase, var alte
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val storeItem = alternatives[position]
-        val emissionAlt = purchase.weight * storeItem.emissionPerKg
-        val tempPurchase = "${purchase.weightToStringKg()}, $storeItem"
-        val tempEmission = HtmlCompat.fromHtml("%.3f ".format(emissionAlt).replace('.',',') + "kg CO<sub><small><small>2</small></small></sub>", HtmlCompat.FROM_HTML_MODE_LEGACY)
-        val tempPercentage = "${if (emissionAlt > purchase.emission) "+" else ""}${"%.3f ".format(((emissionAlt - purchase.emission)/purchase.emission)*100).replace('.', ',')} %"
+        val item = alternatives[position]
+        val emission = HtmlCompat.fromHtml("%.1f ".format(item.emissionPerKg).replace('.', ',') + "kg CO<sub><small><small>2</small></small></sub>", HtmlCompat.FROM_HTML_MODE_LEGACY)
+
+        holder.productTV.text = item.product.name
+        holder.differenceTV.text = "${(((storeItem.emissionPerKg - item.emissionPerKg) / storeItem.emissionPerKg) * 100).toInt()}% bedre"
+        holder.emissionTV.text = emission
+        holder.organicTV.text = if (item.organic) "Ja" else "Nej"
+        holder.packagedTV.text = if (item.packaged) "Nej" else "Ja"
+        holder.countryTV.text = item.country.name
     }
 
     override fun getItemCount(): Int {

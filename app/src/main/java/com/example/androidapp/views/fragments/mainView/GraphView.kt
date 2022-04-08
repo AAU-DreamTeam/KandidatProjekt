@@ -15,7 +15,6 @@ import androidx.fragment.app.activityViewModels
 import com.example.androidapp.R
 import com.example.androidapp.models.Purchase
 import com.example.androidapp.viewmodels.EmissionViewModel
-import com.example.androidapp.views.AxisRenderers.BarXAxisRenderer
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.charts.CombinedChart
 import com.github.mikephil.charting.charts.LineChart

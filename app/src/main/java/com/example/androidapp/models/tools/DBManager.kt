@@ -50,11 +50,44 @@ class DBManager(context: Context?) : SQLiteOpenHelper(context, "FoodEmission.db"
         insertCountry(db, "Peru",1.9488758 , false)//9
         insertCountry(db, "Tyskland",0.113238 , true)//10
         insertCountry(db, "England",0.2601678 , true)//11
-        insertCountry(db, "Turkey",1.0170902 , false)//12
+        insertCountry(db, "Tyrkiet",1.0170902 , false)//12
         insertCountry(db, "USA",1.2230248 , true)//14
         insertCountry(db, "Indien",2.0416272 , false)//15
         insertCountry(db, "New Zealand",2.3757766 , false)//16
         insertCountry(db, "Brasilien",1.9488758 , false)//17
+        insertCountry(db, "Frankrig", 0.2524788, false)//18
+        insertCountry(db, "Egypten", 1.3174058, false)//19
+        insertCountry(db, "Sydafrika", 1.3174058, false)//20
+        insertCountry(db, "Chile", 1.9488758, false)//21
+        insertCountry(db, "Colombia", 1.9488758, false)//22
+        insertCountry(db, "Israel", 1.3393066, false)//23
+        insertCountry(db, "Mexico", 1.9488758, false)//24
+        insertCountry(db, "Ecuador", 1.9488758, false)//25
+        insertCountry(db, "Argentina", 1.9488758, false)//26
+        insertCountry(db, "Belgien", 0.1616088, true)//27
+        insertCountry(db, "Portugal", 0.02796, false)//28
+        insertCountry(db, "Mozambique", 1.3174058, false)//29
+        insertCountry(db, "Kenya", 1.3174058, false)//30
+        insertCountry(db, "Senegal", 1.3174058, false)//31
+        insertCountry(db, "Costa Rica", 1.9488758, false)//32
+        insertCountry(db, "Vietnam", 2.3757766, false)//33
+        insertCountry(db, "Den Dominikanske Republik", 1.9488758, false)//34
+        insertCountry(db, "Østrig", 0.21669, true)//35
+        insertCountry(db, "Namibia", 1.3174058, false)//36
+        insertCountry(db, "Guatemala", 1.9488758, false)//37
+        insertCountry(db, "Zimbabwe", 1.3174058, false)//38
+        insertCountry(db, "Bulgarien", 0.0849031172, false)//39
+        //insertCountry(db, "",, false)//40
+        //insertCountry(db, "",, false)//41
+        //insertCountry(db, "",, false)//42
+        //insertCountry(db, "",, false)//43
+        //insertCountry(db, "",, false)//44
+        //insertCountry(db, "",, false)//45
+        //insertCountry(db, "",, false)//46
+
+
+
+
     }
 
     private fun insertCountry(db: SQLiteDatabase, name: String, emission: Double, GHPenalty: Boolean) : Long {
@@ -68,12 +101,12 @@ class DBManager(context: Context?) : SQLiteOpenHelper(context, "FoodEmission.db"
     }
 
     private fun insertProductData(db: SQLiteDatabase) {
-        insertProduct(db, "Agurk", PRODUCT_CATEGORY.NONE, 0.05, 0.01, 0.00, 0.14, 0.01, true,4,500.0)
+        insertProduct(db, "Agurk", PRODUCT_CATEGORY.NONE, 0.05, 0.01, 0.00, 0.14, 0.01, true,3,300.0)
         insertProduct(db, "Ananas", PRODUCT_CATEGORY.NONE, 0.09, 0.02, 0.00, 0.00, 0.01, true,7,1200.0)
         insertProduct(db, "And", PRODUCT_CATEGORY.POULTRY, 1.60, 0.43, 0.00, 0.14, 0.00, false,4,300.0)
         insertProduct(db, "Appelsin", PRODUCT_CATEGORY.NONE, 0.10, 0.02, 0.00, 0.06, 0.01, true,3,160.0)
         insertProduct(db, "Artiskok", PRODUCT_CATEGORY.NONE, 0.27, 0.05, 0.00, 0.06, 0.01, false,1,150.0)
-        insertProduct(db, "Asparges, grønne", PRODUCT_CATEGORY.NONE, 0.27, 0.10, 0.00, 0.06, 0.01, false,3,500.0)
+        insertProduct(db, "Asparges", PRODUCT_CATEGORY.NONE, 0.27, 0.10, 0.00, 0.06, 0.01, false,3,500.0)
         insertProduct(db, "Aubergine", PRODUCT_CATEGORY.NONE, 0.16, 0.02, 0.00, 0.14, 0.01, true,8,250.0)
         insertProduct(db, "Avocado", PRODUCT_CATEGORY.NONE, 0.32, 0.06, 0.00, 0.14, 0.01, true,9,150.0)
         insertProduct(db, "Banan", PRODUCT_CATEGORY.NONE, 0.21, 0.02, 0.00, 0.14, 0.01, true,7,110.0)
@@ -101,7 +134,7 @@ class DBManager(context: Context?) : SQLiteOpenHelper(context, "FoodEmission.db"
         insertProduct(db, "Græskar", PRODUCT_CATEGORY.NONE, 0.14, 0.04, 0.00, 0.06, 0.01, false,8,1000.0)
         insertProduct(db, "Grønkål", PRODUCT_CATEGORY.NONE, 0.10, 0.02, 0.00, 0.06, 0.01, false,4,250.0)
         insertProduct(db, "Grønne bønner", PRODUCT_CATEGORY.NONE, 0.20, 0.04, 0.00, 0.14, 0.01, true,8,250.0)
-        insertProduct(db, "Grønne linser", PRODUCT_CATEGORY.VEGAN, 0.85, 0.33, 0.00, 0.20, 0.01, false,12,400.0)
+        insertProduct(db, "Linser, tørrede", PRODUCT_CATEGORY.VEGAN, 0.85, 0.33, 0.00, 0.20, 0.01, false,12,400.0)
         insertProduct(db, "Grøntsagsbøffer", PRODUCT_CATEGORY.NONE, 0.34, 0.10, 0.33, 0.24, 0.03, false,4,226.0)
         insertProduct(db, "Gulerod", PRODUCT_CATEGORY.NONE, 0.11, 0.02, 0.00, 0.06, 0.01, false,4,1000.0)
         insertProduct(db, "Gås", PRODUCT_CATEGORY.POULTRY, 1.60, 0.43, 0.00, 0.14, 0.00, false,4,2500.0)
@@ -153,13 +186,12 @@ class DBManager(context: Context?) : SQLiteOpenHelper(context, "FoodEmission.db"
         insertProduct(db, "Portobello", PRODUCT_CATEGORY.NONE, 0.01, 0.01, 0.00, 0.14, 0.01, false,10,250.0)
         insertProduct(db, "Purløg", PRODUCT_CATEGORY.NONE, 0.16, 0.04, 0.00, 0.06, 0.01, false,4,100.0)
         insertProduct(db, "Pære", PRODUCT_CATEGORY.NONE, 0.15, 0.03, 0.00, 0.14, 0.01, false,4,150.0)
-        insertProduct(db, "Quinoa, sort", PRODUCT_CATEGORY.VEGAN, 1.04, 0.63, 0.00, 0.20, 0.01, false,9,300.0)
+        insertProduct(db, "Quinoa", PRODUCT_CATEGORY.VEGAN, 1.04, 0.63, 0.00, 0.20, 0.01, false,9,300.0)
         insertProduct(db, "Rabarber", PRODUCT_CATEGORY.NONE, 0.13, 0.03, 0.00, 0.06, 0.01, false,4,100.0)
         insertProduct(db, "Radise", PRODUCT_CATEGORY.NONE, 0.13, 0.03, 0.00, 0.14, 0.01, false,4,250.0)
         insertProduct(db, "Ribs", PRODUCT_CATEGORY.NONE, 0.25, 0.08, 0.00, 0.14, 0.01, false,4,125.0)
         insertProduct(db, "Rosenkål", PRODUCT_CATEGORY.NONE, 0.10, 0.02, 0.00, 0.06, 0.01, false,4,350.0)
         insertProduct(db, "Rødbede", PRODUCT_CATEGORY.NONE, 0.17, 0.01, 0.00, 0.06, 0.01, false,4,1000.0)
-        insertProduct(db, "Røde linser", PRODUCT_CATEGORY.VEGAN, 0.85, 0.33, 0.00, 0.20, 0.01, false,12,400.0)
         insertProduct(db, "Rødkål", PRODUCT_CATEGORY.NONE, 0.10, 0.02, 0.00, 0.06, 0.01, false,4,100.0)
         insertProduct(db, "Icebergsalat", PRODUCT_CATEGORY.NONE, 0.08, 0.02, 0.00, 0.06, 0.01, false,3,400.0)
         insertProduct(db, "Savoykål", PRODUCT_CATEGORY.NONE, 0.10, 0.02, 0.00, 0.06, 0.01, false,4,800.0)
@@ -172,7 +204,8 @@ class DBManager(context: Context?) : SQLiteOpenHelper(context, "FoodEmission.db"
         insertProduct(db, "Spinat", PRODUCT_CATEGORY.NONE, 0.12, 0.03, 0.00, 0.06, 0.01, false,4,200.0)
         insertProduct(db, "Squash", PRODUCT_CATEGORY.NONE, 0.14, 0.04, 0.00, 0.06, 0.01, true,8,280.0)
         insertProduct(db, "Stikkelsbær", PRODUCT_CATEGORY.NONE, 0.21, 0.09, 0.00, 0.14, 0.01, false,10,250.0)
-        insertProduct(db, "Tomat", PRODUCT_CATEGORY.NONE, 0.07, 0.01, 0.00, 0.14, 0.01, true,3,500.0)
+        insertProduct(db, "Tofu", PRODUCT_CATEGORY.VEGAN, 0.18, 0.11, 0.91, 0.26, 0.00, false, 39, 200.0)
+        insertProduct(db, "Tomat", PRODUCT_CATEGORY.NONE, 0.07, 0.01, 0.00, 0.14, 0.01, true,3,75.0)
         insertProduct(db, "Tranebær", PRODUCT_CATEGORY.NONE, 0.15, 0.03, 0.00, 0.14, 0.01, false,14,250.0)
         insertProduct(db, "Vandmelon", PRODUCT_CATEGORY.NONE, 0.03, 0.01, 0.00, 0.00, 0.01, false,3,700.0)
         insertProduct(db, "Vegansk fars", PRODUCT_CATEGORY.VEGAN, 0.15, 0.15, 0.09, 0.14, 0.00, false,4,350.0)
@@ -238,7 +271,7 @@ class DBManager(context: Context?) : SQLiteOpenHelper(context, "FoodEmission.db"
         insertStoreItem(db, "Avocado", "Mexico", "spisemodne avocadoer mexico", false, true, 6 * 0.150)
 
 // Banan
-        insertStoreItem(db, "Banan", "Equador", "bananer 4 pak oko ecuador", true, true, 4 * 0.110)
+        insertStoreItem(db, "Banan", "Ecuador", "bananer 4 pak oko ecuador", true, true, 4 * 0.110)
 
 // Basilikum
         insertStoreItem(db, "Basilikum", "Danmark", "basilikum danmark", false, true, 1 * 0.100)
@@ -338,9 +371,9 @@ class DBManager(context: Context?) : SQLiteOpenHelper(context, "FoodEmission.db"
         insertStoreItem(db, "Grisekød, hakket", "Danmark", "hakket grisekod 8-12% fedt friland oko danmark", true, true, 0.008)
         insertStoreItem(db, "Grisekød, hakket", "Danmark", "hakket grisekod 8-12% fedt", false, true, 0.008)
 
-// Grisekød, nakkefilet (nakkekotelet)
-        insertStoreItem(db, "Grisekød, nakkefilet (nakkekotelet)", "Danmark", "nakkefilet danmark", false, true, 1.50)
-        insertStoreItem(db, "Grisekød, nakkefilet (nakkekotelet)", "Danmark", "nakkekoteletter oko danmark", true, true, 0.27)
+// Grisekød, nakkefilet
+        insertStoreItem(db, "Grisekød, nakkefilet", "Danmark", "nakkefilet danmark", false, true, 1.50)
+        insertStoreItem(db, "Grisekød, nakkefilet", "Danmark", "nakkekoteletter oko danmark", true, true, 0.27)
 
 // Grisekød, svinekam med svær
         insertStoreItem(db, "Grisekød, svinekam med svær", "Danmark", "fleskesteg krogmodnet danmark", false, true, 1.1)
@@ -436,8 +469,8 @@ class DBManager(context: Context?) : SQLiteOpenHelper(context, "FoodEmission.db"
         insertStoreItem(db, "Kidney bønner", "Kina", "kidneybonner kina", false, true, 0.240)
 
 // Kikærter
-        insertStoreItem(db, "Kikærter", "Tyrkiet", "kikerter oko tyrkiet", true, true, 0.41)
-        insertStoreItem(db, "Kikærter", "Tyrkiet", "kikerter tyrkiet", false, true, 0.24)
+        insertStoreItem(db, "Kikærter, tørrede", "Tyrkiet", "kikerter oko tyrkiet", true, true, 0.41)
+        insertStoreItem(db, "Kikærter, tørrede", "Tyrkiet", "kikerter tyrkiet", false, true, 0.24)
 
 // Kiwi
         insertStoreItem(db, "Kiwi", "Chile", "kiwi oko chile", true, true, 0.5)
@@ -609,13 +642,13 @@ class DBManager(context: Context?) : SQLiteOpenHelper(context, "FoodEmission.db"
         insertStoreItem(db, "Squash", "Spanien", "squash oko spanien", true, false, 1 * 0.28)
         insertStoreItem(db, "Squash", "Spanien", "squash spanien", false, false, 1 * 0.28)
 
-// Sukkerært
-        insertStoreItem(db, "Sukkerært", "Guatemala", "sukkererter guatemala", false, true, 0.125)
-        insertStoreItem(db, "Sukkerært", "Kenya", "sukkererter kenya", false, true, 0.125)
-        insertStoreItem(db, "Sukkerært", "Zimbabwe", "sukkererter zimbabwe", false, true, 0.125)
 
 // Svinemørbrad
         insertStoreItem(db, "Svinemørbrad", "Danmark", "svinemorbrad danmark", false, true, 0.50)
+
+        // Tofu
+        insertStoreItem(db, "Tofu", "Bulgarien", "tofu", false, true, 0.2)
+        insertStoreItem(db, "Tofu", "Bulgarien", "tofu oko", false, true, 0.45)
 
 // Tomat
         insertStoreItem(db, "Tomat", "Danmark", "ida tomater danmark", false, true, 0.2)
@@ -641,22 +674,19 @@ class DBManager(context: Context?) : SQLiteOpenHelper(context, "FoodEmission.db"
         insertStoreItem(db, "Vindrue", "Sydafrika", "rode druer sydafrika", false, true, 0.5)
 
 // Æble
-        insertStoreItem(db, "Æble", "Ambrosia", "ebler oko ambrosia", true, true, 1.0)
         insertStoreItem(db, "Æble", "Chile", "ebler chile", false, true, 1.0)
-        insertStoreItem(db, "Æble", "Elstar", "ebler elstar", false, true, 1.50)
         insertStoreItem(db, "Æble", "Frankrig", "ebler frankrig", false, true, 1.0)
         insertStoreItem(db, "Æble", "Frankrig", "ebler oko frankrig", true, true, 4 * 0.150)
-        insertStoreItem(db, "Æble", "Ingrid Marie", "ebler ingrid marie", false, true, 1.50)
-        insertStoreItem(db, "Æble", "Inored", "ebler oko inored", true, true, 6 * 0.150)
         insertStoreItem(db, "Æble", "Italien", "ebler oko italien", true, true, 4 * 0.150)
         insertStoreItem(db, "Æble", "Italien", "ebler, royal gala italien", false, true, 8 * 0.150)
-        insertStoreItem(db, "Æble", "Nicoter", "ebler oko nicoter", true, true, 1.0)
-        insertStoreItem(db, "Æble", "Royal Gala", "ebler oko royal gala", true, true, 1.0)
 
 // Ærter
         insertStoreItem(db, "Ærter", "Danmark", "erter oko danmark", true, true, 0.4)
         insertStoreItem(db, "Ærter", "Italien", "erter italien", false, true, 0.45)
         insertStoreItem(db, "Ærter", "Portugal", "erter portugal", false, true, 0.45)
+        insertStoreItem(db, "Ærter", "Guatemala", "sukkererter guatemala", false, true, 0.125)
+        insertStoreItem(db, "Ærter", "Kenya", "sukkererter kenya", false, true, 0.125)
+        insertStoreItem(db, "Ærter", "Zimbabwe", "sukkererter zimbabwe", false, true, 0.125)
     }
 
     private fun insertStoreItem(db: SQLiteDatabase, productName: String, countryName: String, receiptText: String, organic: Boolean, packaged: Boolean, weight: Double, store: String = "Føtex"): Long {
@@ -678,17 +708,26 @@ class DBManager(context: Context?) : SQLiteOpenHelper(context, "FoodEmission.db"
     private fun getCountryID(db: SQLiteDatabase, countryName: String): Long{
         val query = "SELECT ${CountryDao.COLUMN_ID} FROM ${CountryDao.TABLE} WHERE ${CountryDao.COLUMN_NAME} = '$countryName';"
 
-        return select(query, db) {
-            it.getLong(0)
-        }!!
+        try {
+            return select(query, db) {
+                it.getLong(0)
+            }!!
+
+        } catch (e: Exception) {
+            throw Exception("Missing: $countryName")
+        }
     }
 
     private fun getProductID(db: SQLiteDatabase, productName: String): Long{
         val query = "SELECT ${ProductDao.COLUMN_ID} FROM ${ProductDao.TABLE} WHERE ${ProductDao.COLUMN_NAME} = '$productName';"
 
-        return select(query, db) {
-            it.getLong(0)
-        }!!
+        try {
+            return select(query, db) {
+                it.getLong(0)
+            }!!
+        } catch (e: Exception) {
+            throw Exception("Missing: $productName")
+        }
     }
 
     fun insert(table: String, contentValues: ContentValues): Long {

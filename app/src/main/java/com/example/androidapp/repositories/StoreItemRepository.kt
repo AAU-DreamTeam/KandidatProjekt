@@ -7,8 +7,8 @@ import com.example.androidapp.models.daos.StoreItemDao
 class StoreItemRepository(context: Context){
     private val storeItemDao = StoreItemDao(context)
 
-    fun loadAlternatives(storeItem: StoreItem): List<StoreItem> {
-        return storeItemDao.loadAlternatives(storeItem)
+    fun loadAlternatives(storeItem: StoreItem,  numberOfAlternatives: Int): List<StoreItem> {
+        return storeItemDao.loadAlternatives(storeItem, numberOfAlternatives)
     }
 
     fun loadStoreItems(): List<StoreItem>{

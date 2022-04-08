@@ -72,35 +72,12 @@ class EmissionViewModel: ViewModel()  {
 
         _purchases.value = purchaseRepository!!.loadAllPurchases()
         _trips.value = purchaseRepository!!.loadAllTrips()
-        //extractTrips()
 
         calcTotalEmission()
         _totalEmissionAlt.value = purchaseRepository!!.loadAlternativeEmission(_purchases.value!!)
 
         _emissionReduction.value = ((totalEmission.value!! - totalEmissionAlt.value!!)/totalEmission.value!!) * 100
     }
-
-    /*fun extractTrips(){
-        var prevTimestamp = ""
-        var currTimestamp = ""
-        var index = -1
-
-        for (purchase in _purchases.value!!) {
-            currTimestamp = purchase.timestamp
-
-            if (prevTimestamp != currTimestamp) {
-                val tripPurchases = mutableListOf<Purchase>()
-
-                index++
-                tripPurchases.add(purchase)
-                _trips.value!!.add(index, Pair(currTimestamp, tripPurchases))
-                prevTimestamp = purchase.timestamp
-            } else {
-                _trips.value!![index].second.add(purchase)
-            }
-        }
-    }*/
-
     fun onViewAlternatives(purchaseId: Int): List<StoreItem> {
         return storeItemRepository!!.loadAlternatives(_purchases.value!![purchaseId].storeItem)
     }
