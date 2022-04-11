@@ -117,9 +117,19 @@ class ScannerViewModel: ViewModel() {
     fun onCountryChanged(index: Int, value: Country,currentList: COMPLETED){
         if (currentList == COMPLETED.COMPLETED){
             _completedPurchases.value!![index].storeItem.country = value
+            _completedPurchases.value!![index].storeItem.countryDefault = false
 
         }else{
             _missingPurchases.value!![index].storeItem.country = value
+            _missingPurchases.value!![index].storeItem.countryDefault = false
+        }
+    }
+    fun onCountryDefaultChanged(index: Int, value: Boolean,currentList: COMPLETED){
+        if (currentList == COMPLETED.COMPLETED){
+            _completedPurchases.value!![index].storeItem.countryDefault = value
+
+        }else{
+            _missingPurchases.value!![index].storeItem.countryDefault = value
         }
     }
 

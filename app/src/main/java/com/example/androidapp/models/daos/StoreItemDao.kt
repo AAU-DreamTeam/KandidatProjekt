@@ -163,7 +163,9 @@ class StoreItemDao(private val dbManager: DBManager) {
             receiptText,
             isOrganic(receiptText),
             isPackaged(receiptText),
-            extractWeight(receiptText).toDouble()
+            extractWeight(receiptText).toDouble(),
+            false,
+            false
         )
     }
 
@@ -240,6 +242,8 @@ class StoreItemDao(private val dbManager: DBManager) {
         contentValues.put(COLUMN_ORGANIC, storeItem.organic)
         contentValues.put(COLUMN_PACKAGED, storeItem.packaged)
         contentValues.put(COLUMN_WEIGHT, storeItem.weight)
+        contentValues.put(COLUMN_COUNTRY_DEFAULT,storeItem.countryDefault)
+        contentValues.put(COLUMN_WEIGHT_DEFAULT,storeItem.weightDefault)
         contentValues.put(COLUMN_STORE, storeItem.store)
 
         return dbManager.insert(TABLE, contentValues)
@@ -270,7 +274,7 @@ class StoreItemDao(private val dbManager: DBManager) {
 
     companion object {
         const val TABLE = "storeItem"
-        const val COLUMN_COUNT = 6
+        const val COLUMN_COUNT = 8
         const val COLUMN_COUNTRY_ID = "countryID"
         const val COLUMN_PRODUCT_ID = "productID"
 
@@ -289,8 +293,14 @@ class StoreItemDao(private val dbManager: DBManager) {
         const val COLUMN_WEIGHT = "weight"
         const val COLUMN_WEIGHT_POSITION = 4
 
+        const val COLUMN_COUNTRY_DEFAULT = "countryDefault"
+        const val COLUMN_COUNTRY_DEFAULT_POSITION = 5
+
+        const val COLUMN_WEIGHT_DEFAULT = "weightDefault"
+        const val COLUMN_WEIGHT_DEFAULT_POSITION = 6
+
         const val COLUMN_STORE = "store"
-        const val COLUMN_STORE_POSITION = 5
+        const val COLUMN_STORE_POSITION = 7
 
         const val ALL_COLUMNS =
             "$TABLE.$COLUMN_ID, " +
@@ -298,6 +308,8 @@ class StoreItemDao(private val dbManager: DBManager) {
                     "$TABLE.$COLUMN_ORGANIC, " +
                     "$TABLE.$COLUMN_PACKAGED, " +
                     "$TABLE.$COLUMN_WEIGHT, " +
+                    "$TABLE.$COLUMN_COUNTRY_DEFAULT, " +
+                    "$TABLE.$COLUMN_WEIGHT_DEFAULT, " +
                     "$TABLE.$COLUMN_STORE"
 
         fun produceStoreItem(cursor: Cursor, startIndex: Int = 0): StoreItem {
@@ -315,6 +327,8 @@ class StoreItemDao(private val dbManager: DBManager) {
                 cursor.getInt(startIndex + COLUMN_ORGANIC_POSITION) != 0,
                 cursor.getInt(startIndex + COLUMN_PACKAGED_POSITION) != 0,
                 cursor.getDouble(startIndex + COLUMN_WEIGHT_POSITION),
+                cursor.getInt(startIndex + COLUMN_COUNTRY_DEFAULT_POSITION) !=0,
+                cursor.getInt(startIndex + COLUMN_WEIGHT_DEFAULT_POSITION) !=0,
                 cursor.getString(startIndex + COLUMN_STORE_POSITION)
             )
         }
