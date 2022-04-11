@@ -133,7 +133,7 @@ class OverviewView : Fragment() {
     }
 
     private fun setupPage(){
-        if(viewModel.purchases.value?.isNotEmpty() == false ){
+        if(viewModel.purchases.value!!.isEmpty()){
             gameTV.text= resources.getString(R.string.game_no_products_text)
             playButton.visibility= View.INVISIBLE
             showButton.visibility = View.INVISIBLE

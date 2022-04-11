@@ -5,6 +5,7 @@ import com.example.androidapp.models.daos.CountryDao
 import com.example.androidapp.models.daos.ProductDao
 import com.example.androidapp.models.daos.PurchaseDao
 import com.example.androidapp.models.daos.StoreItemDao
+import com.example.androidapp.models.enums.RATING
 
 class EmissionCalculator {
     companion object{
@@ -39,16 +40,53 @@ class EmissionCalculator {
                     "CASE WHEN ${ProductDao.TABLE}.${ProductDao.COLUMN_GHCULTIVATED} = 1 AND ${CountryDao.TABLE}.${CountryDao.COLUMN_GHPENALTY} = 1 THEN $GH_PENALTY " +
                          "ELSE $NO_PENALTY " +
                     "END"
-            return "${ProductDao.TABLE}.${ProductDao.COLUMN_ILUC} + " +
+            return "(${ProductDao.TABLE}.${ProductDao.COLUMN_ILUC} + " +
                     "${ProductDao.TABLE}.${ProductDao.COLUMN_PROCESSING} + " +
                     "${ProductDao.TABLE}.${ProductDao.COLUMN_RETAIL} + " +
                     "${ProductDao.TABLE}.${ProductDao.COLUMN_CULTIVATION} * $organicPenalty * $ghPenalty + " +
                     "$packagingEmission + " +
-                    "${CountryDao.TABLE}.${CountryDao.COLUMN_TRANSPORT_EMISSION}"
+                    "${CountryDao.TABLE}.${CountryDao.COLUMN_TRANSPORT_EMISSION})"
         }
 
         fun sqlEmissionPerPurchaseFormula(): String {
-            return "(${sqlEmissionPerKgFormula()}) * ${StoreItemDao.TABLE}.${StoreItemDao.COLUMN_WEIGHT} * ${PurchaseDao.TABLE}.${PurchaseDao.COLUMN_QUANTITY}"
+            return "((${sqlEmissionPerKgFormula()}) * ${StoreItemDao.TABLE}.${StoreItemDao.COLUMN_WEIGHT} * ${PurchaseDao.TABLE}.${PurchaseDao.COLUMN_QUANTITY})"
+        }
+
+        fun test(): String {
+            return "(SELECT ${sqlRatingFormular()} AS rating, id FROM ${sqlRatingTable()})"
+        }
+
+        fun sqlRatingTable(): String {
+            val ratingVariables = "ratingValues"
+            val productID = "prodID"
+            val minimum = "minimum"
+            val maximum = "maximum"
+            val range = "(maximum - minimum)"
+            val min = "MIN(${sqlEmissionPerKgFormula()})"
+            val max = "MAX(${sqlEmissionPerKgFormula()})"
+
+            return "(SELECT ${StoreItemDao.TABLE}.${StoreItemDao.COLUMN_ID}, ${sqlEmissionPerKgFormula()} AS emission, $range AS range, $minimum " +
+                    "FROM ${StoreItemDao.TABLE} " +
+                    "INNER JOIN ${ProductDao.TABLE} ON ${StoreItemDao.COLUMN_PRODUCT_ID} = ${ProductDao.TABLE}.${ProductDao.COLUMN_ID} " +
+                    "INNER JOIN ${CountryDao.TABLE} ON ${StoreItemDao.TABLE}.${StoreItemDao.COLUMN_COUNTRY_ID} = ${CountryDao.TABLE}.${CountryDao.COLUMN_ID} " +
+                    "INNER JOIN (SELECT ${ProductDao.TABLE}.${ProductDao.COLUMN_ID} AS $productID, " +
+                                       "$min AS $minimum, " +
+                                       "$max AS $maximum " +
+                                "FROM ${StoreItemDao.TABLE} " +
+                                "INNER JOIN ${ProductDao.TABLE} ON ${StoreItemDao.COLUMN_PRODUCT_ID} = ${ProductDao.TABLE}.${ProductDao.COLUMN_ID} " +
+                                "INNER JOIN ${CountryDao.TABLE} ON ${StoreItemDao.TABLE}.${StoreItemDao.COLUMN_COUNTRY_ID} = ${CountryDao.TABLE}.${CountryDao.COLUMN_ID} " +
+                                "GROUP BY $productID) $ratingVariables " +
+                    "ON ${StoreItemDao.TABLE}.${StoreItemDao.COLUMN_PRODUCT_ID} = $ratingVariables.$productID)"
+        }
+
+        fun sqlRatingFormular(): String{
+            return "(CASE " +
+                    "WHEN emission >= minimum + range * 0.8 THEN ${RATING.VERY_BAD.ordinal} " +
+                    "WHEN emission >= minimum + range * 0.6 THEN ${RATING.BAD.ordinal} " +
+                    "WHEN emission >= minimum + range * 0.4 THEN ${RATING.OK.ordinal} " +
+                    "WHEN emission >= minimum + range * 0.2 THEN ${RATING.GOOD.ordinal} " +
+                    "ELSE ${RATING.VERY_GOOD.ordinal} " +
+                    "END)"
         }
     }
 }

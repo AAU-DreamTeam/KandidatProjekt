@@ -32,7 +32,7 @@ class CountryDao(private val dbManager: DBManager) {
 
     companion object {
         const val TABLE = "country"
-        private const val COLUMN_COUNT = 4
+        const val COLUMN_COUNT = 4
 
         const val COLUMN_ID = "id"
         private const val COLUMN_ID_POSITION = 0

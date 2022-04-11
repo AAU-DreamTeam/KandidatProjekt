@@ -16,5 +16,10 @@
     <color name="red">#FF0101</color>
     <color name="toggleBtn">#D60E15</color>
     <color name="defaultValue">#F17516</color>
+    <color name="very_good">#57e32c</color>
+    <color name="good">#b7dd29</color>
+    <color name="ok">#ffe234</color>
+    <color name="bad">#ffa534</color>
+    <color name="very_bad">	#ff4545</color>
 
 </resources>

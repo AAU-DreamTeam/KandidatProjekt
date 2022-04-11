@@ -10,6 +10,7 @@ import com.example.androidapp.R
 import com.example.androidapp.models.Purchase
 import com.example.androidapp.models.StoreItem
 import com.example.androidapp.models.enums.PRODUCT_CATEGORY
+import com.google.android.material.button.MaterialButton
 import kotlinx.android.synthetic.main.alternative_list_item.view.*
 
 class AlternativesAdapter(val context: Context, val storeItem: StoreItem, var alternatives: List<StoreItem>): RecyclerView.Adapter<AlternativesAdapter.ViewHolder>() {
@@ -20,6 +21,7 @@ class AlternativesAdapter(val context: Context, val storeItem: StoreItem, var al
         val organicTV = view.organicTV
         val packagedTV = view.packagedTV
         val countryTV = view.countryTV
+        val alternativeRatingBtn : MaterialButton = view.alternativeRatingBtn
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -46,6 +48,8 @@ class AlternativesAdapter(val context: Context, val storeItem: StoreItem, var al
         holder.organicTV.text = if (item.organic) "Ja" else "Nej"
         holder.packagedTV.text = if (item.packaged) "Nej" else "Ja"
         holder.countryTV.text = item.country.name
+        holder.alternativeRatingBtn.setIconResource(item.rating!!.iconId)
+        holder.alternativeRatingBtn.setIconTintResource(item.rating!!.colorId)
     }
 
     override fun getItemCount(): Int {

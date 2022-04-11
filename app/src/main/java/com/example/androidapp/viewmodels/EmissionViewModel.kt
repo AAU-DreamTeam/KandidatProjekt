@@ -51,8 +51,10 @@ class EmissionViewModel: ViewModel()  {
 
         _emissionList.value = mutableListOf(_weeklyEmission.value,_monthlyEmission.value)
 
-        _purchases.value = purchaseRepository!!.loadAllPurchases()
-        _trips.value = purchaseRepository!!.loadAllTrips()
+        val (tripList, purchaseList) = purchaseRepository!!.loadAllTrips()
+
+        _trips.value = tripList
+        _purchases.value = purchaseList
     }
 
     override fun onCleared() {

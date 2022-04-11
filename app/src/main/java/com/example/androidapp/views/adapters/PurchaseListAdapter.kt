@@ -47,6 +47,8 @@ class PurchaseListAdapter(val context: AppCompatActivity, var purchases: List<Pu
         holder.packagedTV.text = if (purchase.storeItem.packaged) "Nej" else "Ja"
         holder.countryTV.text = purchase.storeItem.country.name
         holder.weightTV.text = purchase.weightToStringG()
+        holder.ratingIV.setIconResource(purchase.storeItem.rating!!.iconId)
+        holder.ratingIV.setIconTintResource(purchase.storeItem.rating!!.colorId)
 
         if (storeItemEmission == storeItemAltEmission) {
             holder.alternativeHeaderTV.text = "Der findes ingen bedre alternativer"
@@ -77,5 +79,6 @@ class PurchaseListAdapter(val context: AppCompatActivity, var purchases: List<Pu
         val countryTV: TextView = view.countryTV
         val weightTV: TextView = view.weightTV
         val buttonAlternatives: MaterialButton = view.btnAlternatives
+        val ratingIV: MaterialButton = view.ratingIV
     }
 }

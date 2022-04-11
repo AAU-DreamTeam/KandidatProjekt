@@ -8,6 +8,7 @@ import com.example.androidapp.models.tools.DBManager
 import com.example.androidapp.models.tools.EmissionCalculator
 import com.example.androidapp.models.StoreItem
 import com.example.androidapp.models.enums.PRODUCT_CATEGORY
+import com.example.androidapp.models.enums.RATING
 import java.util.*
 
 class StoreItemDao(private val dbManager: DBManager) {
@@ -53,18 +54,23 @@ class StoreItemDao(private val dbManager: DBManager) {
             "SELECT $ALL_COLUMNS, " +
                     "${ProductDao.ALL_COLUMNS}, " +
                     "${CountryDao.ALL_COLUMNS}, " +
-                    "MIN(${EmissionCalculator.sqlEmissionPerKgFormula()}) AS EMISSION " +
+                    "MIN(${EmissionCalculator.sqlEmissionPerKgFormula()}) AS EMISSION, " +
+                    "rating.rating " +
                     "FROM $TABLE " +
                     "INNER JOIN ${ProductDao.TABLE} ON $COLUMN_PRODUCT_ID = ${ProductDao.TABLE}.${ProductDao.COLUMN_ID} " +
                     "INNER JOIN ${CountryDao.TABLE} ON $TABLE.$COLUMN_COUNTRY_ID = ${CountryDao.TABLE}.${CountryDao.COLUMN_ID} " +
+                    "INNER JOIN ${EmissionCalculator.test()} rating ON $TABLE.$COLUMN_ID = rating.id " +
                     "WHERE $COLUMN_PRODUCT_ID = ${storeItem.product.id} " +
                     "GROUP BY $TABLE.$COLUMN_ORGANIC, $TABLE.$COLUMN_PACKAGED " +
                     "HAVING EMISSION < ${storeItem.emissionPerKg};"
 
-        println(query)
-        return dbManager.selectMultiple(query) {
-            produceStoreItem(it)
+        println("---" + query)
+
+        val lst = dbManager.selectMultiple(query) {
+            produceStoreItem(it, true, 1)
         }
+
+        return lst
     }
 
     private fun loadAlternativesFromCategories(
@@ -163,7 +169,7 @@ class StoreItemDao(private val dbManager: DBManager) {
             receiptText,
             isOrganic(receiptText),
             isPackaged(receiptText),
-            extractWeight(receiptText).toDouble()
+            extractWeight(receiptText)
         )
     }
 
@@ -263,6 +269,8 @@ class StoreItemDao(private val dbManager: DBManager) {
                     "LIMIT 1;"
         }
 
+        println(EmissionCalculator.sqlRatingTable())
+
         storeItem.altEmission = dbManager.select<Pair<Int, Double>>(query) {
             Pair(it.getInt(0), it.getDouble(1))
         } ?: Pair(0, storeItem.emissionPerKg)
@@ -300,12 +308,14 @@ class StoreItemDao(private val dbManager: DBManager) {
                     "$TABLE.$COLUMN_WEIGHT, " +
                     "$TABLE.$COLUMN_STORE"
 
-        fun produceStoreItem(cursor: Cursor, startIndex: Int = 0): StoreItem {
+        fun produceStoreItem(cursor: Cursor, withRating: Boolean = false, ratingOffset: Int = -1, startIndex: Int = 0): StoreItem {
             val product = ProductDao.produceProduct(cursor, startIndex + COLUMN_COUNT)
             val country = CountryDao.produceCountry(
                 cursor,
                 startIndex + COLUMN_COUNT + ProductDao.COLUMN_COUNT
             )
+
+            val rating = if (withRating) RATING.values()[cursor.getInt(startIndex + COLUMN_COUNT + ProductDao.COLUMN_COUNT + CountryDao.COLUMN_COUNT + ratingOffset)] else null
 
             return StoreItem(
                 cursor.getInt(startIndex + COLUMN_ID_POSITION),
@@ -315,7 +325,8 @@ class StoreItemDao(private val dbManager: DBManager) {
                 cursor.getInt(startIndex + COLUMN_ORGANIC_POSITION) != 0,
                 cursor.getInt(startIndex + COLUMN_PACKAGED_POSITION) != 0,
                 cursor.getDouble(startIndex + COLUMN_WEIGHT_POSITION),
-                cursor.getString(startIndex + COLUMN_STORE_POSITION)
+                cursor.getString(startIndex + COLUMN_STORE_POSITION),
+                rating
             )
         }
     }

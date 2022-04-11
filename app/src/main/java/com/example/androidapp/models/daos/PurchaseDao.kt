@@ -4,7 +4,9 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
 import com.example.androidapp.models.Purchase
+import com.example.androidapp.models.StoreItem
 import com.example.androidapp.models.Trip
+import com.example.androidapp.models.enums.RATING
 import com.example.androidapp.models.tools.DBManager
 import com.example.androidapp.models.tools.EmissionCalculator
 import com.example.androidapp.models.tools.TextRecognizer
@@ -14,23 +16,6 @@ import java.util.*
 
 class PurchaseDao(context: Context) {
     private val dbManager = DBManager(context)
-
-    fun loadAllPurchases(): List<Purchase> {
-        val query =
-            "SELECT $ALL_COLUMNS, " +
-                    "${StoreItemDao.ALL_COLUMNS}, " +
-                    "${ProductDao.ALL_COLUMNS}, " +
-                    "${CountryDao.ALL_COLUMNS} " +
-                    "FROM $TABLE " +
-                    "INNER JOIN ${StoreItemDao.TABLE} ON $COLUMN_STORE_ITEM_ID = ${StoreItemDao.TABLE}.${StoreItemDao.COLUMN_ID} " +
-                    "INNER JOIN ${ProductDao.TABLE} ON ${StoreItemDao.COLUMN_PRODUCT_ID} = ${ProductDao.TABLE}.${ProductDao.COLUMN_ID} " +
-                    "INNER JOIN ${CountryDao.TABLE} ON ${StoreItemDao.TABLE}.${StoreItemDao.COLUMN_COUNTRY_ID} = ${CountryDao.TABLE}.${CountryDao.COLUMN_ID} " +
-                    "ORDER BY $TABLE.$COLUMN_TIMESTAMP DESC;"
-
-        return dbManager.selectMultiple(query){
-            producePurchase(it)
-        }
-    }
 
     fun loadEmissionFromYearMonth(calendar: Calendar): Double {
         val month = SimpleDateFormat("MM", Locale.getDefault()).format(calendar.time)
@@ -234,8 +219,8 @@ class PurchaseDao(context: Context) {
                 "$TABLE.$COLUMN_WEEK, " +
                 "$TABLE.$COLUMN_QUANTITY"       //3
 
-        fun producePurchase(cursor: Cursor, startIndex: Int = 0): Purchase{
-            val storeItem = StoreItemDao.produceStoreItem(cursor, startIndex + COLUMN_COUNT)
+        private fun producePurchase(cursor: Cursor, startIndex: Int = 0): Purchase{
+            val storeItem = StoreItemDao.produceStoreItem(cursor, true, 0,startIndex + COLUMN_COUNT)
             val timestamp = cursor.getString(startIndex + COLUMN_TIMESTAMP_POSITION)
             val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
             val calendar = Calendar.getInstance()
@@ -245,8 +230,9 @@ class PurchaseDao(context: Context) {
             return Purchase(cursor.getInt(startIndex + COLUMN_ID_POSITION), storeItem, calendar, cursor.getInt(startIndex + COLUMN_QUANTITY_POSITION))
         }
 
-        fun produceTrip(cursor: Cursor): List<Trip> {
+        fun produceTrip(cursor: Cursor): Pair<List<Trip>, List<Purchase>> {
             val trips = mutableListOf<Trip>()
+            val allPurchases = mutableListOf<Purchase>()
             var timestamp = cursor.getString(COLUMN_TIMESTAMP_POSITION)
             var purchases = mutableListOf<Purchase>()
 
@@ -260,11 +246,12 @@ class PurchaseDao(context: Context) {
                     purchases = mutableListOf()
                 }
                 purchases.add(purchase)
+                allPurchases.add(purchase)
             } while (cursor.moveToNext())
 
             trips.add(Trip(purchases))
 
-            return trips
+            return Pair(trips, allPurchases)
         }
     }
 
@@ -272,25 +259,38 @@ class PurchaseDao(context: Context) {
         dbManager.close()
     }
 
-    fun loadAllTrips(): List<Trip> {
+    fun loadAllTrips(): Pair<List<Trip>, List<Purchase>> {
         val query =
             "SELECT $ALL_COLUMNS, " +
                     "${StoreItemDao.ALL_COLUMNS}, " +
                     "${ProductDao.ALL_COLUMNS}, " +
-                    "${CountryDao.ALL_COLUMNS} " +
+                    "${CountryDao.ALL_COLUMNS}, " +
+                    "rating.rating " +
                     "FROM $TABLE " +
                     "INNER JOIN ${StoreItemDao.TABLE} ON $COLUMN_STORE_ITEM_ID = ${StoreItemDao.TABLE}.${StoreItemDao.COLUMN_ID} " +
                     "INNER JOIN ${ProductDao.TABLE} ON ${StoreItemDao.COLUMN_PRODUCT_ID} = ${ProductDao.TABLE}.${ProductDao.COLUMN_ID} " +
                     "INNER JOIN ${CountryDao.TABLE} ON ${StoreItemDao.TABLE}.${StoreItemDao.COLUMN_COUNTRY_ID} = ${CountryDao.TABLE}.${CountryDao.COLUMN_ID} " +
+                    "INNER JOIN ${EmissionCalculator.test()} rating ON $COLUMN_STORE_ITEM_ID = rating.id"
                     "ORDER BY $TABLE.$COLUMN_TIMESTAMP DESC;"
 
-        val trips = dbManager.select<List<Trip>>(query) {
+        val (trips, purchases) = dbManager.select<Pair<List<Trip>, List<Purchase>>>(query) {
             produceTrip(it)
-        } ?: listOf()
+        } ?: Pair(listOf(), listOf())
 
         getAltEmissions(trips)
+        //rateStoreItems(purchases)
 
-        return trips
+        return Pair(trips, purchases)
+    }
+
+    private fun rateStoreItems(purchases: List<Purchase>){
+        for (purchase in purchases) {
+            val query = "SELECT ${EmissionCalculator.sqlRatingFormular()} FROM ${EmissionCalculator.sqlRatingTable()} WHERE id = ${purchase.storeItem.id};"
+
+            purchase.storeItem.rating = dbManager.select<RATING>(query) {
+                RATING.values()[it.getInt(0)]
+            }
+        }
     }
 
     private fun getAltEmissions(trips: List<Trip>){

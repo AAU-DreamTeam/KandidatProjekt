@@ -9,7 +9,6 @@ import com.example.androidapp.repositories.StoreItemRepository
 import kotlin.random.Random
 
 object AlternativesViewModel: ViewModel() {
-    val random = Random(1)
     private var storeItemRepository: StoreItemRepository? = null
     var storeItem: StoreItem? = null
 
@@ -25,5 +24,6 @@ object AlternativesViewModel: ViewModel() {
 
     fun loadAlternatives(numberOfAlternatives: Int){
         _alternatives.value = storeItemRepository!!.loadAlternatives(storeItem!!, numberOfAlternatives)
+        return
     }
 }

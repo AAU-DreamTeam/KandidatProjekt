@@ -2,6 +2,7 @@ package com.example.androidapp.models
 
 import android.text.Spanned
 import androidx.core.text.HtmlCompat
+import com.example.androidapp.models.enums.RATING
 import com.example.androidapp.models.tools.EmissionCalculator
 import java.util.*
 
@@ -12,7 +13,8 @@ class StoreItem (val id: Int,
                  var organic: Boolean,
                  var packaged: Boolean,
                  var weight: Double,
-                 val store: String = "Føtex"){
+                 val store: String = "Føtex",
+                 var rating: RATING?){
 
     constructor(product: Product,
                 country: Country,
@@ -20,7 +22,7 @@ class StoreItem (val id: Int,
                 organic: Boolean,
                 packaged: Boolean,
                 weight: Double,
-                store: String = "Føtex"): this(0, product, country, _receiptText, organic, packaged, weight, store)
+                store: String = "Føtex"): this(0, product, country, _receiptText, organic, packaged, weight, store, null)
 
     var weightDefault = false
     var receiptText = _receiptText
