@@ -273,18 +273,19 @@ class ScannerAdapter(var purchases: List<Purchase>,
         private fun toggleBtnListener() {
             // TODO: handle toggle buttom listener
         }
-        private fun writePurchaseValues(holder:ViewHolder, purchase: Purchase){
-            System.out.println("ReceiptText: "+purchase.storeItem.receiptText)
-            System.out.println("Here :"+holder.absoluteAdapterPosition)
-            System.out.println("ProductName: "+purchase.storeItem.product.name)
-            System.out.println("CountryName: "+purchase.storeItem.country.name)
-            System.out.println("DefaultValue: "+purchase.storeItem.countryDefault)
-            System.out.println("TextColor: "+ (holder.country.currentTextColor == defaultTextColor))
-            System.out.println("Weigth: "+ purchase.storeItem.weightToString(true))
-            System.out.println("WeigthDefault: "+ purchase.storeItem.weightDefault)
-            System.out.println("Quantatit: "+ purchase.quantity)
-            System.out.println("QuantatitDefault: "+ purchase.quantityDefault)
+    }
+    private fun writePurchaseValues(holder:ViewHolder, purchase: Purchase){
+        System.out.println("ReceiptText: "+purchase.storeItem.receiptText)
+        System.out.println("Here :"+holder.absoluteAdapterPosition)
+        System.out.println("ProductName: "+purchase.storeItem.product.name)
+        System.out.println("CountryName: "+purchase.storeItem.country.name)
+        System.out.println("CountryDefault: "+purchase.storeItem.countryDefault)
+        System.out.println("TextColor: "+ (holder.country.currentTextColor == defaultTextColor))
+        System.out.println("Weigth: "+ purchase.storeItem.weightToString(true))
+        System.out.println("WeigthDefault: "+ purchase.storeItem.weightDefault)
+        System.out.println("Quantatit: "+ purchase.quantity)
+        System.out.println("QuantatitDefault: "+ purchase.quantityDefault)
+        System.out.println("Rating: "+ purchase.storeItem.rating)
 
-        }
     }
 }
