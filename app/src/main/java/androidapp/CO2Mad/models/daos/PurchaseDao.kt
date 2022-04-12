@@ -4,9 +4,7 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
 import androidapp.CO2Mad.models.Purchase
-import androidapp.CO2Mad.models.StoreItem
 import androidapp.CO2Mad.models.Trip
-import androidapp.CO2Mad.models.enums.RATING
 import androidapp.CO2Mad.models.tools.DBManager
 import androidapp.CO2Mad.models.tools.EmissionCalculator
 import androidapp.CO2Mad.models.tools.TextRecognizer
@@ -55,27 +53,6 @@ class PurchaseDao(context: Context) {
         return dbManager.select<Double>(query) {
             it.getDouble(0)
         }!!
-    }
-
-    fun loadAlternativeEmission(purchases: List<Purchase>): Double {
-        val emissions = mutableListOf<Double>()
-
-        for (purchase in purchases) {
-            val query =
-                    "SELECT MIN(${EmissionCalculator.sqlEmissionPerKgFormula()}) " +
-                            "FROM ${StoreItemDao.TABLE} " +
-                            "INNER JOIN ${ProductDao.TABLE} ON ${StoreItemDao.COLUMN_PRODUCT_ID} = ${ProductDao.TABLE}.${ProductDao.COLUMN_ID} " +
-                            "INNER JOIN ${CountryDao.TABLE} ON ${StoreItemDao.TABLE}.${StoreItemDao.COLUMN_COUNTRY_ID} = ${CountryDao.TABLE}.${CountryDao.COLUMN_ID} " +
-                            "WHERE ${ProductDao.TABLE}.${ProductDao.COLUMN_ID} = ${purchase.storeItem.product.id};"
-
-            dbManager.select(query) {
-                val tempp = it.getDouble(0)
-                val temp = purchase.weight * tempp
-                emissions.add(temp)
-            }
-        }
-
-        return emissions.sum()
     }
 
     fun extractPurchases(imagePath: String, callback: (MutableList<Purchase>) -> Unit) {
@@ -220,7 +197,7 @@ class PurchaseDao(context: Context) {
                 "$TABLE.$COLUMN_QUANTITY"       //3
 
         private fun producePurchase(cursor: Cursor, startIndex: Int = 0): Purchase{
-            val storeItem = StoreItemDao.produceStoreItem(cursor, true, 0,startIndex + COLUMN_COUNT)
+            val storeItem = StoreItemDao.produceStoreItem(cursor,startIndex + COLUMN_COUNT)
             val timestamp = cursor.getString(startIndex + COLUMN_TIMESTAMP_POSITION)
             val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
             val calendar = Calendar.getInstance()
@@ -259,44 +236,33 @@ class PurchaseDao(context: Context) {
         dbManager.close()
     }
 
-    fun loadAllTrips(): Pair<List<Trip>, List<Purchase>> {
+    fun loadAllTrips(numberOfAlternatives: Int): Pair<List<Trip>, List<Purchase>> {
         val query =
             "SELECT $ALL_COLUMNS, " +
                     "${StoreItemDao.ALL_COLUMNS}, " +
                     "${ProductDao.ALL_COLUMNS}, " +
-                    "${CountryDao.ALL_COLUMNS}, " +
-                    "rating.rating " +
+                    "${CountryDao.ALL_COLUMNS} " +
                     "FROM $TABLE " +
                     "INNER JOIN ${StoreItemDao.TABLE} ON $COLUMN_STORE_ITEM_ID = ${StoreItemDao.TABLE}.${StoreItemDao.COLUMN_ID} " +
                     "INNER JOIN ${ProductDao.TABLE} ON ${StoreItemDao.COLUMN_PRODUCT_ID} = ${ProductDao.TABLE}.${ProductDao.COLUMN_ID} " +
                     "INNER JOIN ${CountryDao.TABLE} ON ${StoreItemDao.TABLE}.${StoreItemDao.COLUMN_COUNTRY_ID} = ${CountryDao.TABLE}.${CountryDao.COLUMN_ID} " +
-                    "INNER JOIN ${EmissionCalculator.test()} rating ON $COLUMN_STORE_ITEM_ID = rating.id"
                     "ORDER BY $TABLE.$COLUMN_TIMESTAMP DESC;"
 
         val (trips, purchases) = dbManager.select<Pair<List<Trip>, List<Purchase>>>(query) {
             produceTrip(it)
         } ?: Pair(listOf(), listOf())
 
-        getAltEmissions(trips)
-        //rateStoreItems(purchases)
+        getAltEmissions(trips, numberOfAlternatives)
 
         return Pair(trips, purchases)
     }
 
-    private fun rateStoreItems(purchases: List<Purchase>){
-        for (purchase in purchases) {
-            val query = "SELECT ${EmissionCalculator.sqlRatingFormular()} FROM ${EmissionCalculator.sqlRatingTable()} WHERE id = ${purchase.storeItem.id};"
+    private fun getAltEmissions(trips: List<Trip>, numberOfAlternatives: Int){
+        val storeItemDao = StoreItemDao(dbManager)
 
-            purchase.storeItem.rating = dbManager.select<RATING>(query) {
-                RATING.values()[it.getInt(0)]
-            }
-        }
-    }
-
-    private fun getAltEmissions(trips: List<Trip>){
         for (trip in trips) {
             for (purchase in trip.purchases) {
-                StoreItemDao(dbManager).loadAltEmission(purchase.storeItem)
+                storeItemDao.loadAltEmissions(purchase.storeItem, numberOfAlternatives)
             }
         }
     }

@@ -1,23 +1,20 @@
 package androidapp.CO2Mad.models
 
 import android.text.Spanned
-import androidx.core.text.HtmlCompat
 import androidapp.CO2Mad.models.enums.RATING
+import androidx.core.text.HtmlCompat
 import androidapp.CO2Mad.models.tools.EmissionCalculator
-import java.util.*
 
 class StoreItem (val id: Int,
                  var product: Product,
                  var country: Country,
-                 _receiptText: String,
+                 var receiptText: String,
                  var organic: Boolean,
                  var packaged: Boolean,
                  var weight: Double,
                  var countryDefault: Boolean,
                  var weightDefault: Boolean,
-                 val store: String = "Føtex",
-                 var rating: RATING?
-                 ){
+                 val store: String = "Føtex"){
 
     constructor(product: Product,
                 country: Country,
@@ -28,13 +25,17 @@ class StoreItem (val id: Int,
                 countryDefault: Boolean,
                 weightDefault: Boolean,
                 store: String = "Føtex"
-                ): this(0, product, country, _receiptText, organic, packaged, weight,countryDefault,weightDefault,store,null)
+                ): this(0, product, country, _receiptText, organic, packaged, weight,countryDefault,weightDefault,store)
 
-    var receiptText = _receiptText
     val emissionPerKg: Double get() = EmissionCalculator.calcEmission(this)
-    var altEmission: Pair<Int, Double> = Pair(0, emissionPerKg)
+    var altEmissions: List<Pair<Int, Double>>? = null
+        set(value) {
+            field = value
+            rating = EmissionCalculator.rate(this)
+        }
+    var rating: RATING? = RATING.VERY_GOOD
 
-    fun hasValidWeight(): Boolean {
+    private fun hasValidWeight(): Boolean {
         return weight > 0.0
     }
     fun isValid(): Boolean{
@@ -49,12 +50,12 @@ class StoreItem (val id: Int,
         return HtmlCompat.fromHtml("%.2f ".format(emissionPerKg).replace('.', ',') + "kg CO<sub><small><small>2</small></small></sub> pr. kg", HtmlCompat.FROM_HTML_MODE_LEGACY)
     }
 
-    fun altEmissionDifference(): Spanned {
-        return HtmlCompat.fromHtml("%.2f ".format(((emissionPerKg - altEmission.second) / emissionPerKg) * 100).replace('.', ','), HtmlCompat.FROM_HTML_MODE_LEGACY)
+    fun altEmissionDifferenceText(): Spanned {
+        return HtmlCompat.fromHtml("%.2f ".format(((emissionPerKg - altEmissions!!.first().second) / emissionPerKg) * 100).replace('.', ','), HtmlCompat.FROM_HTML_MODE_LEGACY)
     }
 
-    fun difference(compare: StoreItem): Spanned {
-        return HtmlCompat.fromHtml("%.2f ".format((((compare.emissionPerKg - emissionPerKg) / compare.emissionPerKg) * 100)).replace('.', ','), HtmlCompat.FROM_HTML_MODE_LEGACY)
+    fun differenceText(compare: StoreItem): Spanned {
+        return HtmlCompat.fromHtml("%.2f ".format(((compare.emissionPerKg - emissionPerKg) / compare.emissionPerKg) * 100).replace('.', ','), HtmlCompat.FROM_HTML_MODE_LEGACY)
     }
 
     override fun toString(): String {

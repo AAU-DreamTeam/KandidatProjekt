@@ -22,8 +22,8 @@ class PurchaseRepository(context: Context){
         return purchaseDao.loadEmissionFromYearWeek(calendar)
     }
 
-    fun loadAllTrips(): Pair<List<Trip>, List<Purchase>> {
-        return purchaseDao.loadAllTrips()
+    fun loadAllTrips(numberOfAlternatives: Int): Pair<List<Trip>, List<Purchase>> {
+        return purchaseDao.loadAllTrips(numberOfAlternatives)
     }
 
     fun extractPurchases(imagePath: String, callback: (MutableList<Purchase>) -> Unit) {

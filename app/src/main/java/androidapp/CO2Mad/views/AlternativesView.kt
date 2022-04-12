@@ -27,6 +27,6 @@ class AlternativesView : AppCompatActivity() {
             alternativeListRV.adapter = AlternativesAdapter(this, AlternativesViewModel.storeItem!!, list)
         }
 
-        AlternativesViewModel.loadAlternatives(3)
+        AlternativesViewModel.loadAlternatives()
     }
 }

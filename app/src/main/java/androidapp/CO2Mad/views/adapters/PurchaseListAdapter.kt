@@ -1,29 +1,18 @@
 package androidapp.CO2Mad.views.adapters
 
-import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.cardview.widget.CardView
-import androidx.core.text.HtmlCompat
-import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidapp.CO2Mad.R
 import androidapp.CO2Mad.models.Purchase
-import androidapp.CO2Mad.models.StoreItem
 import androidapp.CO2Mad.viewmodels.AlternativesViewModel
 import androidapp.CO2Mad.views.AlternativesView
-import androidapp.CO2Mad.views.ScannerView
 import com.google.android.material.button.MaterialButton
 import kotlinx.android.synthetic.main.purchase_list_item.view.*
-import kotlinx.android.synthetic.main.trip_list_item.view.*
 
 class PurchaseListAdapter(val context: AppCompatActivity, var purchases: List<Purchase>):  RecyclerView.Adapter<PurchaseListAdapter.ViewHolder>(){
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -37,8 +26,6 @@ class PurchaseListAdapter(val context: AppCompatActivity, var purchases: List<Pu
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val purchase = purchases[position]
-        val storeItemEmission = purchase.storeItem.emissionPerKg
-        val storeItemAltEmission = purchase.storeItem.altEmission.second
 
         holder.productTV.text = purchase.storeItem.product.name
         holder.emissionTV.text = purchase.emissionToString()
@@ -50,12 +37,12 @@ class PurchaseListAdapter(val context: AppCompatActivity, var purchases: List<Pu
         holder.ratingIV.setIconResource(purchase.storeItem.rating!!.iconId)
         holder.ratingIV.setIconTintResource(purchase.storeItem.rating!!.colorId)
 
-        if (storeItemEmission == storeItemAltEmission) {
+        if (purchase.storeItem.altEmissions!!.isEmpty()) {
             holder.alternativeHeaderTV.text = "Der findes ingen bedre alternativer"
             holder.buttonAlternatives.visibility = View.GONE
         } else {
             holder.alternativeHeaderTV.text = "Der findes et alternativ som er"
-            holder.buttonAlternatives.text = "${purchase.storeItem.altEmissionDifference()}% BEDRE"
+            holder.buttonAlternatives.text = "${purchase.storeItem.altEmissionDifferenceText()}% BEDRE"
 
             holder.buttonAlternatives.setOnClickListener{
                 AlternativesViewModel.storeItem = purchase.storeItem

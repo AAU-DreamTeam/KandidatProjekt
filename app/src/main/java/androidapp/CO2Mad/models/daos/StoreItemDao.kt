@@ -3,19 +3,29 @@ package androidapp.CO2Mad.models.daos
 import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
-import android.util.Log
 import androidapp.CO2Mad.models.tools.DBManager
 import androidapp.CO2Mad.models.tools.EmissionCalculator
 import androidapp.CO2Mad.models.StoreItem
 import androidapp.CO2Mad.models.enums.PRODUCT_CATEGORY
-import androidapp.CO2Mad.models.enums.RATING
 import java.util.*
 
 class StoreItemDao(private val dbManager: DBManager) {
     constructor(context: Context) : this(DBManager(context))
 
-    fun loadStoreItems(): List<StoreItem> {
-        val results = mutableListOf<StoreItem>()
+    fun loadAlternatives(storeItem: StoreItem): List<StoreItem> {
+        val ids = buildString {
+            var first = true
+            this.append("(")
+            storeItem.altEmissions!!.forEach{
+                if (first) {
+                    this.append(it.first)
+                    first = false
+                } else {
+                    this.append(", ${it.first}")
+                }
+            }
+            this.append(")")
+        }
         val query =
             "SELECT $ALL_COLUMNS, " +           // 5
                     "${ProductDao.ALL_COLUMNS}, " +            // 12
@@ -23,111 +33,13 @@ class StoreItemDao(private val dbManager: DBManager) {
                     "FROM $TABLE " +
                     "INNER JOIN ${ProductDao.TABLE} ON $COLUMN_PRODUCT_ID = ${ProductDao.TABLE}.${ProductDao.COLUMN_ID} " +
                     "INNER JOIN ${CountryDao.TABLE} ON ${TABLE}.$COLUMN_COUNTRY_ID = ${CountryDao.TABLE}.${CountryDao.COLUMN_ID} " +
-                    "ORDER BY ${ProductDao.TABLE}.${ProductDao.COLUMN_NAME}, $TABLE.$COLUMN_ORGANIC, $TABLE.$COLUMN_PACKAGED, ${CountryDao.TABLE}.${CountryDao.COLUMN_NAME};"
+                    "WHERE ${TABLE}.$COLUMN_ID IN $ids;"
 
-        dbManager.select(query) {
-            var index = 0
-
-            do {
-                val storeItem = produceStoreItem(it)
-
-                if (index == 0 || results[index - 1] != storeItem) {
-                    results.add(storeItem)
-                    index++
-                }
-            } while (it.moveToNext())
-        }
-
-        return results
-    }
-
-    fun loadAlternatives(storeItem: StoreItem, numberOfAlternatives: Int): List<StoreItem> {
-        return if (storeItem.product.productCategory == PRODUCT_CATEGORY.VEGETABLES) {
-            loadAlternativesFromProduct(storeItem)
-        } else {
-            loadAlternativesFromCategories(storeItem, numberOfAlternatives)
-        }
-    }
-
-    private fun loadAlternativesFromProduct(storeItem: StoreItem): List<StoreItem> {
-        val query =
-            "SELECT $ALL_COLUMNS, " +
-                    "${ProductDao.ALL_COLUMNS}, " +
-                    "${CountryDao.ALL_COLUMNS}, " +
-                    "MIN(${EmissionCalculator.sqlEmissionPerKgFormula()}) AS EMISSION, " +
-                    "rating.rating " +
-                    "FROM $TABLE " +
-                    "INNER JOIN ${ProductDao.TABLE} ON $COLUMN_PRODUCT_ID = ${ProductDao.TABLE}.${ProductDao.COLUMN_ID} " +
-                    "INNER JOIN ${CountryDao.TABLE} ON $TABLE.$COLUMN_COUNTRY_ID = ${CountryDao.TABLE}.${CountryDao.COLUMN_ID} " +
-                    "INNER JOIN ${EmissionCalculator.test()} rating ON $TABLE.$COLUMN_ID = rating.id " +
-                    "WHERE $COLUMN_PRODUCT_ID = ${storeItem.product.id} " +
-                    "GROUP BY $TABLE.$COLUMN_ORGANIC, $TABLE.$COLUMN_PACKAGED " +
-                    "HAVING EMISSION < ${storeItem.emissionPerKg};"
-
-        println("---" + query)
-
-        val lst = dbManager.selectMultiple(query) {
-            produceStoreItem(it, true, 1)
-        }
-
-        return lst
-    }
-
-    private fun loadAlternativesFromCategories(
-        storeItem: StoreItem,
-        numberOfAlternatives: Int
-    ): List<StoreItem> {
-        val storeItems = mutableListOf<StoreItem>()
-
-        storeItems.addAll(loadNonVeganAlternatives(storeItem))
-        storeItems.addAll(loadVeganAlternatives(storeItem, numberOfAlternatives - storeItems.size - 1))
-
-        storeItems.sortBy { it.emissionPerKg }
-
-        return storeItems
-    }
-
-    private fun loadNonVeganAlternatives(storeItem: StoreItem): List<StoreItem> {
-        val query =
-            "${generateQuery("${ProductDao.TABLE}.${ProductDao.COLUMN_PRODUCT_CATEGORY} = ${storeItem.product.productCategory.ordinal} AND EMISSION < ${storeItem.emissionPerKg}")} " +
-                    "UNION " +
-                    "${generateQuery("${ProductDao.TABLE}.${ProductDao.COLUMN_PRODUCT_CATEGORY} NOT IN (${storeItem.product.productCategory.ordinal}, ${PRODUCT_CATEGORY.VEGETABLES.ordinal}, ${PRODUCT_CATEGORY.GRAINLEGUME.ordinal}) AND EMISSION < ${storeItem.emissionPerKg}")};"
-
-        println()
-        return dbManager.selectMultiple(query) {
+        val alternatives = dbManager.selectMultiple(query) {
             produceStoreItem(it)
         }
-    }
 
-    private fun loadVeganAlternatives(
-        storeItem: StoreItem,
-        alternativesToGet: Int
-    ): List<StoreItem> {
-        val query = "${
-            generateQuery(
-                "${ProductDao.TABLE}.${ProductDao.COLUMN_PRODUCT_CATEGORY} = ${PRODUCT_CATEGORY.GRAINLEGUME.ordinal} AND EMISSION < ${storeItem.emissionPerKg}",
-                alternativesToGet
-            )
-        } " +
-                "UNION " +
-                "${generateQuery("${ProductDao.TABLE}.${ProductDao.COLUMN_ID} = ${storeItem.altEmission.first}")};"
-
-        return dbManager.selectMultiple(query) {
-            produceStoreItem(it)
-        }
-    }
-
-    private fun generateQuery(condition: String, limit: Int = 1): String {
-        return "SELECT * FROM (SELECT $ALL_COLUMNS, " +
-                "${ProductDao.ALL_COLUMNS}, " +
-                "${CountryDao.ALL_COLUMNS}, " +
-                "(${EmissionCalculator.sqlEmissionPerKgFormula()}) AS EMISSION " +
-                "FROM $TABLE " +
-                "INNER JOIN ${ProductDao.TABLE} ON $COLUMN_PRODUCT_ID = ${ProductDao.TABLE}.${ProductDao.COLUMN_ID} " +
-                "INNER JOIN ${CountryDao.TABLE} ON $TABLE.$COLUMN_COUNTRY_ID = ${CountryDao.TABLE}.${CountryDao.COLUMN_ID} " +
-                "WHERE $condition " +
-                "ORDER BY RANDOM() " +
-                "LIMIT $limit)"
+        return alternatives.sortedBy { it.emissionPerKg }
     }
 
     fun extractStoreItem(receiptText: String): StoreItem {
@@ -255,30 +167,80 @@ class StoreItemDao(private val dbManager: DBManager) {
         return dbManager.insert(TABLE, contentValues)
     }
 
-    fun loadAltEmission(storeItem: StoreItem) {
-        val emission = EmissionCalculator.sqlEmissionPerKgFormula()
-        val query = if (storeItem.product.productCategory == PRODUCT_CATEGORY.VEGETABLES) {
-            "SELECT ${ProductDao.TABLE}.${ProductDao.COLUMN_ID}, MIN($emission) " +
-                    "FROM $TABLE " +
-                    "INNER JOIN ${ProductDao.TABLE} ON $COLUMN_PRODUCT_ID = ${ProductDao.TABLE}.${ProductDao.COLUMN_ID} " +
-                    "INNER JOIN ${CountryDao.TABLE} ON $TABLE.${COLUMN_COUNTRY_ID} = ${CountryDao.TABLE}.${CountryDao.COLUMN_ID} " +
-                    "WHERE $COLUMN_PRODUCT_ID = ${storeItem.product.id};"
+    fun loadAltEmissions(storeItem: StoreItem, numberOfAlternatives: Int) {
+        if (storeItem.product.productCategory == PRODUCT_CATEGORY.VEGETABLES) {
+            loadAltEmissionsForProduct(storeItem)
         } else {
-            "SELECT ${ProductDao.TABLE}.${ProductDao.COLUMN_ID}, $emission AS ALT_EMISSION " +
+            loadAltEmissionsForCategory(storeItem, numberOfAlternatives)
+        }
+    }
+
+    private fun loadAltEmissionsForProduct(storeItem: StoreItem) {
+        val query =
+            "SELECT $ALL_COLUMNS, " +
+                    "MIN(${EmissionCalculator.sqlEmissionPerKgFormula()}) AS EMISSION, " +
+                    "${ProductDao.ALL_COLUMNS}, " +
+                    "${CountryDao.ALL_COLUMNS} " +
                     "FROM $TABLE " +
                     "INNER JOIN ${ProductDao.TABLE} ON $COLUMN_PRODUCT_ID = ${ProductDao.TABLE}.${ProductDao.COLUMN_ID} " +
-                    "INNER JOIN ${CountryDao.TABLE} ON ${TABLE}.${COLUMN_COUNTRY_ID} = ${CountryDao.TABLE}.${CountryDao.COLUMN_ID} " +
-                    "WHERE ALT_EMISSION < ${storeItem.emissionPerKg} AND ${ProductDao.COLUMN_PRODUCT_CATEGORY} = ${PRODUCT_CATEGORY.GRAINLEGUME.ordinal} AND ALT_EMISSION < (SELECT MIN($emission) FROM $TABLE INNER JOIN ${ProductDao.TABLE} ON $COLUMN_PRODUCT_ID = ${ProductDao.TABLE}.${ProductDao.COLUMN_ID} INNER JOIN ${CountryDao.TABLE} ON ${TABLE}.${COLUMN_COUNTRY_ID} = ${CountryDao.TABLE}.${CountryDao.COLUMN_ID} WHERE productCategory NOT IN (${PRODUCT_CATEGORY.VEGETABLES.ordinal}, ${PRODUCT_CATEGORY.GRAINLEGUME.ordinal})) " +
-                    "ORDER BY RANDOM() " +
-                    "LIMIT 1;"
+                    "INNER JOIN ${CountryDao.TABLE} ON $TABLE.$COLUMN_COUNTRY_ID = ${CountryDao.TABLE}.${CountryDao.COLUMN_ID} " +
+                    "WHERE $COLUMN_PRODUCT_ID = ${storeItem.product.id} " +
+                    "GROUP BY $TABLE.$COLUMN_ORGANIC, $TABLE.$COLUMN_PACKAGED " +
+                    "HAVING EMISSION < ${storeItem.emissionPerKg};"
+
+        storeItem.altEmissions = dbManager.selectMultiple(query) {
+            Pair(it.getInt(COLUMN_ID_POSITION), it.getDouble(COLUMN_COUNT))
         }
-
-        println(EmissionCalculator.sqlRatingTable())
-
-        storeItem.altEmission = dbManager.select<Pair<Int, Double>>(query) {
-            Pair(it.getInt(0), it.getDouble(1))
-        } ?: Pair(0, storeItem.emissionPerKg)
     }
+
+    private fun loadAltEmissionsForCategory(storeItem: StoreItem, numberOfAlternatives: Int) {
+        val emissions = mutableListOf<Pair<Int, Double>>()
+
+        emissions.addAll(loadNonVeganAlternativeEmissions(storeItem))
+        emissions.addAll(loadVeganAlternativeEmissions(storeItem, numberOfAlternatives - emissions.size))
+
+        emissions.sortBy { it.second }
+
+        storeItem.altEmissions = emissions
+    }
+
+    private fun loadNonVeganAlternativeEmissions(storeItem: StoreItem): List<Pair<Int, Double>> {
+        val query =
+            if (storeItem.product.productCategory == PRODUCT_CATEGORY.GRAINLEGUME) {
+                "${generateQuery("${ProductDao.TABLE}.${ProductDao.COLUMN_PRODUCT_CATEGORY} NOT IN (${PRODUCT_CATEGORY.VEGETABLES.ordinal}, ${PRODUCT_CATEGORY.GRAINLEGUME.ordinal}) ${PRODUCT_CATEGORY.VEGETABLES.ordinal} AND EMISSION < ${storeItem.emissionPerKg}")} " +
+                "UNION " +
+                "${generateQuery("${ProductDao.TABLE}.${ProductDao.COLUMN_PRODUCT_CATEGORY} != ${PRODUCT_CATEGORY.VEGETABLES.ordinal} AND EMISSION < ${storeItem.emissionPerKg}")};"
+            } else {
+                "${generateQuery("${ProductDao.TABLE}.${ProductDao.COLUMN_PRODUCT_CATEGORY} = ${storeItem.product.productCategory.ordinal} AND EMISSION < ${storeItem.emissionPerKg}")} " +
+                "UNION " +
+                "${generateQuery("${ProductDao.TABLE}.${ProductDao.COLUMN_PRODUCT_CATEGORY} NOT IN (${storeItem.product.productCategory.ordinal}, ${PRODUCT_CATEGORY.VEGETABLES.ordinal}, ${PRODUCT_CATEGORY.GRAINLEGUME.ordinal}) AND EMISSION < ${storeItem.emissionPerKg}")};"
+            }
+
+        return dbManager.selectMultiple(query) {
+            Pair(it.getInt(COLUMN_ID_POSITION), it.getDouble(COLUMN_COUNT))
+        }
+    }
+
+    private fun loadVeganAlternativeEmissions(storeItem: StoreItem, limit: Int): List<Pair<Int, Double>> {
+        val query = "${generateQuery("${ProductDao.TABLE}.${ProductDao.COLUMN_PRODUCT_CATEGORY} = ${PRODUCT_CATEGORY.GRAINLEGUME.ordinal} AND EMISSION < ${storeItem.emissionPerKg} ", limit)};"
+        return dbManager.selectMultiple(query) {
+            Pair(it.getInt(COLUMN_ID_POSITION), it.getDouble(COLUMN_COUNT))
+        }
+    }
+
+    private fun generateQuery(condition: String, limit: Int = 1): String {
+        return "SELECT * FROM (SELECT $ALL_COLUMNS, " +
+                "${EmissionCalculator.sqlEmissionPerKgFormula()} AS EMISSION, " +
+                "${ProductDao.ALL_COLUMNS}, " +
+                "${CountryDao.ALL_COLUMNS} " +
+                "FROM $TABLE " +
+                "INNER JOIN ${ProductDao.TABLE} ON $COLUMN_PRODUCT_ID = ${ProductDao.TABLE}.${ProductDao.COLUMN_ID} " +
+                "INNER JOIN ${CountryDao.TABLE} ON $TABLE.$COLUMN_COUNTRY_ID = ${CountryDao.TABLE}.${CountryDao.COLUMN_ID} " +
+                "WHERE $condition " +
+                "ORDER BY RANDOM() " +
+                "LIMIT $limit)"
+    }
+
 
     companion object {
         const val TABLE = "storeItem"
@@ -320,14 +282,12 @@ class StoreItemDao(private val dbManager: DBManager) {
                     "$TABLE.$COLUMN_WEIGHT_DEFAULT, " +
                     "$TABLE.$COLUMN_STORE"
 
-        fun produceStoreItem(cursor: Cursor, withRating: Boolean = false, ratingOffset: Int = -1, startIndex: Int = 0): StoreItem {
+        fun produceStoreItem(cursor: Cursor, startIndex: Int = 0): StoreItem {
             val product = ProductDao.produceProduct(cursor, startIndex + COLUMN_COUNT)
             val country = CountryDao.produceCountry(
                 cursor,
                 startIndex + COLUMN_COUNT + ProductDao.COLUMN_COUNT
             )
-
-            val rating = if (withRating) RATING.values()[cursor.getInt(startIndex + COLUMN_COUNT + ProductDao.COLUMN_COUNT + CountryDao.COLUMN_COUNT + ratingOffset)] else null
 
             return StoreItem(
                 cursor.getInt(startIndex + COLUMN_ID_POSITION),
@@ -339,8 +299,7 @@ class StoreItemDao(private val dbManager: DBManager) {
                 cursor.getDouble(startIndex + COLUMN_WEIGHT_POSITION),
                 cursor.getInt(startIndex + COLUMN_COUNTRY_DEFAULT_POSITION) !=0,
                 cursor.getInt(startIndex + COLUMN_WEIGHT_DEFAULT_POSITION) !=0,
-                cursor.getString(startIndex + COLUMN_STORE_POSITION),
-                rating
+                cursor.getString(startIndex + COLUMN_STORE_POSITION)
             )
         }
     }

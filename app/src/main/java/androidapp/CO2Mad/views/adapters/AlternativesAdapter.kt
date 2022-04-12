@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.core.text.HtmlCompat
 import androidx.recyclerview.widget.RecyclerView
 import androidapp.CO2Mad.R
-import androidapp.CO2Mad.models.Purchase
 import androidapp.CO2Mad.models.StoreItem
 import androidapp.CO2Mad.models.enums.PRODUCT_CATEGORY
 import com.google.android.material.button.MaterialButton
@@ -43,7 +42,7 @@ class AlternativesAdapter(val context: Context, val storeItem: StoreItem, var al
             holder.productTV.text = item.product.name
         }
 
-        holder.differenceTV.text = "${item.difference(storeItem)}% bedre"
+        holder.differenceTV.text = "${item.differenceText(storeItem)}% bedre"
         holder.emissionTV.text = emission
         holder.organicTV.text = if (item.organic) "Ja" else "Nej"
         holder.packagedTV.text = if (item.packaged) "Nej" else "Ja"

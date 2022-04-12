@@ -51,7 +51,7 @@ class EmissionViewModel: ViewModel()  {
 
         _emissionList.value = mutableListOf(_weeklyEmission.value,_monthlyEmission.value)
 
-        val (tripList, purchaseList) = purchaseRepository!!.loadAllTrips()
+        val (tripList, purchaseList) = purchaseRepository!!.loadAllTrips(3)
 
         _trips.value = tripList
         _purchases.value = purchaseList
