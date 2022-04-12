@@ -135,37 +135,41 @@ class ScannerAdapter(var purchases: List<Purchase>,
     }
 
 
-    private fun insertCountryDefault(holder: ViewHolder,purchase: Purchase, firstTime: Boolean = false){
+    private fun insertCountryDefault(holder: ViewHolder,purchase: Purchase){
 
 
             val countryName = purchase.storeItem.country.name
 
-            if((countryName == "" && purchase.storeItem.product.name != "") || purchase.storeItem.country.defaultValue  ){
+            if((countryName == "" && purchase.storeItem.product.name != "") ){
                 val countryId = purchase.storeItem.product.countryId
                 val country = countries.find { it.id ==countryId }!!
 
                 holder.country.setText(country.name,false)
                 holder.country.setTextColor( defaultTextColor)
                 viewModel.onCountryChanged(holder.adapterPosition,country,currentList)
-                country.defaultValue = true
-                purchase.storeItem.country.defaultValue = true
-
-            }else{
-                holder.country.setText(purchase.storeItem.country.name, false)
-            }
+                viewModel.onCountryDefaultChanged(holder.adapterPosition,true,currentList)
+                purchase.storeItem.countryDefault = true
+            }else if(purchase.storeItem.countryDefault) {
+                holder.country.setText(countryName,false)
+                holder.country.setTextColor( defaultTextColor)
+            }else {
+                    holder.country.setText(purchase.storeItem.country.name, false)
+                }
 
     }
 
-    private fun insertWeightDefault(holder: ViewHolder,purchase: Purchase,firstTime: Boolean =false){
-            //Will always be zero if nothing is found
+    private fun insertWeightDefault(holder: ViewHolder,purchase: Purchase){
             val weightString = purchase.storeItem.weightToString(true)
-            if((weightString == "" && purchase.storeItem.product.name != "") ||purchase.storeItem.weightDefault ){
+            if((weightString == "" && purchase.storeItem.product.name != "") ){
                 val productWeight = purchase.storeItem.product.weight
                 holder.weight.setText(productWeight.toInt().toString())
                 holder.weight.setTextColor( defaultTextColor)
                 viewModel.onWeightChanged(holder.adapterPosition, productWeight/1000,currentList)
                 viewModel.onWeightDefaultChanged(holder.adapterPosition,true,currentList)
                 purchase.storeItem.weightDefault = true
+            }else if (purchase.storeItem.weightDefault){
+                holder.weight.setText(purchase.storeItem.weight.toInt().toString())
+                holder.weight.setTextColor( defaultTextColor)
             }else{
                 holder.weight.setText(purchase.storeItem.weightToString(true))
             }
@@ -176,7 +180,6 @@ class ScannerAdapter(var purchases: List<Purchase>,
     }
 
     private fun insertAmountDefault(holder: ViewHolder,purchase: Purchase){
-            //Will always be 0 if nothing is found
             val quanity = purchase.quantity
             if((quanity == 0 && purchase.storeItem.product.name != "") ||purchase.quantityDefault ){
                 holder.amount.setText("1")
@@ -198,7 +201,7 @@ class ScannerAdapter(var purchases: List<Purchase>,
                 holder.country.error = null
             }
             holder.country.setTextColor(Color.BLACK)
-            purchase.storeItem.country.defaultValue = false
+            purchase.storeItem.countryDefault = false
         }
 
 
@@ -209,6 +212,7 @@ class ScannerAdapter(var purchases: List<Purchase>,
 
             holder.country.setText(country.name, false)
             viewModel.onCountryChanged(holder.adapterPosition, country,currentList)
+            viewModel.onCountryDefaultChanged(holder.adapterPosition,false,currentList)
         }
     }
 
@@ -235,6 +239,7 @@ class ScannerAdapter(var purchases: List<Purchase>,
             } else {
                 holder.weight.error = null
                 viewModel.onWeightChanged(holder.adapterPosition, it.toString().toDouble()/1000,currentList)
+                viewModel.onWeightDefaultChanged(holder.adapterPosition,false,currentList)
             }
             holder.weight.setTextColor(Color.BLACK)
             purchase.storeItem.weightDefault = false
@@ -273,7 +278,7 @@ class ScannerAdapter(var purchases: List<Purchase>,
             System.out.println("Here :"+holder.absoluteAdapterPosition)
             System.out.println("ProductName: "+purchase.storeItem.product.name)
             System.out.println("CountryName: "+purchase.storeItem.country.name)
-            System.out.println("DefaultValue: "+purchase.storeItem.country.defaultValue)
+            System.out.println("DefaultValue: "+purchase.storeItem.countryDefault)
             System.out.println("TextColor: "+ (holder.country.currentTextColor == defaultTextColor))
             System.out.println("Weigth: "+ purchase.storeItem.weightToString(true))
             System.out.println("WeigthDefault: "+ purchase.storeItem.weightDefault)

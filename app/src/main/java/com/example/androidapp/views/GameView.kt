@@ -87,5 +87,9 @@ class GameView : AppCompatActivity() {
         btnNext.setOnClickListener{
             QuizMaster.nextQuestion()
         }
+
+        game_back_button.setOnClickListener{
+            finish()
+        }
     }
 }

@@ -13,8 +13,11 @@ class StoreItem (val id: Int,
                  var organic: Boolean,
                  var packaged: Boolean,
                  var weight: Double,
+                 var countryDefault: Boolean,
+                 var weightDefault: Boolean,
                  val store: String = "Føtex",
-                 var rating: RATING?){
+                 var rating: RATING?
+                 ){
 
     constructor(product: Product,
                 country: Country,
@@ -22,9 +25,11 @@ class StoreItem (val id: Int,
                 organic: Boolean,
                 packaged: Boolean,
                 weight: Double,
-                store: String = "Føtex"): this(0, product, country, _receiptText, organic, packaged, weight, store, null)
+                countryDefault: Boolean,
+                weightDefault: Boolean,
+                store: String = "Føtex"
+                ): this(0, product, country, _receiptText, organic, packaged, weight,countryDefault,weightDefault,store,null)
 
-    var weightDefault = false
     var receiptText = _receiptText
     val emissionPerKg: Double get() = EmissionCalculator.calcEmission(this)
     var altEmission: Pair<Int, Double> = Pair(0, emissionPerKg)
