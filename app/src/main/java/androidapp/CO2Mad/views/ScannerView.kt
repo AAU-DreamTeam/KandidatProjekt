@@ -53,9 +53,10 @@ class ScannerView : AppCompatActivity() {
 
         viewModel.saved.observe(this) {
             if (it) {
+                makeToast("Dit indkøb er blevet gemt.")
                 finish()
             } else {
-                makeToast("Kan ikke gemme før alle felter er udfyldt")
+                makeToast("Kan ikke gemme før alle felter er udfyldt.")
             }
         }
 
@@ -72,7 +73,6 @@ class ScannerView : AppCompatActivity() {
 
         btn_save.setOnClickListener {
             viewModel.onSave()
-           makeToast("Dit indkøb er blevet gemt.")
         }
 
     }
