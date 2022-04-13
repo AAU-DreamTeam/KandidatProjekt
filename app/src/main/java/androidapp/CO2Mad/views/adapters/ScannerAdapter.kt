@@ -54,13 +54,13 @@ class ScannerAdapter(
             setUpCountryDropdown(holder, purchase)
             setUpAmountField(holder, purchase)
             setUpWeightField(holder, purchase)
-            setupButtons(holder)
+            setupButtons(holder, purchase)
 
         }
 
     }
 
-    private fun setupButtons(holder: ViewHolder) {
+    private fun setupButtons(holder: ViewHolder, purchase: Purchase) {
         val toast1 = Toast.makeText(
             holder.itemView.context,
             "Varen er blevet fjernet fra listen.",
@@ -68,7 +68,12 @@ class ScannerAdapter(
         )
         val toast2 = Toast.makeText(
             holder.itemView.context,
-            "Varen er flyttet til \"Udfyldte\" .",
+            "Varen er flyttet til \"Udfyldte\".",
+            Toast.LENGTH_SHORT
+        )
+        val toast3 = Toast.makeText(
+            holder.itemView.context,
+            "Kan ikke flyttes til \"Udfyldte\".",
             Toast.LENGTH_SHORT
         )
 
@@ -79,12 +84,16 @@ class ScannerAdapter(
             toast1.setGravity(Gravity.TOP, 0, 0)
             toast1.show()
             viewModel.onDeletePurchase(holder.adapterPosition, currentList)
-
         }
         holder.acceptButton.setOnClickListener {
-            toast2.setGravity(Gravity.TOP, 0, 0)
-            toast2.show()
-            viewModel.onCompletedChange(holder.adapterPosition)
+            if(purchase.isValid()) {
+                toast2.setGravity(Gravity.TOP, 0, 0)
+                toast2.show()
+                viewModel.onCompletedChange(holder.adapterPosition)
+            } else {
+                toast3.setGravity(Gravity.TOP, 0, 0)
+                toast3.show()
+            }
 
         }
 
