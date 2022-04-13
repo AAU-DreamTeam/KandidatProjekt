@@ -179,7 +179,9 @@ class ScannerAdapter(
                 viewModel.onCountryDefaultChanged(holder.adapterPosition,true,currentList)
                 purchase.storeItem.countryDefault = true
             }else if(purchase.storeItem.countryDefault) {
-                holder.country.setText(countryName,false)
+            val countryId = purchase.storeItem.product.countryId
+            val country = countries.find { it.id == countryId }!!
+                holder.country.setText(country.name,false)
                 purchase.storeItem.countryDefault = true
                 holder.country.setTextColor( defaultTextColor)
             }else {
@@ -198,7 +200,7 @@ class ScannerAdapter(
                 viewModel.onWeightDefaultChanged(holder.adapterPosition,true,currentList)
                 purchase.storeItem.weightDefault = true
             }else if (purchase.storeItem.weightDefault){
-                holder.weight.setText(purchase.storeItem.weightToString(true))
+                holder.weight.setText(purchase.storeItem.product.weight.toInt().toString())
                 purchase.storeItem.weightDefault = true
                 holder.weight.setTextColor( defaultTextColor)
             }else{
