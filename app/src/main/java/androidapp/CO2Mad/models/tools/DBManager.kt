@@ -647,6 +647,7 @@ class DBManager(context: Context?) : SQLiteOpenHelper(context, "FoodEmission.db"
         insertStoreItem(db, "Tomat", "Spanien", "tomater oko spanien", true, true, 0.5)
         insertStoreItem(db, "Tomat", "Marokko","lose tomater", false, false, 0.075)
         insertStoreItem(db, "Tomat", "Spanien","cocktailtomat", false, true, 0.500)
+        insertStoreItem(db, "Tomat", "Spanien", "blommetomater", false, true, 0.500)
 
 // Vandmelon
         insertStoreItem(db, "Vandmelon", "Brasilien", "vandmelon brasilien", false, false, 1 * 0.700)
