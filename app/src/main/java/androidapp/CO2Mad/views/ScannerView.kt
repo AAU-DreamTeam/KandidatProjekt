@@ -32,10 +32,6 @@ import java.io.IOException
 
 class ScannerView : AppCompatActivity() {
     private val viewModel = ScannerViewModel()
-    private lateinit var completedCard: CardView
-    private lateinit var missingCard: CardView
-
-
     private lateinit var constraintView:ConstraintLayout
 
 
@@ -43,8 +39,6 @@ class ScannerView : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scanner)
 
-        completedCard = findViewById(R.id.completedCard)
-        missingCard = findViewById(R.id.missingCard)
         constraintView= findViewById(R.id.scannerViewConstraint)
 
         viewModel.initiate(this)

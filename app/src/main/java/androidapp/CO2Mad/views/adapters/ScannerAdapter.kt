@@ -136,6 +136,7 @@ class ScannerAdapter(var purchases: List<Purchase>,
 
 
     private fun insertCountryDefault(holder: ViewHolder,purchase: Purchase){
+        writePurchaseValues(holder,purchase)
 
 
             val countryName = purchase.storeItem.country.name
@@ -151,6 +152,7 @@ class ScannerAdapter(var purchases: List<Purchase>,
                 purchase.storeItem.countryDefault = true
             }else if(purchase.storeItem.countryDefault) {
                 holder.country.setText(countryName,false)
+                purchase.storeItem.countryDefault = true
                 holder.country.setTextColor( defaultTextColor)
             }else {
                     holder.country.setText(purchase.storeItem.country.name, false)
@@ -168,7 +170,8 @@ class ScannerAdapter(var purchases: List<Purchase>,
                 viewModel.onWeightDefaultChanged(holder.adapterPosition,true,currentList)
                 purchase.storeItem.weightDefault = true
             }else if (purchase.storeItem.weightDefault){
-                holder.weight.setText(purchase.storeItem.weight.toInt().toString())
+                holder.weight.setText(purchase.storeItem.weightToString(true))
+                purchase.storeItem.weightDefault = true
                 holder.weight.setTextColor( defaultTextColor)
             }else{
                 holder.weight.setText(purchase.storeItem.weightToString(true))
@@ -264,6 +267,7 @@ class ScannerAdapter(var purchases: List<Purchase>,
 
             itemView.productOption.setAdapter(productAdapter)
             itemView.co2Showcase.setAdapter(countryAdapter)
+            this.setIsRecyclable(false)
 
             toggleButton.addOnButtonCheckedListener { toggleButton, checkedId, isChecked ->
                 toggleBtnListener()
