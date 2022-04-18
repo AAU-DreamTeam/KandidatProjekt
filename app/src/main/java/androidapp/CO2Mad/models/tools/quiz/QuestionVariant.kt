@@ -28,12 +28,12 @@ interface QuestionVariant {
             QuestionType.TREE -> 0.060
         }
     }
-    fun iconStr():String{
+   /* fun iconStr():String{
         if(hasBeenAsked){
             return actualValueStr
         }
         return "?$iconStr"
-    }
+    }*/
 
     fun QuestionVariant.calcQuizValue() : Int {
         var value: Int

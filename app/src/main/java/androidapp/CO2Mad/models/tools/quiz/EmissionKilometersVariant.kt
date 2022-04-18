@@ -12,6 +12,7 @@ class EmissionKilometersVariant(emission: Double, questionType: QuestionType): Q
     override var hasBeenAsked = false
     override val actualValueStr get() = if (!hasBeenAsked) valueToString(-1) else valueToString(actualValue)
     override val quizValueStr = valueToString(quizValue)
+
     private fun valueToString(value: Int): String {
         val unit = "km"
 

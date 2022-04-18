@@ -17,23 +17,18 @@ import java.util.*
 class EmissionViewModel: ViewModel()  {
     private var purchaseRepository: PurchaseRepository? = null
     private var storeItemRepository: StoreItemRepository? = null
-
+    private val emissionList = mutableListOf<Double>()
+    private var position = 0
     private val calendar: Calendar = Calendar.getInstance(TimeZone.getTimeZone("Europe/Copenhagen"))
+
+    private val _emission = MutableLiveData<Double>(null)
+    val emission: LiveData<Double> get() = _emission
 
     private val _purchases = MutableLiveData<List<Purchase>>()
     val purchases: LiveData<List<Purchase>> get() = _purchases
 
     private val _trips = MutableLiveData<List<Trip>>()
     val trips: LiveData<List<Trip>> get() = _trips
-
-    private val _monthlyEmission = MutableLiveData<Double>()
-    val monthlyEmission: LiveData<Double> get() = _monthlyEmission
-
-    private val _weeklyEmission = MutableLiveData<Double>()
-    val weeklyEmission: LiveData<Double> get() = _weeklyEmission
-
-    private val _emissionList = MutableLiveData<MutableList<Double?>>()
-    val emissionList: LiveData<MutableList<Double?>> get() = _emissionList
 
     fun initiate(context: Context) {
         if (purchaseRepository == null) {
@@ -43,18 +38,30 @@ class EmissionViewModel: ViewModel()  {
         if (storeItemRepository == null) {
             storeItemRepository = StoreItemRepository(context)
         }
+
+        loadData()
     }
 
     fun loadData(){
-        _monthlyEmission.value = purchaseRepository!!.loadEmissionFromYearMonth(calendar)
-        _weeklyEmission.value = purchaseRepository!!.loadEmissionFromYearWeek(calendar)
-
-        _emissionList.value = mutableListOf(_weeklyEmission.value,_monthlyEmission.value)
-
         val (tripList, purchaseList) = purchaseRepository!!.loadAllTrips(3)
 
         _trips.value = tripList
         _purchases.value = purchaseList
+
+        emissionList.clear()
+        emissionList.add(purchaseRepository!!.loadEmissionFromYearWeek(calendar))
+        emissionList.add(purchaseRepository!!.loadEmissionFromYearMonth(calendar))
+
+        setEmission()
+    }
+
+    private fun setEmission() {
+        _emission.value = emissionList[position]
+    }
+
+    fun onEmissionTimeRangeChanged(newPosition: Int) {
+        position = newPosition
+        setEmission()
     }
 
     override fun onCleared() {

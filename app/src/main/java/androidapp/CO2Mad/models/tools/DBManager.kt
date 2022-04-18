@@ -6,9 +6,9 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper;
 import androidapp.CO2Mad.models.daos.CountryDao
+import androidapp.CO2Mad.models.daos.VariablesDao
 import androidapp.CO2Mad.models.daos.ProductDao
 import androidapp.CO2Mad.models.enums.PRODUCT_CATEGORY
-import java.util.*
 
 class DBManager(context: Context?) : SQLiteOpenHelper(context, "FoodEmission.db", null, 1) {
     val INVALID_ID = -1L
@@ -18,6 +18,7 @@ class DBManager(context: Context?) : SQLiteOpenHelper(context, "FoodEmission.db"
         insertProductData(db)
         insertCountryData(db)
         insertStoreItemData(db)
+        insertVariables(db)
     }
 
     private fun createTables(db: SQLiteDatabase) {
@@ -35,7 +36,8 @@ class DBManager(context: Context?) : SQLiteOpenHelper(context, "FoodEmission.db"
         val createPurchaseTableStmnt = "CREATE TABLE purchase(id INTEGER PRIMARY KEY AUTOINCREMENT, storeItemID INTEGER NOT NULL, timestamp TEXT NOT NULL, week INTEGER NOT NULL, quantity INTEGER NOT NULL, FOREIGN KEY(storeItemID) REFERENCES storeItem(id));"
         db.execSQL(createPurchaseTableStmnt)
 
-
+        val createHighScoreTableStmt = "CREATE TABLE ${VariablesDao.TABLE}(${VariablesDao.COLUMN_ID} INTEGER PRIMARY KEY, ${VariablesDao.COLUMN_SCORE} INTEGER NOT NULL, ${VariablesDao.COLUMN_ENABLE_GAME} BOOLEAN NOT NULL);"
+        db.execSQL(createHighScoreTableStmt)
     }
 
     private fun insertCountryData(db: SQLiteDatabase) {
@@ -723,8 +725,22 @@ class DBManager(context: Context?) : SQLiteOpenHelper(context, "FoodEmission.db"
         }
     }
 
+    private fun insertVariables(db: SQLiteDatabase) : Long{
+        val contentValues = ContentValues()
+
+        contentValues.put(VariablesDao.COLUMN_ID, 1)
+        contentValues.put(VariablesDao.COLUMN_SCORE, 0)
+        contentValues.put(VariablesDao.COLUMN_ENABLE_GAME, 1)
+
+        return db.insert(VariablesDao.TABLE, null, contentValues)
+    }
+
     fun insert(table: String, contentValues: ContentValues): Long {
         return writableDatabase.insert(table, null, contentValues)
+    }
+
+    fun update(table: String, contentValues: ContentValues, idName: String, id: String): Int {
+        return writableDatabase.update(table, contentValues, "$idName = ?", arrayOf(id))
     }
 
     fun <T> selectMultiple(query: String, producer: (cursor: Cursor) -> T): List<T> {

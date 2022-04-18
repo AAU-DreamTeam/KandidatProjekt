@@ -15,7 +15,8 @@
     <string name="alternativer"> Alternativer </string>
     <string name="choose_product_text"> Produkt: </string>
     <string name="play_button"> Spil "Over eller Under" </string>
-    <string name="game_no_products_text"> Scan en kvitering for at bruge appen </string>
+    <string name="game_no_products_text"> Scan en kvittering for at bruge appen </string>
+    <string name="game_disabled_text"> Scan en kvittering for at spille "Over eller Under" </string>
     <string name="game_text"> Spil for at finde ud af hvad ? gemmer! </string>
     <string name="show_button"> Vis tal </string>
     <string name="dit_co2_aftryk_er"> Dit CO<sub><small>2</small></sub> aftryk er </string>

@@ -206,10 +206,6 @@ class ScannerAdapter(
             }else{
                 holder.weight.setText(purchase.storeItem.weightToString(true))
             }
-
-
-
-
     }
 
     private fun insertAmountDefault(holder: ViewHolder, purchase: Purchase) {
