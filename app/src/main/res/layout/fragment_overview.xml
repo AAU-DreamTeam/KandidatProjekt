@@ -4,75 +4,88 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android">
-<FrameLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".views.fragments.mainView.OverviewView">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:id="@+id/overview_constraint"
-            android:layout_height="match_parent">
+        android:id="@+id/overview_constraint"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="400dp"
-                android:layout_height="0dp"
-                android:id="@+id/overviewView"
-                app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginStart="4dp" android:layout_marginTop="12dp"
-                app:layout_constraintTop_toBottomOf="@+id/materialCardView"/>
         <com.google.android.material.card.MaterialCardView
-                android:id="@+id/materialCardView"
-                style="@style/Card"
-                android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:layout_marginTop="0dp"
-                android:layout_marginStart="8dp"
-                app:cardElevation="1dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:strokeWidth="0dp">
+            android:id="@+id/materialCardView"
+            style="@style/Card"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="0dp"
+            app:cardElevation="1dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:strokeWidth="0dp">
 
             <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center_horizontal|center_vertical"
-                    android:orientation="vertical">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_horizontal|center_vertical"
+                android:orientation="vertical">
 
                 <com.google.android.material.textfield.TextInputLayout
-                        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
-                        android:layout_width="300dp"
-
-                        android:layout_height="wrap_content"
-                >
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content">
 
                     <AutoCompleteTextView
-                            android:id="@+id/co2Showcase"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textSize="20sp"
-                            android:gravity="center"
-                            android:inputType="none"/>
-                </com.google.android.material.textfield.TextInputLayout>
-                <TextView
-                        android:id="@+id/totalEmission"
-                        style="@style/CardTextView"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/co2Showcase"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="25sp"/>
+                        android:gravity="center"
+                        android:inputType="none"
+                        android:textSize="20sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:id="@+id/totalEmission"
+                    style="@style/CardTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="25sp" />
 
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/overviewView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="12dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/materialCardView" />
+
+        <View
+            android:id="@+id/line"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="16dp"
+            android:background="@android:color/darker_gray"
+            app:layout_constraintBottom_toTopOf="@id/materialCardView2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/overviewView" />
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/materialCardView2"
             android:layout_width="390dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             android:layout_marginBottom="5dp"
             android:backgroundTint="@android:color/transparent"
             app:cardElevation="0dp"
-            app:layout_constraintBottom_toTopOf="@+id/button_play"
+            app:layout_constraintBottom_toTopOf="@id/id"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
 
             <LinearLayout
@@ -90,56 +103,102 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <View
-            android:id="@+id/line"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/id"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:background="@android:color/darker_gray"
-            app:layout_constraintBottom_toTopOf="@+id/materialCardView2"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/overviewView" />
-
-        <Button
-            android:id="@+id/button_play"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="13dp"
-            android:layout_marginBottom="5dp"
-            android:text="@string/play_button"
-            android:textColor="@color/black"
-            app:backgroundTint="@color/colorButton"
-            app:layout_constraintBottom_toTopOf="@+id/button_showNumbers"
-            app:layout_constraintEnd_toStartOf="@+id/ScanButton" />
-
-        <Button
-            android:id="@+id/button_showNumbers"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="68dp"
-            android:text="@string/show_button"
-            android:textColor="@color/black"
-            app:backgroundTint="@color/colorButton"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/ScanButton" />
-
-        <ImageButton
-            android:id="@+id/ScanButton"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginBottom="20dp"
-
-            android:clickable="true"
-            android:scaleType="fitCenter"
-            android:visibility="visible"
-            app:backgroundTint="@color/colorButton"
+            android:layout_marginTop="5dp"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:maxImageSize="58dp"
-            app:srcCompat="@drawable/ic_document_scanner_black_24dp"
-            app:useCompatPadding="false"
-            tools:visibility="visible" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/line">
+
+            <LinearLayout
+                android:id="@+id/gameContainer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginBottom="8dp"
+                android:gravity="center|center_horizontal"
+                android:orientation="vertical"
+                android:visibility="visible">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <Button
+                        android:id="@+id/button_play"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/play_button"
+                        android:textColor="@color/black"
+                        app:backgroundTint="@color/colorButton"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <Button
+                        android:id="@+id/button_showNumbers"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/show_button"
+                        android:textColor="@color/black"
+                        app:backgroundTint="@color/colorButton"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/button_play" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/frontPageHighScoreTxt"
+                        style="@style/TextStyle16"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="High Score:" />
+
+                    <TextView
+                        android:id="@+id/frontPageHighScoreNum"
+                        style="@style/TextStyle16"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/ScanButton"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="22dp"
+                android:clickable="true"
+                android:scaleType="fitCenter"
+                android:visibility="visible"
+                app:backgroundTint="@color/colorButton"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:maxImageSize="58dp"
+                app:srcCompat="@drawable/ic_document_scanner_black_24dp"
+                app:useCompatPadding="false"
+                tools:visibility="visible" />
+        </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
-</FrameLayout>
 </ScrollView>

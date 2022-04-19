@@ -22,6 +22,7 @@ import androidapp.CO2Mad.models.tools.quiz.QuizMaster
 import androidapp.CO2Mad.viewmodels.EmissionViewModel
 import androidapp.CO2Mad.views.GameView
 import androidapp.CO2Mad.views.ScannerView
+import kotlinx.android.synthetic.main.fragment_overview.*
 
 
 class OverviewView : Fragment() {
@@ -66,6 +67,7 @@ class OverviewView : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setupHighScore()
         setupEmission()
         setupPage()
         setupIcons(view, layoutInflater, view.parent as ViewGroup?)
@@ -74,6 +76,12 @@ class OverviewView : Fragment() {
     override fun onResume() {
         super.onResume()
         observeIcons(QuizMaster.questions.value)
+    }
+
+    private fun setupHighScore(){
+        QuizMaster.highScore.observe(viewLifecycleOwner) {
+            frontPageHighScoreNum.text = it.toString()
+        }
     }
     private fun setupEmission(){
         viewModel.emission.observe(viewLifecycleOwner) { emission ->
@@ -156,8 +164,7 @@ class OverviewView : Fragment() {
         QuizMaster.enableGame.observe(viewLifecycleOwner) { enableGame ->
             if (enableGame && viewModel.emission.value != 0.0) {
                 gameTV.text = resources.getString(R.string.game_text)
-                playButton.visibility = View.VISIBLE
-                showButton.visibility = View.VISIBLE
+                gameContainer.visibility = View.VISIBLE
             } else {
                 if (!enableGame) {
                     QuizMaster.showQuestions()
@@ -166,8 +173,7 @@ class OverviewView : Fragment() {
                     gameTV.text = resources.getString(R.string.game_no_products_text)
                 }
 
-                playButton.visibility = View.INVISIBLE
-                showButton.visibility = View.INVISIBLE
+                gameContainer.visibility = View.GONE
             }
         }
     }
