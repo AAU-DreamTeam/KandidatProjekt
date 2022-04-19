@@ -137,7 +137,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:maxImageSize="58dp"
-            app:srcCompat="@drawable/ic_document_scanner_black_24dp"
+            app:srcCompat="@drawable/ic_camera_solid"
             app:useCompatPadding="false"
             tools:visibility="visible" />
     </androidx.constraintlayout.widget.ConstraintLayout>

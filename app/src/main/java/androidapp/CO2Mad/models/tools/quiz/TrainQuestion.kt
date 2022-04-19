@@ -3,7 +3,7 @@ package androidapp.CO2Mad.models.tools.quiz
 import androidapp.CO2Mad.R
 
 class TrainQuestion(emission: Double, type: QuestionType): Question {
-    override val iconId = R.drawable.ic_directions_car_black_24dp
+    override val iconId = R.drawable.ic_train_solid
     override val bgImageId = R.mipmap.ic_train_foreground
     override val variants = mutableListOf<QuestionVariant>()
     override val variantTypeToIndex = mutableMapOf<QuestionVariantType, Int>()
