@@ -129,12 +129,7 @@ class StoreItemDao(private val dbManager: DBManager) {
             "SELECT $TABLE.$COLUMN_ID " +
                     "FROM $TABLE " +
                     "WHERE $COLUMN_PRODUCT_ID = ${storeItem.product.id} AND " +
-                    "$COLUMN_COUNTRY_ID = ${storeItem.country.id} AND " +
-                    "$COLUMN_RECEIPT_TEXT = '${storeItem.receiptText}' AND " +
-                    "$COLUMN_ORGANIC = ${dbManager.booleanToInt(storeItem.organic)} AND " +         // 2
-                    "$COLUMN_PACKAGED =  ${dbManager.booleanToInt(storeItem.packaged)} AND " +        // 3
-                    "$COLUMN_WEIGHT = ${storeItem.weight} AND " +          // 4
-                    "$COLUMN_STORE = '${storeItem.store}';"           // 5
+                    "$COLUMN_RECEIPT_TEXT = '${formatReceiptText(storeItem.receiptText)}';"
 
         return dbManager.select<Long>(query) {
             it.getLong(0)
@@ -145,10 +140,27 @@ class StoreItemDao(private val dbManager: DBManager) {
         val id = loadId(storeItem)
 
         return if (id != dbManager.INVALID_ID) {
+            update(storeItem, id)
             id
         } else {
             save(storeItem)
         }
+    }
+
+    private fun update(storeItem: StoreItem, id: Long) {
+        val contentValues = ContentValues()
+
+        contentValues.put(COLUMN_PRODUCT_ID, storeItem.product.id)
+        contentValues.put(COLUMN_COUNTRY_ID, storeItem.country.id)
+        contentValues.put(COLUMN_RECEIPT_TEXT, formatReceiptText(storeItem.receiptText))
+        contentValues.put(COLUMN_ORGANIC, storeItem.organic)
+        contentValues.put(COLUMN_PACKAGED, storeItem.packaged)
+        contentValues.put(COLUMN_WEIGHT, storeItem.weight)
+        contentValues.put(COLUMN_COUNTRY_DEFAULT,storeItem.countryDefault)
+        contentValues.put(COLUMN_WEIGHT_DEFAULT,storeItem.weightDefault)
+        contentValues.put(COLUMN_STORE, storeItem.store)
+
+        dbManager.update(TABLE, contentValues, COLUMN_ID, id.toString())
     }
 
     private fun save(storeItem: StoreItem): Long {
