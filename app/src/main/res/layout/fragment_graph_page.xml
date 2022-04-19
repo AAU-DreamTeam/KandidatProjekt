@@ -1,104 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android">
-<androidx.constraintlayout.widget.ConstraintLayout
-    android:id="@+id/constraint_graph"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<ScrollView xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-
-    <LinearLayout
-        android:id="@+id/LinearLayout_graph"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraint_graph"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:layout_height="match_parent"
+        android:layout_marginTop="8dp">
 
-        app:layout_constraintTop_toTopOf="parent">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/dropdown_menu_graph"
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+        <LinearLayout
+            android:id="@+id/LinearLayout_graph"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/dropdown_menu_graph"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
+
+                <AutoCompleteTextView
+                    android:id="@+id/dropdown_AutoText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:inputType="none"
+                    android:textSize="15sp"
+                    tools:text="Ugentlig forbrug" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/number_of_people_field"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="8dp"
+                android:hint="Personer">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/number_of_people_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:text="1" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
+
+        <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/top_graph"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/LinearLayout_graph">
+
+        </com.github.mikephil.charting.charts.LineChart>
+
+
+        <com.github.mikephil.charting.charts.CombinedChart
+            android:id="@+id/bar_graph"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@+id/LinearLayout_graph"
+
             >
 
-            <AutoCompleteTextView
-                android:id="@+id/dropdown_AutoText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:inputType="none"
-                android:textSize="15sp"
-                tools:text="Ugentlig forbrug"
-                />
+        </com.github.mikephil.charting.charts.CombinedChart>
 
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/number_of_people_field"
+        <View
+            android:id="@+id/line2"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginStart="8dp"
-            android:hint="Personer">
+            android:layout_height="1dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="602dp"
+            android:background="@android:color/darker_gray"
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/number_of_people_input"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="number"
-                android:text="1" />
+            app:layout_constraintTop_toBottomOf="@+id/top_graph" />
 
-        </com.google.android.material.textfield.TextInputLayout>
+        <com.github.mikephil.charting.charts.CombinedChart
+            android:id="@+id/bottom_graph"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/line2">
 
-    </LinearLayout>
-
-
+        </com.github.mikephil.charting.charts.CombinedChart>
 
 
-    <com.github.mikephil.charting.charts.LineChart
-        android:id="@+id/top_graph"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/LinearLayout_graph"
-        >
-
-    </com.github.mikephil.charting.charts.LineChart>
-
-
-    <com.github.mikephil.charting.charts.CombinedChart
-        android:id="@+id/bar_graph"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/LinearLayout_graph"
-        android:visibility="gone"
-
-        >
-
-    </com.github.mikephil.charting.charts.CombinedChart>
-
-    <View
-        android:id="@+id/line2"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginBottom="602dp"
-        android:background="@android:color/darker_gray"
-
-        app:layout_constraintTop_toBottomOf="@+id/top_graph"
-         />
-
-    <com.github.mikephil.charting.charts.CombinedChart
-        android:id="@+id/bottom_graph"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/line2">
-
-    </com.github.mikephil.charting.charts.CombinedChart>
-
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

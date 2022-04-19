@@ -29,6 +29,11 @@ class PurchaseView : Fragment() {
         tripListRV.layoutManager = LinearLayoutManager(requireContext())
 
         viewModel.trips.observe(viewLifecycleOwner) { list ->
+            if (list.isEmpty()) {
+                emptyListTV.visibility = View.VISIBLE
+            } else {
+                emptyListTV.visibility = View.GONE
+            }
             tripListRV.adapter = TripListAdapter(requireContext() as AppCompatActivity, list)
         }
     }
