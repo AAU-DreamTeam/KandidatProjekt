@@ -19,8 +19,6 @@ class GameView : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game_view)
 
-        QuizMaster.nextQuestion()
-
         viewModel.emission.observe(this) {
             carbonFootprint.text = "%.1f ".format(it).replace('.', ',') + " kg"
         }
@@ -90,5 +88,10 @@ class GameView : AppCompatActivity() {
         game_back_button.setOnClickListener{
             finish()
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        QuizMaster.nextQuestion()
     }
 }

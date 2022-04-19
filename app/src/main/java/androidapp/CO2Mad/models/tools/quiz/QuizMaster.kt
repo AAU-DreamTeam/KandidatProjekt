@@ -16,7 +16,7 @@ object QuizMaster : ViewModel() {
     private val _emission = MutableLiveData<Double>()
     val emission: LiveData<Double> get() = _emission
 
-    private val _score = MutableLiveData(0)
+    private val _score = MutableLiveData<Int>()
     val score: LiveData<Int> get() = _score
 
     private val _enableGame = MutableLiveData<Boolean>()
@@ -109,6 +109,7 @@ object QuizMaster : ViewModel() {
 
     fun setEmission(emission: Double) {
         _emission.value = emission
+        _score.value = 0
         generateQuestions()
     }
 
