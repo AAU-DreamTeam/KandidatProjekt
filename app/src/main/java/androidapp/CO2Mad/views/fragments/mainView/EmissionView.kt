@@ -31,23 +31,9 @@ class EmissionView : Fragment() {
         overviewView = OverviewView()
         fragmentFL = rootView.findViewById(R.id.fragment_fl)
 
-        setUpScanButton()
-
         childFragmentManager.beginTransaction().replace(fragmentFL.id, overviewView).commit()
-
 
         return rootView
     }
 
-    private fun setUpScanButton() {
-        val resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            if (it.resultCode == Activity.RESULT_OK && it.data?.extras?.get("reloadData") == true) {
-                viewModel.loadData()
-            }
-        }
-
-        scanButton.setOnClickListener{
-            resultLauncher.launch(Intent(activity, ScannerView::class.java))
-        }
-    }
 }

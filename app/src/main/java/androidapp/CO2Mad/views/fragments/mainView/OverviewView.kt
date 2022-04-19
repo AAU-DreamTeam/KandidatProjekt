@@ -37,6 +37,7 @@ class OverviewView : Fragment() {
     private lateinit var scanButton : ImageButton
     private var pos = 0
     private val iconPerLine = 3
+    private var iconSetupFinished = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -106,7 +107,6 @@ class OverviewView : Fragment() {
 
                 iconSetupFinished = true
             }
-
             observeIcons(it)
         }
     }
@@ -174,7 +174,6 @@ class OverviewView : Fragment() {
     private fun setUpScanButton() {
         val resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             viewModel.loadData()
-            setQuizMaster()
         }
 
         scanButton.setOnClickListener{
