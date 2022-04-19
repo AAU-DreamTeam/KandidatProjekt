@@ -1,34 +1,29 @@
 package androidapp.CO2Mad.views
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
-import android.util.Log
 import android.view.View
-import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.Toast
+import androidapp.CO2Mad.R
+import androidapp.CO2Mad.models.enums.COMPLETED
+import androidapp.CO2Mad.models.tools.quiz.QuizMaster
+import androidapp.CO2Mad.viewmodels.ScannerViewModel
+import androidapp.CO2Mad.views.adapters.ScannerAdapter
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.cardview.widget.CardView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.FileProvider
 import androidx.core.view.isGone
-import androidx.core.view.isInvisible
-import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidapp.CO2Mad.R
-import androidapp.CO2Mad.models.enums.COMPLETED
-import androidapp.CO2Mad.viewmodels.ScannerViewModel
-import androidapp.CO2Mad.views.adapters.ScannerAdapter
 import kotlinx.android.synthetic.main.activity_scanner.*
 import java.io.File
 import java.io.IOException
+
 
 class ScannerView : AppCompatActivity() {
     private val viewModel = ScannerViewModel()
@@ -47,7 +42,17 @@ class ScannerView : AppCompatActivity() {
 
         viewModel.saved.observe(this) {
             if (it) {
+                val resultIntent = Intent()
+
+                if (viewModel.completedPurchases.value!!.isNotEmpty() || viewModel.missingPurchases.value!!.isNotEmpty()) {
+                    QuizMaster.saveEnableGame(true)
+                    resultIntent.putExtra("reloadData", true)
+                } else {
+                    resultIntent.putExtra("reloadData", false)
+                }
+
                 makeToast("Dit indkøb er blevet gemt.")
+                setResult(RESULT_OK, resultIntent)
                 finish()
             } else {
                 makeToast("Kan ikke gemme før alle felter er udfyldt.")
@@ -61,6 +66,9 @@ class ScannerView : AppCompatActivity() {
     }
     private fun setupExitButtons(){
         btn_cancel.setOnClickListener{
+            val resultIntent = Intent()
+            resultIntent.putExtra("reloadData", false)
+            setResult(RESULT_OK, resultIntent)
             finish()
             makeToast("Dit indkøb er ikke blevet gemt")
         }

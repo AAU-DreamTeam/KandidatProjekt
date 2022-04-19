@@ -1,28 +1,9 @@
 package androidapp.CO2Mad.views
 
-import android.content.Context
-import android.content.Intent
-import android.content.pm.PackageManager
-import android.hardware.display.DisplayManager
-import android.hardware.display.VirtualDisplay
-import android.media.projection.MediaProjection
-import android.media.projection.MediaProjectionManager
 import android.os.Bundle
-import android.os.Handler
-import android.util.Log
-import android.util.SparseIntArray
-import android.view.Surface
-import android.widget.Toast
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.fragment.app.activityViewModels
 import androidx.viewpager2.widget.ViewPager2
 import androidapp.CO2Mad.R
-import androidapp.CO2Mad.models.tools.quiz.QuizMaster
-import androidapp.CO2Mad.viewmodels.EmissionViewModel
 import androidapp.CO2Mad.views.adapters.MainAdapter
 import com.google.android.material.tabs.TabLayout
 

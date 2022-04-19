@@ -1,5 +1,6 @@
 package androidapp.CO2Mad.views.fragments.mainView
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -11,6 +12,7 @@ import android.widget.ImageButton
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.activityViewModels
 import androidapp.CO2Mad.R
+import androidapp.CO2Mad.models.tools.quiz.QuizMaster
 import androidapp.CO2Mad.viewmodels.EmissionViewModel
 import androidapp.CO2Mad.views.ScannerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -24,11 +26,12 @@ class EmissionView : Fragment() {
                               savedInstanceState: Bundle?): View? {
         val rootView = inflater.inflate(R.layout.fragment_emission, container, false)
 
+        QuizMaster.initiate(requireContext())
         viewModel.initiate(requireContext())
         overviewView = OverviewView()
         fragmentFL = rootView.findViewById(R.id.fragment_fl)
 
-        viewModel.loadData()
+        setUpScanButton()
 
         childFragmentManager.beginTransaction().replace(fragmentFL.id, overviewView).commit()
 
@@ -36,4 +39,15 @@ class EmissionView : Fragment() {
         return rootView
     }
 
+    private fun setUpScanButton() {
+        val resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if (it.resultCode == Activity.RESULT_OK && it.data?.extras?.get("reloadData") == true) {
+                viewModel.loadData()
+            }
+        }
+
+        scanButton.setOnClickListener{
+            resultLauncher.launch(Intent(activity, ScannerView::class.java))
+        }
+    }
 }

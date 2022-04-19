@@ -1,18 +1,28 @@
 package androidapp.CO2Mad.models.tools.quiz
 
+import android.content.Context
+import androidapp.CO2Mad.repositories.PurchaseRepository
+import androidapp.CO2Mad.repositories.VariablesRepository
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import java.lang.Exception
+import java.util.*
 
 object QuizMaster : ViewModel() {
-    private val _emission = MutableLiveData<Double>(null)
+    private var variablesRepository: VariablesRepository? = null
+    private var indices: MutableList<Int>? = null
+
+    private val _emission = MutableLiveData<Double>()
     val emission: LiveData<Double> get() = _emission
 
-    private val _score = MutableLiveData(0)
+    private val _score = MutableLiveData<Int>()
     val score: LiveData<Int> get() = _score
 
-    private val _highScore = MutableLiveData(0)
+    private val _enableGame = MutableLiveData<Boolean>()
+    val enableGame: LiveData<Boolean> get() = _enableGame
+
+    private val _highScore = MutableLiveData<Int>()
     val highScore: LiveData<Int> get() = _highScore
 
     private val _currentQuestion = MutableLiveData<Question>()
@@ -27,16 +37,36 @@ object QuizMaster : ViewModel() {
     private val _questions = MutableLiveData<MutableList<Question>>()
     val questions: LiveData<MutableList<Question>> get() = _questions
 
-    private val questionTypeToIndex = mutableMapOf<QuestionType, Int>()
-    private var indices: MutableList<Int>? = null
+    fun initiate(context: Context) {
+        if (variablesRepository == null) {
+            variablesRepository = VariablesRepository(context)
+        }
+
+        loadData()
+    }
+
+    private fun loadData(){
+        _highScore.value = variablesRepository!!.loadHighScore()
+        _enableGame.value = variablesRepository!!.loadEnableGame()
+    }
+
+    fun saveEnableGame(enableGame: Boolean){
+        if (_enableGame.value != enableGame) {
+            _enableGame.value = enableGame
+            variablesRepository!!.saveEnableGame(enableGame)
+        }
+    }
+
+    private fun saveHighScore() {
+        val score = _score.value!!
+
+        if (score > _highScore.value!!) {
+            variablesRepository!!.saveHighScore(score)
+        }
+    }
 
     fun nextQuestion() : Boolean {
         if (emission.value != null) {
-            if (indices == null) {
-                generateQuestions()
-            } else if (indices!!.isEmpty()) {
-                return false
-            }
             drawQuestion()
             return true
         } else {
@@ -60,8 +90,6 @@ object QuizMaster : ViewModel() {
                 indices!!.add(index)
                 numberOfQuestions++
             }
-
-            questionTypeToIndex[type] = index
         }
 
         _remainingQuestions.value = numberOfQuestions
@@ -81,7 +109,7 @@ object QuizMaster : ViewModel() {
 
     fun setEmission(emission: Double) {
         _emission.value = emission
-        reset()
+        _score.value = 0
         generateQuestions()
     }
 
@@ -93,24 +121,19 @@ object QuizMaster : ViewModel() {
         }
     }
 
-
-    fun getQuestionVariant(questionType: QuestionType, variantType: QuestionVariantType): QuestionVariant {
-        val questionIndex = questionTypeToIndex[questionType]
-
-        if (questionIndex != null) {
-            return _questions.value!![questionIndex].getVariant(variantType)
-        } else {
-            throw IllegalArgumentException("Unable to find question of type ${questionType.name}.")
-        }
+    fun onQuizFinished(){
+        saveHighScore()
+        saveEnableGame(false)
     }
+
     fun showQuestions(){
         for(question in _questions.value!!){
             question.showQuestion()
         }
     }
 
-    fun reset() {
-        _questions.value?.clear()
-        indices?.clear()
+    override fun onCleared() {
+        super.onCleared()
+        variablesRepository?.close()
     }
 }

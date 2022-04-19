@@ -19,8 +19,6 @@ class GameView : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game_view)
 
-        QuizMaster.nextQuestion()
-
         viewModel.emission.observe(this) {
             carbonFootprint.text = "%.1f ".format(it).replace('.', ',') + " kg"
         }
@@ -37,9 +35,6 @@ class GameView : AppCompatActivity() {
             questionStart.text = HtmlCompat.fromHtml(it.getQuestionLine(1), HtmlCompat.FROM_HTML_MODE_LEGACY)
             questionMiddle.text = HtmlCompat.fromHtml(it.getQuestionLine(2), HtmlCompat.FROM_HTML_MODE_LEGACY)
             questionEnd.text = HtmlCompat.fromHtml(it.getQuestionLine(3), HtmlCompat.FROM_HTML_MODE_LEGACY)
-
-            answerQuizEmission.text = HtmlCompat.fromHtml(it.getAnswerLine(1), HtmlCompat.FROM_HTML_MODE_LEGACY)
-            answerUserEmission.text = HtmlCompat.fromHtml(it.getAnswerLine(2), HtmlCompat.FROM_HTML_MODE_LEGACY)
 
             questionLL.visibility = VISIBLE
             answerLL.visibility = GONE
@@ -61,7 +56,8 @@ class GameView : AppCompatActivity() {
                 circle.setBackgroundColor(ContextCompat.getColor(this, R.color.red))
             }
 
-
+            answerQuizEmission.text = HtmlCompat.fromHtml(viewModel.currentQuestion.value!!.getAnswerLine(1), HtmlCompat.FROM_HTML_MODE_LEGACY)
+            answerUserEmission.text = HtmlCompat.fromHtml(viewModel.currentQuestion.value!!.getAnswerLine(2), HtmlCompat.FROM_HTML_MODE_LEGACY)
 
             questionLL.visibility = GONE
             answerLL.visibility = VISIBLE
@@ -71,6 +67,7 @@ class GameView : AppCompatActivity() {
             if (it == 0) {
                 btnNext.text = "Afslut"
                 btnNext.setOnClickListener{
+                    viewModel.onQuizFinished()
                     finish()
                 }
             }
@@ -91,5 +88,10 @@ class GameView : AppCompatActivity() {
         game_back_button.setOnClickListener{
             finish()
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        QuizMaster.nextQuestion()
     }
 }

@@ -13,7 +13,7 @@ class EmissionHoursVariant(emission: Double, questionType: QuestionType): Questi
     override val quizValue: Int
     override val quizEffect: Double
     override val iconStr = " timer"
-    override val actualValueStr: String
+    override val actualValueStr get() = if (!hasBeenAsked) valueToString(-1) else valueToString(actualValue)
     override val quizValueStr: String
 
     init {
@@ -46,7 +46,6 @@ class EmissionHoursVariant(emission: Double, questionType: QuestionType): Questi
                 quizEffect = emissionPerSecond * quizValue
             }
 
-        actualValueStr = valueToString(actualValue)
         quizValueStr = valueToString(quizValue)
     }
 
