@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<ScrollView xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+<FrameLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".views.fragments.mainView.OverviewView">
@@ -62,56 +65,81 @@
         </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.card.MaterialCardView
-                android:id="@+id/materialCardView2"
-                android:layout_width="390dp"
-                android:layout_height="wrap_content"
-                app:cardElevation="0dp"
-                android:backgroundTint="@android:color/transparent"
-                app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginStart="8dp" android:layout_marginTop="12dp"
-                app:layout_constraintTop_toBottomOf="@+id/line">
+            android:id="@+id/materialCardView2"
+            android:layout_width="390dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginBottom="5dp"
+            android:backgroundTint="@android:color/transparent"
+            app:cardElevation="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/button_play"
+            app:layout_constraintStart_toStartOf="parent">
+
             <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_horizontal|center_vertical"
-                    android:orientation="vertical">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal|center_vertical"
+                android:orientation="vertical">
+
                 <TextView
-                        android:id="@+id/gameText"
-                        style="@style/CardTextView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="15sp"/>
+                    android:id="@+id/gameText"
+                    style="@style/CardTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
+
         <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@android:color/darker_gray" android:id="@+id/line"
-                app:layout_constraintStart_toStartOf="parent" android:layout_marginTop="12dp"
-                app:layout_constraintTop_toBottomOf="@+id/overviewView"/>
+            android:id="@+id/line"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:background="@android:color/darker_gray"
+            app:layout_constraintBottom_toTopOf="@+id/materialCardView2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/overviewView" />
 
         <Button
             android:id="@+id/button_play"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="4dp"
+            android:layout_marginEnd="13dp"
+            android:layout_marginBottom="5dp"
             android:text="@string/play_button"
             android:textColor="@color/black"
             app:backgroundTint="@color/colorButton"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/materialCardView2" />
+            app:layout_constraintBottom_toTopOf="@+id/button_showNumbers"
+            app:layout_constraintEnd_toStartOf="@+id/ScanButton" />
 
         <Button
             android:id="@+id/button_showNumbers"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="62dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginEnd="68dp"
             android:text="@string/show_button"
             android:textColor="@color/black"
             app:backgroundTint="@color/colorButton"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/button_play" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/ScanButton" />
+
+        <ImageButton
+            android:id="@+id/ScanButton"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="20dp"
+
+            android:clickable="true"
+            android:scaleType="fitCenter"
+            android:visibility="visible"
+            app:backgroundTint="@color/colorButton"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:maxImageSize="58dp"
+            app:srcCompat="@drawable/ic_document_scanner_black_24dp"
+            app:useCompatPadding="false"
+            tools:visibility="visible" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>
+</ScrollView>

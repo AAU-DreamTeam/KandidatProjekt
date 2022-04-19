@@ -22,6 +22,7 @@ import androidapp.CO2Mad.models.tools.quiz.QuestionVariantType
 import androidapp.CO2Mad.models.tools.quiz.QuizMaster
 import androidapp.CO2Mad.viewmodels.EmissionViewModel
 import androidapp.CO2Mad.views.GameView
+import androidapp.CO2Mad.views.ScannerView
 
 
 class OverviewView : Fragment() {
@@ -34,6 +35,7 @@ class OverviewView : Fragment() {
     private lateinit var topView: ConstraintLayout
     private lateinit var constraintView: ConstraintLayout
     private lateinit var co2Showcase: AutoCompleteTextView
+    private lateinit var scanButton : ImageButton
     private var pos = 0
     private val iconPerLine = 3
 
@@ -42,6 +44,7 @@ class OverviewView : Fragment() {
 
         val rootView = inflater.inflate(R.layout.fragment_overview, container, false)
 
+        scanButton = rootView.findViewById(R.id.ScanButton)
         totalEmissionTV = rootView.findViewById(R.id.totalEmission)
         gameTV = rootView.findViewById(R.id.gameText)
         playButton= rootView.findViewById(R.id.button_play)
@@ -51,11 +54,12 @@ class OverviewView : Fragment() {
         co2Showcase = rootView.findViewById(R.id.co2Showcase)
 
 
-        setHeight(rootView)
+
         setupButtons()
         setQuizMaster()
         setupIcons(rootView,inflater,container)
         setupDropDown()
+        setUpScanButton()
 
         return rootView
     }
@@ -144,6 +148,16 @@ class OverviewView : Fragment() {
             showButton.visibility = View.VISIBLE
         }
     }
+    private fun setUpScanButton() {
+        val resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            viewModel.loadData()
+            setQuizMaster()
+        }
+
+        scanButton.setOnClickListener{
+            resultLauncher.launch(Intent(activity, ScannerView::class.java))
+        }
+    }
 
     private fun setupDropDown(){
         val adapter: ArrayAdapter<Any?> = ArrayAdapter<Any?>(
@@ -188,7 +202,6 @@ class OverviewView : Fragment() {
         val resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             viewModel.loadData()
         }
-        //setup listeners for scanning
         playButton.setOnClickListener{
             resultLauncher.launch(Intent(activity, GameView::class.java))
         }
