@@ -129,7 +129,7 @@ class PurchaseDao(context: Context) {
     }
 
     private fun isValid(receiptText: String): Boolean {
-        return !(receiptText.contains("PANT") || receiptText.contains("RABAT") || receiptText.contains("*") || receiptText.contains("[0-9]+[,][0-9]+".toRegex()) || receiptText.length == 1)
+        return !(receiptText.contains("PANT") || receiptText.contains("RABAT") || receiptText.contains("*") || !receiptText.contains("([a-z]|[A-Z])+".toRegex()) || receiptText.contains("[0-9]+[,][0-9]+".toRegex()) || receiptText.length == 1)
     }
 
     private fun extractPurchaseFromLine(receiptText: String, quantity: Int = 0): Purchase {
