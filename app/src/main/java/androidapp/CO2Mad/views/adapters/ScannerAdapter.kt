@@ -149,7 +149,7 @@ class ScannerAdapter(
         holder.product.setText(purchase.storeItem.product.name, false)
 
         holder.product.setOnItemClickListener { parent, _, pos, _ ->
-            val product = products.find { it.name  == parent.getItemAtPosition(pos) }!!
+            val product = parent.getItemAtPosition(pos) as Product
 
             holder.product.setText(product.name, false)
             viewModel.onProductChanged(holder.adapterPosition, product, currentList)
@@ -296,26 +296,16 @@ class ScannerAdapter(
         val acceptButton: Button = itemView.findViewById(R.id.btn_accept)
 
         init {
-            val productAdapter = ArrayAdapter(itemView.context, R.layout.dropdown_item,productsToStrings(products))
+            val productAdapter = ProductAdapter(itemView.context, R.layout.dropdown_item, products)
             val countryAdapter = CountryAdapter(itemView.context, R.layout.dropdown_item, countries)
-            productAdapter.sort { product, product2 -> product.compareTo(product2) }
 
             itemView.productOption.setAdapter(productAdapter)
-            itemView.productOption.threshold = 0
             itemView.co2Showcase.setAdapter(countryAdapter)
             this.setIsRecyclable(false)
 
             toggleButton.addOnButtonCheckedListener { toggleButton, checkedId, isChecked ->
                 toggleBtnListener()
             }
-        }
-        private fun productsToStrings(products:List<Product>): List<String> {
-            val strings = mutableListOf<String>()
-            for(product in products){
-                strings.add(product.name)
-
-            }
-            return strings.toList()
         }
 
         private fun toggleBtnListener() {

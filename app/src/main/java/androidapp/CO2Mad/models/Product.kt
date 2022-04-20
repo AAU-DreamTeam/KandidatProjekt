@@ -20,9 +20,4 @@ class Product(val id: Int,
     fun isValid(): Boolean {
         return id > 0
     }
-
-    override fun toString(): String {
-        return name
-    }
-
 }
