@@ -51,8 +51,9 @@ object QuizMaster : ViewModel() {
     }
 
     fun saveEnableGame(enableGame: Boolean){
-        if (_enableGame.value != enableGame) {
-            _enableGame.value = enableGame
+        _enableGame.value = enableGame
+
+        if (enableGame != _enableGame.value) {
             variablesRepository!!.saveEnableGame(enableGame)
         }
     }
