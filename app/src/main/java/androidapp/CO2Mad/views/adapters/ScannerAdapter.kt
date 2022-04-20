@@ -237,7 +237,7 @@ class ScannerAdapter(
         insertCountryDefault(holder, purchase)
 
         holder.country.setOnItemClickListener { parent, view, pos, id ->
-            val country = parent.getItemAtPosition(pos) as Country
+            val country = countries.find { it.name == parent.getItemAtPosition(pos)}!!
 
             holder.country.setText(country.name, false)
             viewModel.onCountryChanged(holder.adapterPosition, country, currentList)
@@ -297,12 +297,13 @@ class ScannerAdapter(
 
         init {
             val productAdapter = ArrayAdapter(itemView.context, R.layout.dropdown_item,productsToStrings(products))
-            val countryAdapter = CountryAdapter(itemView.context, R.layout.dropdown_item, countries)
+            val countryAdapter = ArrayAdapter(itemView.context, R.layout.dropdown_item, countriesToStrings(countries))
             productAdapter.sort { product, product2 -> product.compareTo(product2) }
 
             itemView.productOption.setAdapter(productAdapter)
             itemView.productOption.threshold = 0
             itemView.co2Showcase.setAdapter(countryAdapter)
+            itemView.co2Showcase.threshold = 0
             this.setIsRecyclable(false)
 
             toggleButton.addOnButtonCheckedListener { toggleButton, checkedId, isChecked ->
@@ -313,6 +314,14 @@ class ScannerAdapter(
             val strings = mutableListOf<String>()
             for(product in products){
                 strings.add(product.name)
+
+            }
+            return strings.toList()
+        }
+        private fun countriesToStrings(countries: List<Country>): List<String> {
+            val strings = mutableListOf<String>()
+            for(country in countries){
+                strings.add(country.name)
 
             }
             return strings.toList()
