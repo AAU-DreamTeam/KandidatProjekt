@@ -14,7 +14,7 @@ class ProductDao(private val dbManager: DBManager) {
 
         return dbManager.selectMultiple(query) {
             produceProduct(it)
-        }
+        }.sortedBy { it.name }
     }
 
     fun extractProduct(receiptText: String): Product {
