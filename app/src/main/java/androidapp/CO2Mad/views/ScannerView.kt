@@ -23,13 +23,14 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_scanner.*
 import java.io.File
 import java.io.IOException
+import java.util.*
 
 
 class ScannerView : AppCompatActivity() {
     private val viewModel = ScannerViewModel()
     private lateinit var constraintView:ConstraintLayout
-
-
+    var imageFile : File? = null
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scanner)
@@ -46,6 +47,7 @@ class ScannerView : AppCompatActivity() {
 
                 if (viewModel.completedPurchases.value!!.isNotEmpty() || viewModel.missingPurchases.value!!.isNotEmpty()) {
                     QuizMaster.saveEnableGame(true)
+                    MediaStore.Images.Media.insertImage(contentResolver, imageFile!!.absolutePath, "Title_${Calendar.getInstance()}", "test")
                     resultIntent.putExtra("reloadData", true)
                 } else {
                     resultIntent.putExtra("reloadData", false)
@@ -164,15 +166,13 @@ class ScannerView : AppCompatActivity() {
     }
 
     private fun launchPhotoActivity() {
-
         val fileName = "image"
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         val storageDirectory = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        var imageFile : File? = null
 
         try {
             imageFile = File.createTempFile(fileName, ".jpg", storageDirectory)
-            val imageUri = FileProvider.getUriForFile(this, "androidapp.CO2Mad.fileprovider", imageFile)
+            val imageUri = FileProvider.getUriForFile(this, "androidapp.CO2Mad.fileprovider", imageFile!!)
             intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri)
         } catch (e: IOException) {
             e.printStackTrace()

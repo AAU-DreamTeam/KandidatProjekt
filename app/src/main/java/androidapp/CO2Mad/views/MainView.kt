@@ -1,10 +1,16 @@
 package androidapp.CO2Mad.views
 
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import androidapp.CO2Mad.R
+import androidapp.CO2Mad.viewmodels.EmissionViewModel
 import androidapp.CO2Mad.views.adapters.MainAdapter
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
+import androidx.fragment.app.activityViewModels
 import com.google.android.material.tabs.TabLayout
 
 
@@ -12,6 +18,10 @@ class MainView : AppCompatActivity() {
     private lateinit var tabLayout: TabLayout
     private lateinit var viewPager: ViewPager2
     private lateinit var viewPagerAdapter: MainAdapter
+    private val viewModel: EmissionViewModel by viewModels()
+    private val resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        viewModel.loadData()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,5 +77,17 @@ class MainView : AppCompatActivity() {
                 tabLayout.selectTab(tabLayout.getTabAt(position))
             }
         })
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        if (requestCode == 1 && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+            resultLauncher.launch(Intent(this, ScannerView::class.java))
+        }
     }
 }

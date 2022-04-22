@@ -224,7 +224,7 @@ class DBManager(context: Context?) : SQLiteOpenHelper(context, "FoodEmission.db"
 
     private fun insertStoreItemData(db: SQLiteDatabase){
         // Agurk
-        insertStoreItem(db, "Agurk", "Danmark", "agurk danmark", false, true, 1 * 0.3)
+        insertStoreItem(db, "Agurk", "Danmark", "dk agurk", false, true, 1 * 0.3)
         insertStoreItem(db, "Agurk", "Danmark", "agurk dansk oko danmark", true, true, 1 * 0.3)
         insertStoreItem(db, "Agurk", "Spanien", "agurk oko spanien", true, true, 1 * 0.3)
 
@@ -236,7 +236,7 @@ class DBManager(context: Context?) : SQLiteOpenHelper(context, "FoodEmission.db"
 
 // Appelsin
         insertStoreItem(db, "Appelsin", "Spanien", "appelsiner oko spanien", true, true, 1.50)
-        insertStoreItem(db, "Appelsin", "Spanien", "appelsiner spanien", false, true, 2.0)
+        insertStoreItem(db, "Appelsin", "Spanien", "appelsiner 2 kg", false, true, 2.0)
         insertStoreItem(db, "Appelsin", "Spanien", "appelsiner spanien", false, false, 1 * 0.160)
         insertStoreItem(db, "Appelsin", "Egypten", "appelsiner egypten", false, false, 1 * 0.160)
         insertStoreItem(db, "Appelsin", "Sydafrika", "appelsiner sydafrika", false, false, 1 * 0.160)
@@ -375,7 +375,9 @@ class DBManager(context: Context?) : SQLiteOpenHelper(context, "FoodEmission.db"
         insertStoreItem(db, "Græskar", "Sydafrika", "hokkaido greskar oko sydafrika", true, false, 1 * 1.000)
 
 // Grønkål
-        insertStoreItem(db, "Grønkål", "Danmark", "baby gronkal ", false, true, 0.075)
+        insertStoreItem(db, "Grønkål", "Danmark", "baby gronkal", false, true, 0.075)
+        insertStoreItem(db, "Grønkål", "Danmark", "oko gronkal 250g", true, true, 0.250)
+        insertStoreItem(db, "Grønkål", "Danmark", "snittet gronkal", false, true, 0.250)
 
 // Grøntsagsbøffer
         insertStoreItem(db, "Grøntsagsbøffer", "Danmark", "plantebaserede boffer danmark", false, true, 0.24)
@@ -384,6 +386,7 @@ class DBManager(context: Context?) : SQLiteOpenHelper(context, "FoodEmission.db"
         insertStoreItem(db, "Gulerod", "Danmark", "gulerodder oko danmark", true, true, 0.5)
         insertStoreItem(db, "Gulerod", "Danmark", "snackgulerodder danmark", false, true, 0.5)
         insertStoreItem(db, "Gulerod", "Italien", "gulerodder m. top italien", false, false, 1 * 0.065)
+        insertStoreItem(db, "Gulerod", "Danmark", "gulerodder hands.", false, true, 1.0)
 
 /// Hakket kylling
         insertStoreItem(db, "Hakket kylling", "Danmark", "hakket kyllingekod 3-7% fedt danmark", false, true, 0.003)
@@ -462,6 +465,7 @@ class DBManager(context: Context?) : SQLiteOpenHelper(context, "FoodEmission.db"
 // Kikærter
         insertStoreItem(db, "Kikærter, tørrede", "Tyrkiet", "kikerter oko tyrkiet", true, true, 0.41)
         insertStoreItem(db, "Kikærter, tørrede", "Tyrkiet", "kikerter tyrkiet", false, true, 0.24)
+        insertStoreItem(db, "Kikærter, tørrede", "Tyrkiet", "levevis kikerter", true, true, 0.400)
 
 // Kiwi
         insertStoreItem(db, "Kiwi", "Chile", "kiwi oko chile", true, true, 0.5)
@@ -507,6 +511,7 @@ class DBManager(context: Context?) : SQLiteOpenHelper(context, "FoodEmission.db"
 // Løg
         insertStoreItem(db, "Løg", "Danmark", "skalottelog oko danmark", true, true, 0.2)
         insertStoreItem(db, "Løg", "Danmark", "log danmark", false, true, 1.0)
+        insertStoreItem(db, "Løg", "Danmark", "rodlog", false, true, 1.0)
         insertStoreItem(db, "Løg", "Egypten", "log oko egypten", true, true, 0.75)
         insertStoreItem(db, "Løg", "Holland", "blandede log oko holland", true, true, 0.4)
 
@@ -537,7 +542,7 @@ class DBManager(context: Context?) : SQLiteOpenHelper(context, "FoodEmission.db"
         insertStoreItem(db, "Okseinderlår", "Tyskland", "okseinderlar tyskland", false, true, 1.0)
 
 // Oksekød, hakket
-        insertStoreItem(db, "Oksekød, hakket", "Danmark", "hakket oksekod 4-7% fedt danmark", false, true, 0.004)
+        insertStoreItem(db, "Oksekød, hakket", "Danmark", "mh okse 7%", false, true, 0.004)
         insertStoreItem(db, "Oksekød, hakket", "Frankrig", "hakket oksekod 8-12% fedt oko frankrig", true, true, 0.008)
         insertStoreItem(db, "Oksekød, hakket", "Holland", "hakket oksekod 4-7% fedt holland", false, true, 0.004)
         insertStoreItem(db, "Oksekød, hakket", "Tyskland", "hakket oksekod 4-7% fedt tyskland", false, true, 0.004)
@@ -560,6 +565,7 @@ class DBManager(context: Context?) : SQLiteOpenHelper(context, "FoodEmission.db"
         insertStoreItem(db, "Peberfrugt", "Spanien", "california peberfrugter oko spanien", true, true, 0.3)
         insertStoreItem(db, "Peberfrugt", "Spanien", "lose rød peberfrugter spanien", false, false, 1 * 0.180)
         insertStoreItem(db, "Peberfrugt", "Spanien", "sod rød snackpeber kernefri spanien", false, true, 0.3)
+        insertStoreItem(db, "Peberfrugt", "Spanien", "oko rod peber", true, true, 0.180)
 
 // Persille
         insertStoreItem(db, "Persille", "Danmark", "bredbladet persille oko danmark", true, true, 0.05)
@@ -616,7 +622,7 @@ class DBManager(context: Context?) : SQLiteOpenHelper(context, "FoodEmission.db"
         insertStoreItem(db, "Sorte bønner", "Kina", "sorte bonner kina", false, true, 0.24)
 
 // Spidskål
-        insertStoreItem(db, "Spidskål", "Danmark", "spidskal oko danmark", true, true, 1 * 0.7)
+        insertStoreItem(db, "Spidskål", "Danmark", "spidskal, rod", true, true, 1 * 0.7)
         insertStoreItem(db, "Spidskål", "Holland", "spidskal holland", false, true, 1 * 0.7)
         insertStoreItem(db, "Spidskål", "Holland", "spidskal oko holland", true, true, 1 * 0.7)
         insertStoreItem(db, "Spidskål", "Portugal", "spidskal oko portugal", true, true, 1 * 0.7)

@@ -27,7 +27,7 @@ class TextRecognizer {
             }
     }
 
-    private fun getCameraPhotoOrientation(imagePath: String?): Int {
+    private fun getCameraPhotoOrientation(imagePath: String): Int {
         var rotate = 0
         try {
             val imageFile = File(imagePath)

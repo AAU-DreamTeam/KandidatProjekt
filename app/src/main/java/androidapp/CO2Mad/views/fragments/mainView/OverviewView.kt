@@ -5,6 +5,7 @@ import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Point
 import android.os.Build
 import android.os.Bundle
@@ -39,9 +40,11 @@ class OverviewView : Fragment() {
     private lateinit var constraintView: ConstraintLayout
     private lateinit var co2Showcase: AutoCompleteTextView
     private lateinit var scanButton : ImageButton
-    private var pos = 0
     private val iconPerLine = 3
     private var iconSetupFinished = false
+    private val resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        viewModel.loadData()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -182,19 +185,36 @@ class OverviewView : Fragment() {
         }
     }
     private fun setUpScanButton() {
-        val resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            viewModel.loadData()
-        }
-
         scanButton.setOnClickListener{
-            ActivityCompat.requestPermissions(
-                parentFragment?.activity as Activity,
-                arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
-                1);
-            resultLauncher.launch(Intent(activity, ScannerView::class.java))
+            if (!hasPermissions()) {
+                ActivityCompat.requestPermissions(
+                    parentFragment?.activity as Activity,
+                    arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                    1
+                )
+            } else {
+                resultLauncher.launch(Intent(activity, ScannerView::class.java))
+            }
         }
     }
 
+    private fun hasPermissions() : Boolean {
+        return ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(
+            requireContext(),
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        if (requestCode == 1 && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+            resultLauncher.launch(Intent(activity, ScannerView::class.java))
+        }
+    }
     private fun setupDropDown() {
         val adapter: ArrayAdapter<Any?> = ArrayAdapter<Any?>(
             this.requireContext(),
