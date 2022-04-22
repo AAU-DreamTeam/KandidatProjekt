@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">FoodEmissions</string>
+    <string name="app_name">CO2-Mad</string>
     <string name="str_btn_scan">Scan receipt</string>
     <string name="str_btn_next">Next</string>
     <string name="str_btn_prev">Previous</string>
