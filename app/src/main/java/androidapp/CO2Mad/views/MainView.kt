@@ -1,11 +1,13 @@
 package androidapp.CO2Mad.views
 
+import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import androidapp.CO2Mad.R
+import androidapp.CO2Mad.models.tools.quiz.QuizMaster
 import androidapp.CO2Mad.viewmodels.EmissionViewModel
 import androidapp.CO2Mad.views.adapters.MainAdapter
 import androidx.activity.result.contract.ActivityResultContracts
@@ -20,7 +22,10 @@ class MainView : AppCompatActivity() {
     private lateinit var viewPagerAdapter: MainAdapter
     private val viewModel: EmissionViewModel by viewModels()
     private val resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-        viewModel.loadData()
+        if (it.resultCode == Activity.RESULT_OK && it.data!!.extras!!.get("reloadData") as Boolean) {
+            viewModel.loadData()
+            QuizMaster.saveEnableGame(true)
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

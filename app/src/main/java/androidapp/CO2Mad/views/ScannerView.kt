@@ -30,7 +30,7 @@ class ScannerView : AppCompatActivity() {
     private val viewModel = ScannerViewModel()
     private lateinit var constraintView:ConstraintLayout
     var imageFile : File? = null
-    
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scanner)
@@ -46,7 +46,6 @@ class ScannerView : AppCompatActivity() {
                 val resultIntent = Intent()
 
                 if (viewModel.completedPurchases.value!!.isNotEmpty() || viewModel.missingPurchases.value!!.isNotEmpty()) {
-                    QuizMaster.saveEnableGame(true)
                     MediaStore.Images.Media.insertImage(contentResolver, imageFile!!.absolutePath, "Title_${Calendar.getInstance()}", "test")
                     resultIntent.putExtra("reloadData", true)
                 } else {

@@ -52,7 +52,6 @@ object QuizMaster : ViewModel() {
 
     fun saveEnableGame(enableGame: Boolean){
         _enableGame.value = enableGame
-
         variablesRepository!!.saveEnableGame(enableGame)
     }
 

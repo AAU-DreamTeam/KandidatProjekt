@@ -2,6 +2,7 @@ package androidapp.CO2Mad.views.fragments.mainView
 
 
 import android.Manifest
+import android.R.attr.data
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -11,12 +12,6 @@ import android.os.Build
 import android.os.Bundle
 import android.view.*
 import android.widget.*
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.constraintlayout.widget.ConstraintSet
-import androidx.core.text.HtmlCompat
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidapp.CO2Mad.R
 import androidapp.CO2Mad.models.tools.quiz.Question
 import androidapp.CO2Mad.models.tools.quiz.QuestionType
@@ -25,7 +20,13 @@ import androidapp.CO2Mad.models.tools.quiz.QuizMaster
 import androidapp.CO2Mad.viewmodels.EmissionViewModel
 import androidapp.CO2Mad.views.GameView
 import androidapp.CO2Mad.views.ScannerView
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.app.ActivityCompat
+import androidx.core.text.HtmlCompat
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import kotlinx.android.synthetic.main.fragment_overview.*
 
 
@@ -43,7 +44,10 @@ class OverviewView : Fragment() {
     private val iconPerLine = 3
     private var iconSetupFinished = false
     private val resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-        viewModel.loadData()
+        if (it.resultCode == Activity.RESULT_OK && it.data!!.extras!!.get("reloadData") as Boolean) {
+            viewModel.loadData()
+            QuizMaster.saveEnableGame(true)
+        }
     }
 
     override fun onCreateView(
