@@ -1,6 +1,8 @@
 package androidapp.CO2Mad.views.fragments.mainView
 
 
+import android.Manifest
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Point
@@ -22,6 +24,7 @@ import androidapp.CO2Mad.models.tools.quiz.QuizMaster
 import androidapp.CO2Mad.viewmodels.EmissionViewModel
 import androidapp.CO2Mad.views.GameView
 import androidapp.CO2Mad.views.ScannerView
+import androidx.core.app.ActivityCompat
 import kotlinx.android.synthetic.main.fragment_overview.*
 
 
@@ -45,6 +48,7 @@ class OverviewView : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val rootView = inflater.inflate(R.layout.fragment_overview, container, false)
+
 
         scanButton = rootView.findViewById(R.id.ScanButton)
         totalEmissionTV = rootView.findViewById(R.id.totalEmission)
@@ -183,6 +187,10 @@ class OverviewView : Fragment() {
         }
 
         scanButton.setOnClickListener{
+            ActivityCompat.requestPermissions(
+                parentFragment?.activity as Activity,
+                arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+                1);
             resultLauncher.launch(Intent(activity, ScannerView::class.java))
         }
     }
