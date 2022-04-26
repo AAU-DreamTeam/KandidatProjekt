@@ -8,6 +8,36 @@
     tools:context=".views.MainView">
 
     <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:elevation="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tabIconTint="@color/tab_selector"
+        app:tabIndicatorColor="@color/colorPrimaryDark"
+        app:tabMode="fixed"
+        app:tabTextColor="@color/tab_selector">
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:icon="@drawable/ic_home" />
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:icon="@drawable/ic_graph" />
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:icon="@drawable/ic_basket" />
+
+    </com.google.android.material.tabs.TabLayout>
+    <!--<com.google.android.material.tabs.TabLayout
             android:id="@+id/tabLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -22,7 +52,7 @@
             app:tabIndicatorColor="@color/white"
             app:tabIndicatorGravity="bottom"
             app:tabTextAppearance="@style/TextAppearance.AppCompat.Display4"
-            app:tabTextColor="@color/black" app:tabMinWidth="100dp" app:tabInlineLabel="false"/>
+            app:tabTextColor="@color/black" app:tabMinWidth="100dp" app:tabInlineLabel="false"/>-->
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager"

@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import androidapp.CO2Mad.R
@@ -43,12 +44,6 @@ class MainView : AppCompatActivity() {
 
     private fun setUpTabs(){
         with(tabLayout) {
-
-            addTab(setupTab(R.drawable.ic_home))
-            addTab(setupTab(R.drawable.ic_graph))
-            addTab(setupTab(R.drawable.ic_basket))
-
-
             addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
 
                 override fun onTabSelected(tab: TabLayout.Tab?) {
@@ -64,13 +59,6 @@ class MainView : AppCompatActivity() {
                 }
             })
         }
-    }
-    private fun setupTab(drawable: Int): TabLayout.Tab {
-        val newTab = tabLayout.newTab()
-        val view = getLayoutInflater().inflate(R.layout.customtab,null);
-        view.setBackgroundResource(drawable)
-        newTab.customView = view
-        return newTab
     }
 
     private fun setUpViewPager(){
@@ -93,6 +81,8 @@ class MainView : AppCompatActivity() {
 
         if (requestCode == 1 && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
             resultLauncher.launch(Intent(this, ScannerView::class.java))
+        } else {
+            Toast.makeText(applicationContext, "Kan ikke scanne uden tilladelse til at gemme billeder", Toast.LENGTH_SHORT).show()
         }
     }
 }

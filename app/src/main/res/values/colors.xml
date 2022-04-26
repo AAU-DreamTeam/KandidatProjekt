@@ -10,7 +10,8 @@
     <color name="colorButton">#F4C622</color>
     <color name="colorAccent">#4CAF50</color>
     <color name="black">#FF000000</color>
-    <color name="white">#F9F6EE</color>
+    <color name="white">#fffdfa</color>
+    <color name="whiteDark">#eeece6</color>
     <color name="grey">#B6B6B6</color>
     <color name="green">#06FF01</color>
     <color name="red">#FF0101</color>
