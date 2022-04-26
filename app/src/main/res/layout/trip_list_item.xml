@@ -28,9 +28,9 @@
                 android:layout_marginBottom="8dp"
                 android:layout_marginEnd="0dp"
                 android:layout_marginRight="0dp"
-                app:cardBackgroundColor="#eeece6"
+                app:cardBackgroundColor="@color/darkWhite"
                 app:cardCornerRadius="0dp"
-                app:cardElevation="5dp"
+                app:cardElevation="2dp"
                 app:strokeWidth="0dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
