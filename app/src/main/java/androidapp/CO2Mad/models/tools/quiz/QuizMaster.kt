@@ -63,6 +63,12 @@ object QuizMaster : ViewModel() {
         }
     }
 
+    fun firstQuestion() {
+        if (currentQuestion.value == null) {
+            nextQuestion()
+        }
+    }
+
     fun nextQuestion() : Boolean {
         if (emission.value != null) {
             drawQuestion()

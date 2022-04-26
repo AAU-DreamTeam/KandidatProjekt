@@ -92,6 +92,6 @@ class GameView : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        QuizMaster.nextQuestion()
+        QuizMaster.firstQuestion()
     }
 }
