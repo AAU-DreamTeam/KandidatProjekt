@@ -109,8 +109,8 @@ class ScannerView : AppCompatActivity() {
                 completedToTopConstraint()
 
             }else {
-                closeRecyclerView(recyclerView2, btn_missing_data)
-                openRecyclerView(recyclerView, btn_completed_data)
+                closeRecyclerView(recyclerView2, btn_completed_data)
+                openRecyclerView(recyclerView, btn_missing_data)
                 completedToBottomConstraint()
 
             }

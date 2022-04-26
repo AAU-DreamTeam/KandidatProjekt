@@ -2,23 +2,20 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scannerViewConstraint"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".views.ScannerView"
-    android:id="@+id/scannerViewConstraint"
-    >
+    tools:context=".views.ScannerView">
 
     <!-- første card-->
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/missingCard"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/completedCard"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        >
-
-
+        app:strokeWidth="0dp">
 
         <LinearLayout
             android:id="@+id/linear1"
@@ -69,16 +66,16 @@
 
         </LinearLayout>
 
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.card.MaterialCardView>
 
 
     <!-- Anden card-->
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/completedCard"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@id/btn_save"
-        >
+        app:layout_constraintBottom_toTopOf="@id/buttonHolder"
+        app:strokeWidth="0dp">
 
         <LinearLayout
             android:id="@+id/linear2"
@@ -92,10 +89,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/ic_border"
                 android:gravity="center_horizontal"
-                android:orientation="horizontal"
-
-
-                >
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/textview2"
@@ -134,57 +128,62 @@
         </LinearLayout>
 
 
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.card.MaterialCardView>
 
-
-
-    <!-- knapper -->
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_cancel"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginBottom="16dp"
-        android:insetTop="0dp"
-        android:insetBottom="0dp"
-        android:minWidth="0dp"
-        android:minHeight="0dp"
-        android:paddingStart="5dp"
-        android:paddingEnd="5dp"
-        app:backgroundTint="@color/colorPrimary"
-        app:icon="@drawable/ic_baseline_cancel_24"
-        app:iconPadding="0dp"
-        app:iconSize="40dp"
-        app:iconTint="@color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/btn_save"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_save"
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/buttonHolder"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginBottom="16dp"
-        android:insetTop="0dp"
-        android:insetBottom="0dp"
-        android:minWidth="0dp"
-        android:minHeight="0dp"
-        android:paddingStart="5dp"
-        android:paddingEnd="5dp"
-        app:backgroundTint="@color/colorPrimary"
-        app:icon="@drawable/ic_baseline_save_24"
-        app:iconPadding="0dp"
-        app:iconSize="40dp"
-        app:iconTint="@color/black"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/btn_cancel" />
+        app:layout_constraintStart_toStartOf="parent">
+        <!-- knapper -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
+            app:backgroundTint="@color/colorPrimary"
+            app:icon="@drawable/ic_baseline_cancel_24"
+            app:iconPadding="0dp"
+            app:iconSize="40dp"
+            app:iconTint="@color/black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/btn_save"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
+            app:backgroundTint="@color/colorPrimary"
+            app:icon="@drawable/ic_baseline_save_24"
+            app:iconPadding="0dp"
+            app:iconSize="40dp"
+            app:iconTint="@color/black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/btn_cancel" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
