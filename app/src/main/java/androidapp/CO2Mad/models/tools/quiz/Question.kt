@@ -24,6 +24,7 @@ interface Question {
         if (variantIndex != null) {
             return variants[variantIndex]
         } else {
+
             throw IllegalArgumentException("Unable to find variant of type ${variantType.name}.")
         }
     }

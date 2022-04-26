@@ -7,6 +7,7 @@ class QuestionVariantFactory {
             QuestionVariantType.EMISSION_KILOMETERS -> EmissionKilometersVariant(emission, questionType)
             QuestionVariantType.EMISSION_HOURS -> EmissionHoursVariant(emission, questionType)
             QuestionVariantType.ABSORPTION_DAYS -> AbsorptionDaysVariant(emission, questionType)
+            QuestionVariantType.FART_AMOUNT -> FartAmountVariant(emission,questionType)
         }
     }
 }

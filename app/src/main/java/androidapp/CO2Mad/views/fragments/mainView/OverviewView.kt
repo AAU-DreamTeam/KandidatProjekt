@@ -159,10 +159,15 @@ class OverviewView : Fragment() {
     }
 
     private fun setupIconText(icon: Question, iconView: View) {
-        if (icon.getType() == QuestionType.TREE) {
+        if (icon.getType() == QuestionType.TREE || icon.getType() == QuestionType.FART) {
             iconView.findViewById<TextView>(R.id.icon_textView).visibility = View.INVISIBLE
-            iconView.findViewById<TextView>(R.id.icon_textView2).text =
-                icon.getVariant(QuestionVariantType.ABSORPTION_DAYS).actualValueStr
+            if (icon.getType() == QuestionType.TREE){
+                iconView.findViewById<TextView>(R.id.icon_textView2).text =
+                    icon.getVariant(QuestionVariantType.ABSORPTION_DAYS).actualValueStr
+            }else {
+                iconView.findViewById<TextView>(R.id.icon_textView2).text =
+                    icon.getVariant(QuestionVariantType.FART_AMOUNT).actualValueStr
+            }
         } else {
             iconView.findViewById<TextView>(R.id.icon_textView).text =
                 icon.getVariant(QuestionVariantType.EMISSION_KILOMETERS).actualValueStr

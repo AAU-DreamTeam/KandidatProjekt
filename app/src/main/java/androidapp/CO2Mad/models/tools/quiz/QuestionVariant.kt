@@ -26,6 +26,7 @@ interface QuestionVariant {
             QuestionType.PLANE -> 0.254
             QuestionType.TRAIN -> 0.041
             QuestionType.TREE -> 0.060
+            QuestionType.FART -> 0.000065625
         }
     }
    /* fun iconStr():String{
