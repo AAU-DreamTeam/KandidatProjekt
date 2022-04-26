@@ -17,7 +17,7 @@
             android:layout_height="150dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="0dp"
-            app:cardElevation="1dp"
+            app:cardElevation="5dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:strokeWidth="0dp">
@@ -37,8 +37,10 @@
                         android:id="@+id/co2Showcase"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:backgroundTint="@color/white"
                         android:gravity="center"
                         android:inputType="none"
+                        android:textColorLink="@color/colorPrimary"
                         android:textSize="20sp" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -54,10 +56,10 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/overviewView"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginStart="4dp"
             android:layout_marginTop="12dp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/materialCardView" />
 
@@ -190,6 +192,7 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="22dp"
                 android:clickable="true"
+                android:elevation="2dp"
                 android:scaleType="fitCenter"
                 android:visibility="visible"
                 app:backgroundTint="@color/colorButton"

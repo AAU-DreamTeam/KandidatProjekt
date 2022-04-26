@@ -8,8 +8,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraint_graph"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="8dp">
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp">
 
 
         <LinearLayout
@@ -17,14 +17,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-
+            android:weightSum="12"
             app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/dropdown_menu_graph"
                 style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent">
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="7">
 
                 <AutoCompleteTextView
                     android:id="@+id/dropdown_AutoText"
@@ -39,9 +40,10 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/number_of_people_field"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginStart="8dp"
+                android:layout_weight="5"
                 android:hint="Personer">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -83,7 +85,6 @@
             android:layout_marginTop="12dp"
             android:layout_marginBottom="602dp"
             android:background="@android:color/darker_gray"
-
             app:layout_constraintTop_toBottomOf="@+id/top_graph" />
 
         <com.github.mikephil.charting.charts.CombinedChart
@@ -91,7 +92,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@id/line2">
-
         </com.github.mikephil.charting.charts.CombinedChart>
 
 
