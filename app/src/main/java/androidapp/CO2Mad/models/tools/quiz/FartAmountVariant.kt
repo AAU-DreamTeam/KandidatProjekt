@@ -17,6 +17,6 @@ class FartAmountVariant(emission: Double, questionType: QuestionType): QuestionV
         val unitSingular = "prut"
         val unitPlural = "prutter"
 
-        return if(value == -1) "? $unitPlural" else "$value ${if (value == 1) unitSingular else unitPlural}"
+        return if(value == -1) "? $unitPlural" else "$value ${if (value == 1) unitSingular else "\n"+unitPlural}"
     }
 }
