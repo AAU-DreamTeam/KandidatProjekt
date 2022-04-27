@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_scanner.*
 import java.io.File
 import java.io.IOException
+import java.text.SimpleDateFormat
 import java.util.*
 
 
@@ -46,7 +47,7 @@ class ScannerView : AppCompatActivity() {
                 val resultIntent = Intent()
 
                 if (viewModel.completedPurchases.value!!.isNotEmpty() || viewModel.missingPurchases.value!!.isNotEmpty()) {
-                    MediaStore.Images.Media.insertImage(contentResolver, imageFile!!.absolutePath, "Title_${Calendar.getInstance()}", "test")
+                    MediaStore.Images.Media.insertImage(contentResolver, imageFile!!.absolutePath, SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Calendar.getInstance().time), null)
                     resultIntent.putExtra("reloadData", true)
                 } else {
                     resultIntent.putExtra("reloadData", false)

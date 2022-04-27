@@ -1,9 +1,6 @@
 package androidapp.CO2Mad.viewmodels
 
 import android.content.Context
-import android.graphics.BitmapFactory
-import android.media.ExifInterface
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -14,12 +11,6 @@ import androidapp.CO2Mad.models.enums.COMPLETED
 import androidapp.CO2Mad.repositories.CountryRepository
 import androidapp.CO2Mad.repositories.ProductRepository
 import androidapp.CO2Mad.repositories.PurchaseRepository
-import androidapp.CO2Mad.repositories.StoreItemRepository
-import com.google.mlkit.vision.common.InputImage
-import com.google.mlkit.vision.text.Text
-import com.google.mlkit.vision.text.TextRecognition
-import com.google.mlkit.vision.text.latin.TextRecognizerOptions
-import java.io.File
 
 class ScannerViewModel: ViewModel() {
     private var purchaseRepository: PurchaseRepository? = null

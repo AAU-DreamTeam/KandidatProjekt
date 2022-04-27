@@ -5,7 +5,7 @@ import kotlin.math.roundToInt
 class EmissionKilometersVariant(emission: Double, questionType: QuestionType): QuestionVariant {
     private val emissionPerKM = getEffectPerUnit(questionType)
     override val actualValue = (emission/ emissionPerKM).roundToInt()
-    override val roundToNearest = 10
+    override val roundToNearest = 5
     override val quizValue = calcQuizValue()
     override val quizEffect = quizValue * emissionPerKM
     override val iconStr = " km"

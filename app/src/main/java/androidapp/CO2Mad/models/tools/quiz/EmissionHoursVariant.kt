@@ -33,14 +33,14 @@ class EmissionHoursVariant(emission: Double, questionType: QuestionType): Questi
             }else if(actualValueMinutes >= 1){
                 unitSingular = "minut"
                 unitPlural = "minutter"
-                roundToNearest = 15
+                roundToNearest = 5
                 actualValue = actualValueMinutes
                 quizValue = calcQuizValue()
                 quizEffect = emissionPerSecond * secondsPerMinute * quizValue
             }else{
                 unitSingular = "sekunder"
                 unitPlural = "sekunder"
-                roundToNearest = 15
+                roundToNearest = 5
                 actualValue = actualValueSeconds
                 quizValue = calcQuizValue()
                 quizEffect = emissionPerSecond * quizValue

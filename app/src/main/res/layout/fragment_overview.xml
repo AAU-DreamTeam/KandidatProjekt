@@ -105,12 +105,12 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/id"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:gravity="center_horizontal"
+            android:gravity="center_horizontal|center_vertical"
             android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -118,22 +118,25 @@
             app:layout_constraintTop_toBottomOf="@+id/line">
 
             <LinearLayout
-                android:id="@+id/gameContainer"
+                android:id="@+id/gameHolder"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginBottom="8dp"
                 android:gravity="center|center_horizontal"
                 android:orientation="vertical"
-                android:visibility="visible">
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/ScanButton"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/gameContainer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    app:layout_constraintEnd_toStartOf="@+id/ScanButton"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="@+id/id">
 
                     <Button
                         android:id="@+id/button_play"
@@ -187,10 +190,6 @@
                 android:id="@+id/ScanButton"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="22dp"
                 android:clickable="true"
                 android:elevation="2dp"
                 android:scaleType="fitCenter"
@@ -198,10 +197,13 @@
                 app:backgroundTint="@color/colorButton"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/gameHolder"
+                app:layout_constraintTop_toTopOf="parent"
                 app:maxImageSize="58dp"
                 app:srcCompat="@drawable/ic_camera_solid"
                 app:useCompatPadding="false"
-                tools:visibility="visible" />
-        </LinearLayout>
+                tools:visibility="visible"
+                app:layout_constraintHorizontal_bias="0.5" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

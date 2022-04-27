@@ -88,6 +88,10 @@ object QuizMaster : ViewModel() {
         for ((index, type) in QuestionType.values().withIndex()) {
             val question = questionFactory.getQuestion(type, emission.value!!)
 
+            if (!enableGame.value!!) {
+                question.showQuestion()
+            }
+
             questionsList.add(index, question)
 
             for (i in 0 until question.numberOfVariants) {
