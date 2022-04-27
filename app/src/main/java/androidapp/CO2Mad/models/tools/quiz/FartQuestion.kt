@@ -36,17 +36,17 @@ class FartQuestion(emission: Double, type: QuestionType): Question {
 
     override fun getQuestionLine(line: Int): String {
         return when(line) {
-            1 -> "Hvor mange prutter svarer"
+            1 -> "Svarer dit CO2 forbrug til"
             2 -> quizValueStr
-            3 -> "til?"
+            3 -> ""
             else -> throw Exception("Unable to generate question line: $line.")
         }
     }
 
     override fun getAnswerLine(line: Int): String {
         return when(line) {
-            1 -> "En prut svarer til ${"%.1f ".format(quizAbsorption).replace('.', ',')} kg $CO2Str"
-            2 -> "Din udledning svarer til ${actualValueStr}s $CO2Str optag"
+            1 -> "En prut svarer til ${variants[currentIndex].getEffectPerUnit(QuestionType.FART)*1000} g $CO2Str"
+            2 -> "Din udledning svarer til ${actualValueStr}s $CO2Str udledning"
             else -> throw Exception("Unable to generate answer line: $line.")
         }
     }
