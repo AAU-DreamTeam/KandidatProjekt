@@ -25,11 +25,11 @@ object QuizMaster : ViewModel() {
     private val _highScore = MutableLiveData<Int>()
     val highScore: LiveData<Int> get() = _highScore
 
-    private val _currentQuestion = MutableLiveData<Question>()
-    val currentQuestion: LiveData<Question> get() = _currentQuestion
+    private val _currentQuestion = MutableLiveData<Question?>()
+    val currentQuestion: LiveData<Question?> get() = _currentQuestion
 
-    private val _currentQuestionResult = MutableLiveData<Boolean>()
-    val currentQuestionResult: LiveData<Boolean> get() = _currentQuestionResult
+    private val _currentQuestionResult = MutableLiveData<Boolean?>()
+    val currentQuestionResult: LiveData<Boolean?> get() = _currentQuestionResult
 
     private val _remainingQuestions = MutableLiveData<Int>()
     val remainingQuestions: LiveData<Int> get() = _remainingQuestions
@@ -59,6 +59,7 @@ object QuizMaster : ViewModel() {
         val score = _score.value!!
 
         if (score > _highScore.value!!) {
+            _highScore.value = score
             variablesRepository!!.saveHighScore(score)
         }
     }
@@ -108,6 +109,7 @@ object QuizMaster : ViewModel() {
 
     private fun drawQuestion() {
         val newQuestion = _questions.value!![indices!!.removeLast()]
+        _currentQuestionResult.value = null
 
         newQuestion.draw()
 
@@ -118,6 +120,7 @@ object QuizMaster : ViewModel() {
     fun setEmission(emission: Double) {
         _emission.value = emission
         _score.value = 0
+        _currentQuestion.value = null
         generateQuestions()
     }
 

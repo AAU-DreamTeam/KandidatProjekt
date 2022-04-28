@@ -32,35 +32,39 @@ class GameView : AppCompatActivity() {
         }
 
         viewModel.currentQuestion.observe(this) {
-            questionStart.text = HtmlCompat.fromHtml(it.getQuestionLine(1), HtmlCompat.FROM_HTML_MODE_LEGACY)
-            questionMiddle.text = HtmlCompat.fromHtml(it.getQuestionLine(2), HtmlCompat.FROM_HTML_MODE_LEGACY)
-            questionEnd.text = HtmlCompat.fromHtml(it.getQuestionLine(3), HtmlCompat.FROM_HTML_MODE_LEGACY)
+            if (it != null) {
+                questionStart.text = HtmlCompat.fromHtml(it.getQuestionLine(1), HtmlCompat.FROM_HTML_MODE_LEGACY)
+                questionMiddle.text = HtmlCompat.fromHtml(it.getQuestionLine(2), HtmlCompat.FROM_HTML_MODE_LEGACY)
+                questionEnd.text = HtmlCompat.fromHtml(it.getQuestionLine(3), HtmlCompat.FROM_HTML_MODE_LEGACY)
 
-            questionLL.visibility = VISIBLE
-            answerLL.visibility = GONE
+                questionLL.visibility = VISIBLE
+                answerLL.visibility = GONE
 
-            circle.icon = ContextCompat.getDrawable(this, R.drawable.ic_question_mark_black_24dp)
-            circle.setBackgroundColor(ContextCompat.getColor(this, R.color.grey))
+                circle.icon = ContextCompat.getDrawable(this, R.drawable.ic_question_mark_black_24dp)
+                circle.setBackgroundColor(ContextCompat.getColor(this, R.color.grey))
 
-            backgroundImage.setImageResource(it.bgImageId)
+                backgroundImage.setImageResource(it.bgImageId)
+            }
         }
 
-        viewModel.currentQuestionResult.observe(this) {
-            if (it == true) {
-                answerHeader.text = "Korrekt!"
-                circle.icon = ContextCompat.getDrawable(this, R.drawable.ic_done_black_24dp)
-                circle.setBackgroundColor(ContextCompat.getColor(this, R.color.green))
-            } else {
-                answerHeader.text = "Forkert!"
-                circle.icon = ContextCompat.getDrawable(this, R.drawable.ic_close_black_24dp)
-                circle.setBackgroundColor(ContextCompat.getColor(this, R.color.red))
+        viewModel.currentQuestionResult.observe(this) { result ->
+            if (result != null) {
+                if (result == true) {
+                    answerHeader.text = "Korrekt!"
+                    circle.icon = ContextCompat.getDrawable(this, R.drawable.ic_done_black_24dp)
+                    circle.setBackgroundColor(ContextCompat.getColor(this, R.color.green))
+                } else {
+                    answerHeader.text = "Forkert!"
+                    circle.icon = ContextCompat.getDrawable(this, R.drawable.ic_close_black_24dp)
+                    circle.setBackgroundColor(ContextCompat.getColor(this, R.color.red))
+                }
+
+                viewModel.currentQuestion.value?.let { answerQuizEmission.text = HtmlCompat.fromHtml(it.getAnswerLine(1), HtmlCompat.FROM_HTML_MODE_LEGACY) }
+                viewModel.currentQuestion.value?.let { answerUserEmission.text = HtmlCompat.fromHtml(it.getAnswerLine(2), HtmlCompat.FROM_HTML_MODE_LEGACY) }
+
+                questionLL.visibility = GONE
+                answerLL.visibility = VISIBLE
             }
-
-            answerQuizEmission.text = HtmlCompat.fromHtml(viewModel.currentQuestion.value!!.getAnswerLine(1), HtmlCompat.FROM_HTML_MODE_LEGACY)
-            answerUserEmission.text = HtmlCompat.fromHtml(viewModel.currentQuestion.value!!.getAnswerLine(2), HtmlCompat.FROM_HTML_MODE_LEGACY)
-
-            questionLL.visibility = GONE
-            answerLL.visibility = VISIBLE
         }
 
         viewModel.remainingQuestions.observe(this) {
