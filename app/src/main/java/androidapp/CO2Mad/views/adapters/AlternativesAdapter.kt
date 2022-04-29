@@ -12,7 +12,7 @@ import androidapp.CO2Mad.models.enums.PRODUCT_CATEGORY
 import com.google.android.material.button.MaterialButton
 import kotlinx.android.synthetic.main.alternative_list_item.view.*
 
-class AlternativesAdapter(val context: Context, val storeItem: StoreItem, var alternatives: List<StoreItem>): RecyclerView.Adapter<AlternativesAdapter.ViewHolder>() {
+class AlternativesAdapter(val context: Context, val storeItem: StoreItem, var alternatives: MutableList<StoreItem>): RecyclerView.Adapter<AlternativesAdapter.ViewHolder>() {
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val productTV = view.productTV
         val differenceTV = view.differenceTV
@@ -53,5 +53,11 @@ class AlternativesAdapter(val context: Context, val storeItem: StoreItem, var al
 
     override fun getItemCount(): Int {
         return alternatives.size
+    }
+
+    fun updateList( list:List<StoreItem>){
+        alternatives.clear()
+        alternatives.addAll(list)
+        notifyDataSetChanged()
     }
 }

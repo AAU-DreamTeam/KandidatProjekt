@@ -10,6 +10,9 @@ class StoreItemRepository(context: Context){
     fun loadAlternatives(storeItem: StoreItem): List<StoreItem> {
         return storeItemDao.loadAlternatives(storeItem)
     }
+    fun newAlternatives(storeItem:StoreItem){
+        storeItemDao.loadAltEmissions(storeItem,3)
+    }
 
     fun close(){
         storeItemDao.close()

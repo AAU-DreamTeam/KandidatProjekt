@@ -22,6 +22,10 @@ object AlternativesViewModel: ViewModel() {
         }
     }
 
+    fun newAlternatives(){
+        storeItemRepository!!.newAlternatives(storeItem!!)
+
+    }
     fun loadAlternatives(){
         _alternatives.value = storeItemRepository!!.loadAlternatives(storeItem!!)
     }
