@@ -1,6 +1,7 @@
 package androidapp.CO2Mad.models
 
 import android.text.Spanned
+import androidapp.CO2Mad.models.enums.PRODUCT_CATEGORY
 import androidapp.CO2Mad.models.enums.RATING
 import androidx.core.text.HtmlCompat
 import androidapp.CO2Mad.models.tools.EmissionCalculator
@@ -29,10 +30,6 @@ class StoreItem (val id: Int,
 
     val emissionPerKg: Double get() = EmissionCalculator.calcEmission(this)
     var altEmissions: List<Pair<Int, Double>>? = null
-        set(value) {
-            field = value
-            rating = EmissionCalculator.rate(this)
-        }
     var rating: RATING? = RATING.VERY_GOOD
 
     private fun hasValidWeight(): Boolean {
@@ -40,6 +37,14 @@ class StoreItem (val id: Int,
     }
     fun isValid(): Boolean{
         return receiptText.isNotEmpty() && hasValidWeight() && product.isValid() && country.validate()
+    }
+
+    fun rate(original: StoreItem? = null) {
+        rating = if (original == null || product.productCategory != PRODUCT_CATEGORY.VEGETABLES) {
+            EmissionCalculator.rate(this)
+        } else {
+            EmissionCalculator.rateAlternative(original, this)
+        }
     }
 
     fun weightToString(inGrams: Boolean = false): String {

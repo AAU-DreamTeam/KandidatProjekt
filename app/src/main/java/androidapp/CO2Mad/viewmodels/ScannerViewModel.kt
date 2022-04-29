@@ -178,6 +178,7 @@ class ScannerViewModel: ViewModel() {
     fun onSave(){
         _saved.value = purchaseRepository!!.savePurchases(combineLists())
     }
+
     fun combineLists(): List<Purchase> {
         return _completedPurchases.value!!.let { list1 -> _missingPurchases.value!!.let { list2 -> list1 + list2 } }
 

@@ -36,7 +36,9 @@ class StoreItemDao(private val dbManager: DBManager) {
                     "WHERE ${TABLE}.$COLUMN_ID IN $ids;"
 
         val alternatives = dbManager.selectMultiple(query) {
-            produceStoreItem(it)
+            val alternative = produceStoreItem(it)
+            alternative.rate(storeItem)
+            alternative
         }
 
         return alternatives.sortedBy { it.emissionPerKg }
@@ -198,11 +200,14 @@ class StoreItemDao(private val dbManager: DBManager) {
                     "INNER JOIN ${CountryDao.TABLE} ON $TABLE.$COLUMN_COUNTRY_ID = ${CountryDao.TABLE}.${CountryDao.COLUMN_ID} " +
                     "WHERE $COLUMN_PRODUCT_ID = ${storeItem.product.id} " +
                     "GROUP BY $TABLE.$COLUMN_ORGANIC, $TABLE.$COLUMN_PACKAGED " +
-                    "HAVING EMISSION < ${storeItem.emissionPerKg};"
+                    "HAVING EMISSION < ${storeItem.emissionPerKg} " +
+                    "ORDER BY EMISSION ASC;"
 
         storeItem.altEmissions = dbManager.selectMultiple(query) {
             Pair(it.getInt(COLUMN_ID_POSITION), it.getDouble(COLUMN_COUNT))
         }
+
+        storeItem.rate()
     }
 
     private fun loadAltEmissionsForCategory(storeItem: StoreItem, numberOfAlternatives: Int) {
@@ -214,6 +219,7 @@ class StoreItemDao(private val dbManager: DBManager) {
         emissions.sortBy { it.second }
 
         storeItem.altEmissions = emissions
+        storeItem.rate()
     }
 
     private fun loadNonVeganAlternativeEmissions(storeItem: StoreItem): List<Pair<Int, Double>> {
