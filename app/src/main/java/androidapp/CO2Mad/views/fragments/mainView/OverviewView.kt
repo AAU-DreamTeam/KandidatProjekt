@@ -9,10 +9,7 @@ import android.os.Bundle
 import android.view.*
 import android.widget.*
 import androidapp.CO2Mad.R
-import androidapp.CO2Mad.models.tools.quiz.Question
-import androidapp.CO2Mad.models.tools.quiz.QuestionType
-import androidapp.CO2Mad.models.tools.quiz.QuestionVariantType
-import androidapp.CO2Mad.models.tools.quiz.QuizMaster
+import androidapp.CO2Mad.models.tools.quiz.*
 import androidapp.CO2Mad.viewmodels.EmissionViewModel
 import androidapp.CO2Mad.views.GameView
 import androidapp.CO2Mad.views.MainView
@@ -21,6 +18,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -125,7 +123,10 @@ class OverviewView : Fragment() {
     private fun observeIcons(questions : MutableList<Question>?) {
         if (questions != null) {
             for ((i, q) in questions.withIndex()) {
-                setupIconText(q, topView.findViewById(i))
+                val icon = topView.findViewById<LinearLayout>(i)
+
+                setupIconText(q, icon)
+                icon.findViewById<ImageView>(R.id.icon_imageView).setColorFilter(ContextCompat.getColor(requireContext(), getColor(q.getResult())), android.graphics.PorterDuff.Mode.SRC_IN)
             }
         }
     }
@@ -152,6 +153,7 @@ class OverviewView : Fragment() {
     ) {
         val view = inflater.inflate(R.layout.overview_icon, container, false);
         val imageView = view.findViewById<ImageView>(R.id.icon_imageView)
+
         imageView.setImageDrawable(rootView.resources.getDrawable(icon.iconId))
         view.id = tag
         topView.addView(view)
@@ -172,15 +174,35 @@ class OverviewView : Fragment() {
     }
 
     private fun setupIconText(icon: Question, iconView: View) {
+        var variant: QuestionVariant?
+
         if (icon.getType() == QuestionType.TREE) {
+            variant = icon.getVariant(QuestionVariantType.ABSORPTION_DAYS)
+
             iconView.findViewById<TextView>(R.id.icon_textView).visibility = View.INVISIBLE
             iconView.findViewById<TextView>(R.id.icon_textView2).text =
-                icon.getVariant(QuestionVariantType.ABSORPTION_DAYS).actualValueStr
+                variant.actualValueStr
+            setTextColor(iconView.findViewById(R.id.icon_textView2), variant)
         } else {
-            iconView.findViewById<TextView>(R.id.icon_textView).text =
-                icon.getVariant(QuestionVariantType.EMISSION_KILOMETERS).actualValueStr
-            iconView.findViewById<TextView>(R.id.icon_textView2).text =
-                icon.getVariant(QuestionVariantType.EMISSION_HOURS).actualValueStr
+            variant = icon.getVariant(QuestionVariantType.EMISSION_KILOMETERS)
+            iconView.findViewById<TextView>(R.id.icon_textView).text = variant.actualValueStr
+            setTextColor(iconView.findViewById(R.id.icon_textView), variant)
+
+            variant = icon.getVariant(QuestionVariantType.EMISSION_HOURS)
+            iconView.findViewById<TextView>(R.id.icon_textView2).text = variant.actualValueStr
+            setTextColor(iconView.findViewById<TextView>(R.id.icon_textView2), variant)
+        }
+    }
+
+    private fun setTextColor(view: TextView, variant: QuestionVariant) {
+        view.setTextColor(ContextCompat.getColor(requireContext(), getColor(variant.result)))
+    }
+
+    private fun getColor(result: Boolean?): Int {
+        return when(result) {
+            true -> R.color.green
+            false -> R.color.red
+            else -> R.color.black
         }
     }
 

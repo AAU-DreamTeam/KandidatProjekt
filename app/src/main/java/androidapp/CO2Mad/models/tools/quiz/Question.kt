@@ -10,6 +10,21 @@ interface Question {
     val numberOfVariants: Int
     var currentIndex: Int
 
+    fun getResult(): Boolean? {
+        var finalResult: Boolean? = null
+
+        variants.forEach {
+            if (it.result != null) {
+                finalResult = if (finalResult != null) {
+                    finalResult!! && it.result!!
+                } else {
+                    it.result!!
+                }
+            }
+        }
+        return finalResult
+    }
+
     fun submit(answer: QuestionAnswer): Boolean? {
         return variants[currentIndex].submit(answer)
     }

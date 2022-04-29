@@ -3,7 +3,6 @@ package androidapp.CO2Mad.models.tools.quiz
 import androidapp.CO2Mad.R
 
 class CarQuestion(emission: Double, type: QuestionType): Question {
-    var result: Boolean?= null
     override val iconId = R.drawable.ic_directions_car_black_24dp
     override val bgImageId = R.mipmap.ic_car_foreground
     override val variants = mutableListOf<QuestionVariant>()

@@ -10,6 +10,7 @@ class EmissionKilometersVariant(emission: Double, questionType: QuestionType): Q
     override val quizEffect = quizValue * emissionPerKM
     override val iconStr = " km"
     override var hasBeenAsked = false
+    override var result: Boolean? = null
     override val actualValueStr get() = if (!hasBeenAsked) valueToString(-1) else valueToString(actualValue)
     override val quizValueStr = valueToString(quizValue)
 

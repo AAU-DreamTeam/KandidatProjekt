@@ -8,6 +8,7 @@ class AbsorptionDaysVariant(emission: Double, questionType: QuestionType): Quest
     override val actualValue = (emission / absorptionPerDay).roundToInt()
     override val quizValue = calcQuizValue()
     override var hasBeenAsked = false
+    override var result: Boolean? = null
     override val iconStr = " dage"
     override val actualValueStr get() = if (!hasBeenAsked) valueToString(-1) else valueToString(actualValue)
     override val quizValueStr = valueToString(quizValue)

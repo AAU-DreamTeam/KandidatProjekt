@@ -11,13 +11,16 @@ interface QuestionVariant {
     val roundToNearest: Int
     val iconStr: String
     var hasBeenAsked: Boolean
+    var result: Boolean?
 
     fun submit(answer: QuestionAnswer): Boolean {
         hasBeenAsked = true
-        return when(answer){
+        result = when(answer){
             QuestionAnswer.ABOVE -> quizValue < actualValue
             QuestionAnswer.BELOW -> quizValue > actualValue
         }
+
+        return result!!
     }
 
     fun getEffectPerUnit(questionType: QuestionType): Double {

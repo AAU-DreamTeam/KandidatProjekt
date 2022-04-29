@@ -10,6 +10,7 @@ class EmissionHoursVariant(emission: Double, questionType: QuestionType): Questi
     override val actualValue: Int
     override val roundToNearest: Int
     override var hasBeenAsked = false
+    override var result: Boolean? = null
     override val quizValue: Int
     override val quizEffect: Double
     override val iconStr = " timer"
