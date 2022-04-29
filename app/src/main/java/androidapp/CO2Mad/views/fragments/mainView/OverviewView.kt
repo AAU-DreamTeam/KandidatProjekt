@@ -126,7 +126,6 @@ class OverviewView : Fragment() {
                 val icon = topView.findViewById<LinearLayout>(i)
 
                 setupIconText(q, icon)
-                icon.findViewById<ImageView>(R.id.icon_imageView).setColorFilter(ContextCompat.getColor(requireContext(), getColor(q.getResult())), android.graphics.PorterDuff.Mode.SRC_IN)
             }
         }
     }
