@@ -1,26 +1,27 @@
 package androidapp.CO2Mad.models.tools.quiz
 
 import android.content.Context
-import androidapp.CO2Mad.repositories.PurchaseRepository
 import androidapp.CO2Mad.repositories.VariablesRepository
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import java.lang.Exception
-import java.util.*
 
 object QuizMaster : ViewModel() {
     private var variablesRepository: VariablesRepository? = null
     private var indices: MutableList<Int>? = null
+
+    var runtimeShowIcons: Boolean = false
+        private set
+
+    private val _showIcons = MutableLiveData<Boolean>()
+    val showIcons: LiveData<Boolean> get() = _showIcons
 
     private val _emission = MutableLiveData<Double>()
     val emission: LiveData<Double> get() = _emission
 
     private val _score = MutableLiveData<Int>()
     val score: LiveData<Int> get() = _score
-
-    private val _enableGame = MutableLiveData<Boolean>()
-    val enableGame: LiveData<Boolean> get() = _enableGame
 
     private val _highScore = MutableLiveData<Int>()
     val highScore: LiveData<Int> get() = _highScore
@@ -47,12 +48,17 @@ object QuizMaster : ViewModel() {
 
     private fun loadData(){
         _highScore.value = variablesRepository!!.loadHighScore()
-        _enableGame.value = variablesRepository!!.loadEnableGame()
+        runtimeShowIcons = variablesRepository!!.loadShowIcons()
+        _showIcons.value = runtimeShowIcons
     }
 
-    fun saveEnableGame(enableGame: Boolean){
-        _enableGame.value = enableGame
-        variablesRepository!!.saveEnableGame(enableGame)
+    fun saveShowIcons(showIcons: Boolean, saveToDB: Boolean = true){
+        runtimeShowIcons = showIcons
+
+        if (saveToDB) {
+            _showIcons.value = runtimeShowIcons
+            variablesRepository!!.saveShowIcons(runtimeShowIcons)
+        }
     }
 
     private fun saveHighScore() {
@@ -89,7 +95,7 @@ object QuizMaster : ViewModel() {
         for ((index, type) in QuestionType.values().withIndex()) {
             val question = questionFactory.getQuestion(type, emission.value!!)
 
-            if (!enableGame.value!!) {
+            if (runtimeShowIcons) {
                 question.showQuestion()
             }
 
@@ -121,6 +127,7 @@ object QuizMaster : ViewModel() {
         _emission.value = emission
         _score.value = 0
         _currentQuestion.value = null
+        runtimeShowIcons = showIcons.value!! && emission != 0.0
         generateQuestions()
     }
 
@@ -134,7 +141,7 @@ object QuizMaster : ViewModel() {
 
     fun onQuizFinished(){
         saveHighScore()
-        saveEnableGame(false)
+        saveShowIcons(true)
     }
 
     fun showQuestions(){

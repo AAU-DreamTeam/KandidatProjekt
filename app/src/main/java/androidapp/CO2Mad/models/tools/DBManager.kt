@@ -36,7 +36,7 @@ class DBManager(context: Context?) : SQLiteOpenHelper(context, "FoodEmission.db"
         val createPurchaseTableStmnt = "CREATE TABLE purchase(id INTEGER PRIMARY KEY AUTOINCREMENT, storeItemID INTEGER NOT NULL, timestamp TEXT NOT NULL, week INTEGER NOT NULL, quantity INTEGER NOT NULL, FOREIGN KEY(storeItemID) REFERENCES storeItem(id));"
         db.execSQL(createPurchaseTableStmnt)
 
-        val createHighScoreTableStmt = "CREATE TABLE ${VariablesDao.TABLE}(${VariablesDao.COLUMN_ID} INTEGER PRIMARY KEY, ${VariablesDao.COLUMN_SCORE} INTEGER NOT NULL, ${VariablesDao.COLUMN_ENABLE_GAME} BOOLEAN NOT NULL);"
+        val createHighScoreTableStmt = "CREATE TABLE ${VariablesDao.TABLE}(${VariablesDao.COLUMN_ID} INTEGER PRIMARY KEY, ${VariablesDao.COLUMN_SCORE} INTEGER NOT NULL, ${VariablesDao.COLUMN_SHOW_ICONS} BOOLEAN NOT NULL);"
         db.execSQL(createHighScoreTableStmt)
     }
 
@@ -755,7 +755,7 @@ class DBManager(context: Context?) : SQLiteOpenHelper(context, "FoodEmission.db"
 
         contentValues.put(VariablesDao.COLUMN_ID, 1)
         contentValues.put(VariablesDao.COLUMN_SCORE, 0)
-        contentValues.put(VariablesDao.COLUMN_ENABLE_GAME, 1)
+        contentValues.put(VariablesDao.COLUMN_SHOW_ICONS, 0)
 
         return db.insert(VariablesDao.TABLE, null, contentValues)
     }

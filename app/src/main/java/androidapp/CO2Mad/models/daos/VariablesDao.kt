@@ -27,18 +27,18 @@ class VariablesDao(private val dbManager: DBManager){
         dbManager.close()
     }
 
-    fun loadEnableGame(): Boolean {
-        val query = "SELECT $COLUMN_ENABLE_GAME FROM $TABLE;"
+    fun loadShowIcons(): Boolean {
+        val query = "SELECT $COLUMN_SHOW_ICONS FROM $TABLE;"
 
         return dbManager.select<Boolean>(query){
             it.getInt(0) != 0
         }!!
     }
 
-    fun saveEnableGame(enableGame: Boolean) {
+    fun saveShowIcons(enableGame: Boolean) {
         val contentValues = ContentValues()
 
-        contentValues.put(COLUMN_ENABLE_GAME, dbManager.booleanToInt(enableGame))
+        contentValues.put(COLUMN_SHOW_ICONS, dbManager.booleanToInt(enableGame))
 
         dbManager.update(TABLE, contentValues, COLUMN_ID, "1")
     }
@@ -47,6 +47,6 @@ class VariablesDao(private val dbManager: DBManager){
         val TABLE = "variables"
         val COLUMN_ID = "id"
         val COLUMN_SCORE = "score"
-        val COLUMN_ENABLE_GAME = "enableGame"
+        val COLUMN_SHOW_ICONS = "showIcons"
     }
 }

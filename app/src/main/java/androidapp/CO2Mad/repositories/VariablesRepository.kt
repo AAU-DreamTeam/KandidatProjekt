@@ -14,12 +14,12 @@ class VariablesRepository(context: Context) {
         highScoreDao.saveHighScore(score)
     }
 
-    fun loadEnableGame(): Boolean {
-        return highScoreDao.loadEnableGame()
+    fun loadShowIcons(): Boolean {
+        return highScoreDao.loadShowIcons()
     }
 
-    fun saveEnableGame(enableGame: Boolean) {
-        highScoreDao.saveEnableGame(enableGame)
+    fun saveShowIcons(enableGame: Boolean) {
+        highScoreDao.saveShowIcons(enableGame)
     }
 
     fun close(){

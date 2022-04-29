@@ -16,7 +16,7 @@ interface QuestionVariant {
         hasBeenAsked = true
         return when(answer){
             QuestionAnswer.ABOVE -> quizValue < actualValue
-            QuestionAnswer.BELLOW -> quizValue > actualValue
+            QuestionAnswer.BELOW -> quizValue > actualValue
         }
     }
 
@@ -28,12 +28,6 @@ interface QuestionVariant {
             QuestionType.TREE -> 0.060
         }
     }
-   /* fun iconStr():String{
-        if(hasBeenAsked){
-            return actualValueStr
-        }
-        return "?$iconStr"
-    }*/
 
     fun QuestionVariant.calcQuizValue() : Int {
         var value: Int

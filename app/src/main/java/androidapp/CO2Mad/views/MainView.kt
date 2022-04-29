@@ -11,6 +11,7 @@ import androidapp.CO2Mad.R
 import androidapp.CO2Mad.models.tools.quiz.QuizMaster
 import androidapp.CO2Mad.viewmodels.EmissionViewModel
 import androidapp.CO2Mad.views.adapters.MainAdapter
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.fragment.app.activityViewModels
@@ -22,17 +23,22 @@ class MainView : AppCompatActivity() {
     private lateinit var viewPager: ViewPager2
     private lateinit var viewPagerAdapter: MainAdapter
     private val viewModel: EmissionViewModel by viewModels()
-    private val resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-        if (it.resultCode == Activity.RESULT_OK && it.data!!.extras!!.get("reloadData") as Boolean) {
-            viewModel.loadData()
-            QuizMaster.saveEnableGame(true)
-        }
+
+    companion object {
+        var resultLauncher: ActivityResultLauncher<Intent?>? = null
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_main)
+
+        resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if (it.resultCode == Activity.RESULT_OK && it.data!!.extras!!.get("reloadData") as Boolean) {
+                QuizMaster.saveShowIcons(false)
+                viewModel.loadData()
+            }
+        }
 
         tabLayout = findViewById(R.id.tabLayout)
         viewPager = findViewById(R.id.viewPager)
@@ -80,7 +86,7 @@ class MainView : AppCompatActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
         if (requestCode == 1 && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-            resultLauncher.launch(Intent(this, ScannerView::class.java))
+            resultLauncher!!.launch(Intent(this, ScannerView::class.java))
         } else {
             Toast.makeText(applicationContext, "Kan ikke scanne uden tilladelse til at gemme billeder", Toast.LENGTH_SHORT).show()
         }

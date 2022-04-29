@@ -2,13 +2,9 @@ package androidapp.CO2Mad.views.fragments.mainView
 
 
 import android.Manifest
-import android.R.attr.data
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Point
-import android.os.Build
 import android.os.Bundle
 import android.view.*
 import android.widget.*
@@ -19,6 +15,7 @@ import androidapp.CO2Mad.models.tools.quiz.QuestionVariantType
 import androidapp.CO2Mad.models.tools.quiz.QuizMaster
 import androidapp.CO2Mad.viewmodels.EmissionViewModel
 import androidapp.CO2Mad.views.GameView
+import androidapp.CO2Mad.views.MainView
 import androidapp.CO2Mad.views.ScannerView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -43,12 +40,6 @@ class OverviewView : Fragment() {
     private lateinit var scanButton : ImageButton
     private val iconPerLine = 3
     private var iconSetupFinished = false
-    private val resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-        if (it.resultCode == Activity.RESULT_OK && it.data!!.extras!!.get("reloadData") as Boolean) {
-            viewModel.loadData()
-            QuizMaster.saveEnableGame(true)
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -106,6 +97,28 @@ class OverviewView : Fragment() {
 
             totalEmissionTV.text = emissionString
             QuizMaster.setEmission(emission ?: 0.0)
+
+            hideOrShowGame(emission, QuizMaster.runtimeShowIcons)
+        }
+    }
+
+    private fun setupPage() {
+        QuizMaster.showIcons.observe(viewLifecycleOwner) { showIcons ->
+            hideOrShowGame(viewModel.emission.value!!, showIcons)
+        }
+    }
+
+    private fun hideOrShowGame(emission: Double, showIcons: Boolean) {
+        if (emission == 0.0) {
+            gameTV.text = resources.getString(R.string.game_no_products_text)
+            gameContainer.visibility = View.GONE
+        } else {
+            gameTV.text = if (showIcons) {
+                "Spil igen for at slå din high score!"
+            } else {
+                resources.getString(R.string.game_text)
+            }
+            gameContainer.visibility = View.VISIBLE
         }
     }
 
@@ -171,23 +184,6 @@ class OverviewView : Fragment() {
         }
     }
 
-    private fun setupPage() {
-        QuizMaster.enableGame.observe(viewLifecycleOwner) { enableGame ->
-            if (enableGame && viewModel.emission.value != 0.0) {
-                gameTV.text = resources.getString(R.string.game_text)
-                gameContainer.visibility = View.VISIBLE
-            } else {
-                if (!enableGame) {
-                    QuizMaster.showQuestions()
-                    gameTV.text = resources.getString(R.string.game_disabled_text)
-                } else {
-                    gameTV.text = resources.getString(R.string.game_no_products_text)
-                }
-
-                gameContainer.visibility = View.GONE
-            }
-        }
-    }
     private fun setUpScanButton() {
         scanButton.setOnClickListener{
             if (!hasPermissions()) {
@@ -197,7 +193,7 @@ class OverviewView : Fragment() {
                     1
                 )
             } else {
-                resultLauncher.launch(Intent(activity, ScannerView::class.java))
+                MainView.resultLauncher!!.launch(Intent(activity, ScannerView::class.java))
             }
         }
     }
@@ -210,15 +206,6 @@ class OverviewView : Fragment() {
         ) == PackageManager.PERMISSION_GRANTED
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        if (requestCode == 1 && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-            resultLauncher.launch(Intent(activity, ScannerView::class.java))
-        }
-    }
     private fun setupDropDown() {
         val adapter: ArrayAdapter<Any?> = ArrayAdapter<Any?>(
             this.requireContext(),
@@ -244,44 +231,16 @@ class OverviewView : Fragment() {
 
         //setup listeners for scanning
         playButton.setOnClickListener {
+            if (QuizMaster.currentQuestion.value != null) {
+                QuizMaster.setEmission(viewModel.emission.value!!)
+            }
             resultLauncher.launch(Intent(activity, GameView::class.java))
         }
 
         showButton.setOnClickListener {
             QuizMaster.showQuestions()
+            QuizMaster.saveShowIcons(true, false)
             observeIcons(QuizMaster.questions.value)
         }
     }
-
-    private fun setHeight(view: View) {
-        val height = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.DONUT) {
-            //view.resources.displayMetrics.heightPixels
-            findScreenSize(view)
-        } else {
-            2000
-        }
-
-        topView.layoutParams.height = (height * 0.35).toInt()
-        topView.requestLayout()
-    }
-
-    private fun findScreenSize(view: View): Int {
-        val windowManager: WindowManager =
-            view.context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-        val display: Display = windowManager.defaultDisplay
-        val outPoint = Point()
-        if (Build.VERSION.SDK_INT >= 19) {
-            // include navigation bar
-            display.getRealSize(outPoint)
-        } else {
-            // exclude navigation bar
-            display.getSize(outPoint)
-        }
-        if (outPoint.y > outPoint.x) {
-            return outPoint.y
-        } else {
-            return outPoint.x
-        }
-    }
-
 }

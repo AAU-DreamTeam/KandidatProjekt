@@ -82,7 +82,7 @@ class GameView : AppCompatActivity() {
         }
 
         btnBelow.setOnClickListener{
-            QuizMaster.submitAnswer(QuestionAnswer.BELLOW)
+            QuizMaster.submitAnswer(QuestionAnswer.BELOW)
         }
 
         btnNext.setOnClickListener{

@@ -15,6 +15,7 @@ import androidapp.CO2Mad.R
 import androidapp.CO2Mad.models.tools.quiz.QuizMaster
 import androidapp.CO2Mad.viewmodels.EmissionViewModel
 import androidapp.CO2Mad.views.ScannerView
+import androidx.activity.result.ActivityResultLauncher
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class EmissionView : Fragment() {
@@ -35,5 +36,4 @@ class EmissionView : Fragment() {
 
         return rootView
     }
-
 }
