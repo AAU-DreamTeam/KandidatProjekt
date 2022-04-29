@@ -86,7 +86,7 @@ class OverviewView : Fragment() {
     private fun setupEmission(){
         viewModel.emission.observe(viewLifecycleOwner) { emission ->
             val emissionString = HtmlCompat.fromHtml(
-                "%.3f ".format(emission).replace(
+                "%.1f ".format(emission).replace(
                     '.',
                     ','
                 ) + "kg CO<sub><small><small>2</small></small></sub>",
