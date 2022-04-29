@@ -1,5 +1,6 @@
 package androidapp.CO2Mad.views
 
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.os.Environment
@@ -13,6 +14,7 @@ import androidapp.CO2Mad.models.tools.quiz.QuizMaster
 import androidapp.CO2Mad.viewmodels.ScannerViewModel
 import androidapp.CO2Mad.views.adapters.ScannerAdapter
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
@@ -68,15 +70,34 @@ class ScannerView : AppCompatActivity() {
     }
     private fun setupExitButtons(){
         btn_cancel.setOnClickListener{
-            val resultIntent = Intent()
-            resultIntent.putExtra("reloadData", false)
-            setResult(RESULT_OK, resultIntent)
-            finish()
-            makeToast("Dit indkøb er ikke blevet gemt")
+            AlertDialog.Builder(this)
+                    .setTitle("Gå tilbage")
+                    .setMessage("Er du sikker på at du ville gå tilbage uden at gemme?")
+                    .setPositiveButton(android.R.string.yes, DialogInterface.OnClickListener{dialog, which ->
+                        val resultIntent = Intent()
+                        resultIntent.putExtra("reloadData", false)
+                        setResult(RESULT_OK, resultIntent)
+                        finish()
+                        makeToast("Dit indkøb er ikke blevet gemt")
+                    })
+                    .setNegativeButton(android.R.string.no,null)
+                    .create()
+                    .show()
         }
 
         btn_save.setOnClickListener {
-            viewModel.onSave()
+
+
+            AlertDialog.Builder(this)
+                    .setTitle("Gem")
+                    .setMessage("Er du sikker på at du ville gemme?")
+                    .setPositiveButton(android.R.string.yes, DialogInterface.OnClickListener{dialog, which ->
+                        viewModel.onSave()
+                    })
+                    .setNegativeButton(android.R.string.no,null)
+                    .create()
+                    .show()
+
         }
 
     }
