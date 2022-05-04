@@ -136,8 +136,6 @@ class PurchaseDao(context: Context) {
         val storeItem = StoreItemDao(dbManager).extractStoreItem(receiptText)
         val calendar = Calendar.getInstance(TimeZone.getTimeZone("Europe/Copenhagen"))
 
-        //calendar.add(Calendar.WEEK_OF_YEAR, -1)
-
         return Purchase(storeItem, calendar, quantity)
     }
 
