@@ -3,12 +3,7 @@ package androidapp.CO2Mad.repositories
 import android.content.Context
 import androidapp.CO2Mad.models.Purchase
 import androidapp.CO2Mad.models.Trip
-import androidapp.CO2Mad.models.daos.CountryDao
-import androidapp.CO2Mad.models.daos.ProductDao
 import androidapp.CO2Mad.models.daos.PurchaseDao
-import androidapp.CO2Mad.models.daos.StoreItemDao
-import androidapp.CO2Mad.models.tools.EmissionCalculator
-import java.text.SimpleDateFormat
 import java.util.*
 
 class PurchaseRepository(context: Context){
@@ -22,7 +17,7 @@ class PurchaseRepository(context: Context){
         return purchaseDao.loadEmissionFromYearWeek(calendar)
     }
 
-    fun loadAllTrips(numberOfAlternatives: Int): Pair<List<Trip>, List<Purchase>> {
+    fun loadAllTrips(numberOfAlternatives: Int): Pair<MutableList<Trip>, MutableList<Purchase>> {
         return purchaseDao.loadAllTrips(numberOfAlternatives)
     }
 
@@ -36,5 +31,9 @@ class PurchaseRepository(context: Context){
 
     fun close(){
         purchaseDao.close()
+    }
+
+    fun deletePurchase(id: Int) {
+        purchaseDao.deletePurchase(id)
     }
 }

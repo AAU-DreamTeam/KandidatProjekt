@@ -5,9 +5,9 @@ import android.content.Context
 import android.database.Cursor
 import androidapp.CO2Mad.models.Purchase
 import androidapp.CO2Mad.models.Trip
-import androidapp.CO2Mad.models.tools.DBManager
-import androidapp.CO2Mad.models.tools.EmissionCalculator
-import androidapp.CO2Mad.models.tools.TextRecognizer
+import androidapp.CO2Mad.tools.DBManager
+import androidapp.CO2Mad.tools.EmissionCalculator
+import androidapp.CO2Mad.tools.TextRecognizer
 import com.google.mlkit.vision.text.Text
 import java.text.SimpleDateFormat
 import java.util.*
@@ -136,6 +136,8 @@ class PurchaseDao(context: Context) {
         val storeItem = StoreItemDao(dbManager).extractStoreItem(receiptText)
         val calendar = Calendar.getInstance(TimeZone.getTimeZone("Europe/Copenhagen"))
 
+        //calendar.add(Calendar.WEEK_OF_YEAR, -1)
+
         return Purchase(storeItem, calendar, quantity)
     }
 
@@ -173,6 +175,10 @@ class PurchaseDao(context: Context) {
         dbManager.insert(TABLE, contentValues)
     }
 
+    fun deletePurchase(id: Int){
+        dbManager.delete(TABLE, COLUMN_ID, id.toString())
+    }
+
     companion object {
         const val TABLE = "purchase"
         private const val COLUMN_COUNT = 4 // Excluding foreign keys
@@ -207,7 +213,7 @@ class PurchaseDao(context: Context) {
             return Purchase(cursor.getInt(startIndex + COLUMN_ID_POSITION), storeItem, calendar, cursor.getInt(startIndex + COLUMN_QUANTITY_POSITION))
         }
 
-        fun produceTrip(cursor: Cursor): Pair<List<Trip>, List<Purchase>> {
+        fun produceTrip(cursor: Cursor): Pair<MutableList<Trip>, MutableList<Purchase>> {
             val trips = mutableListOf<Trip>()
             val allPurchases = mutableListOf<Purchase>()
             var timestamp = cursor.getString(COLUMN_TIMESTAMP_POSITION)
@@ -236,7 +242,7 @@ class PurchaseDao(context: Context) {
         dbManager.close()
     }
 
-    fun loadAllTrips(numberOfAlternatives: Int): Pair<List<Trip>, List<Purchase>> {
+    fun loadAllTrips(numberOfAlternatives: Int): Pair<MutableList<Trip>, MutableList<Purchase>> {
         val query =
             "SELECT $ALL_COLUMNS, " +
                     "${StoreItemDao.ALL_COLUMNS}, " +
@@ -248,9 +254,9 @@ class PurchaseDao(context: Context) {
                     "INNER JOIN ${CountryDao.TABLE} ON ${StoreItemDao.TABLE}.${StoreItemDao.COLUMN_COUNTRY_ID} = ${CountryDao.TABLE}.${CountryDao.COLUMN_ID} " +
                     "ORDER BY $TABLE.$COLUMN_TIMESTAMP DESC;"
 
-        val (trips, purchases) = dbManager.select<Pair<List<Trip>, List<Purchase>>>(query) {
+        val (trips, purchases) = dbManager.select<Pair<MutableList<Trip>, MutableList<Purchase>>>(query) {
             produceTrip(it)
-        } ?: Pair(listOf(), listOf())
+        } ?: Pair(mutableListOf(), mutableListOf())
 
         getAltEmissions(trips, numberOfAlternatives)
 

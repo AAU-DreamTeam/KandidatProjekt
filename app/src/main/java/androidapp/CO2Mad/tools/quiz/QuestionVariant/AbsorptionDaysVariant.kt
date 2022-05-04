@@ -1,5 +1,6 @@
-package androidapp.CO2Mad.models.tools.quiz
+package androidapp.CO2Mad.tools.quiz.QuestionVariant
 
+import androidapp.CO2Mad.tools.quiz.Question.QuestionType
 import kotlin.math.roundToInt
 
 class AbsorptionDaysVariant(emission: Double, questionType: QuestionType): QuestionVariant {
@@ -9,7 +10,6 @@ class AbsorptionDaysVariant(emission: Double, questionType: QuestionType): Quest
     override val quizValue = calcQuizValue()
     override var hasBeenAsked = false
     override var result: Boolean? = null
-    override val iconStr = " dage"
     override val actualValueStr get() = if (!hasBeenAsked) valueToString(-1) else valueToString(actualValue)
     override val quizValueStr = valueToString(quizValue)
     override val quizEffect = quizValue * absorptionPerDay

@@ -34,7 +34,7 @@ class PurchaseView : Fragment() {
             } else {
                 emptyListTV.visibility = View.GONE
             }
-            tripListRV.adapter = TripListAdapter(requireContext() as AppCompatActivity, list)
+            tripListRV.adapter = TripListAdapter(requireContext() as AppCompatActivity, viewModel, list)
         }
     }
 }

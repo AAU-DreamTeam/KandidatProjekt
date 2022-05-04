@@ -1,10 +1,10 @@
 package androidapp.CO2Mad.models
 
-import androidapp.CO2Mad.models.enums.PRODUCT_CATEGORY
+import androidapp.CO2Mad.tools.enums.ProductCategory
 
 class Product(val id: Int,
               val name: String,
-              val productCategory: PRODUCT_CATEGORY,
+              val productCategory: ProductCategory,
               val cultivation: Double,
               val iluc: Double,
               val processing: Double,
@@ -15,7 +15,7 @@ class Product(val id: Int,
               val weight : Double
               ){
 
-    constructor(): this(0, "", PRODUCT_CATEGORY.VEGETABLES, 0.0, 0.0, 0.0, 0.0, 0.0, false,0,0.0)
+    constructor(): this(0, "", ProductCategory.VEGETABLES, 0.0, 0.0, 0.0, 0.0, 0.0, false,0,0.0)
 
     fun isValid(): Boolean {
         return id > 0

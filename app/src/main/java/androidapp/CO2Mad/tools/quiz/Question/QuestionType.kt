@@ -1,4 +1,4 @@
-package androidapp.CO2Mad.models.tools.quiz
+package androidapp.CO2Mad.tools.quiz.Question
 
 enum class QuestionType {
     CAR, PLANE, TRAIN, TREE

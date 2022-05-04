@@ -7,8 +7,8 @@ import android.view.View.VISIBLE
 import androidx.core.content.ContextCompat
 import androidx.core.text.HtmlCompat
 import androidapp.CO2Mad.R
-import androidapp.CO2Mad.models.tools.quiz.QuestionAnswer
-import androidapp.CO2Mad.models.tools.quiz.QuizMaster
+import androidapp.CO2Mad.tools.quiz.QuestionVariant.QuestionAnswer
+import androidapp.CO2Mad.viewmodels.QuizMaster
 import kotlinx.android.synthetic.main.activity_game_view.*
 
 class GameView : AppCompatActivity() {

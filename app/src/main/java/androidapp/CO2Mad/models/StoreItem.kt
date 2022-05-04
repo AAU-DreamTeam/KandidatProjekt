@@ -1,10 +1,10 @@
 package androidapp.CO2Mad.models
 
 import android.text.Spanned
-import androidapp.CO2Mad.models.enums.PRODUCT_CATEGORY
-import androidapp.CO2Mad.models.enums.RATING
+import androidapp.CO2Mad.tools.enums.ProductCategory
+import androidapp.CO2Mad.tools.enums.Rating
 import androidx.core.text.HtmlCompat
-import androidapp.CO2Mad.models.tools.EmissionCalculator
+import androidapp.CO2Mad.tools.EmissionCalculator
 
 class StoreItem (val id: Int,
                  var product: Product,
@@ -30,7 +30,7 @@ class StoreItem (val id: Int,
 
     val emissionPerKg: Double get() = EmissionCalculator.calcEmission(this)
     var altEmissions: List<Pair<Int, Double>>? = null
-    var rating: RATING? = RATING.VERY_GOOD
+    var rating: Rating? = Rating.VERY_GOOD
 
     private fun hasValidWeight(): Boolean {
         return weight > 0.0
@@ -40,7 +40,7 @@ class StoreItem (val id: Int,
     }
 
     fun rate(original: StoreItem? = null) {
-        rating = if (original == null || product.productCategory != PRODUCT_CATEGORY.VEGETABLES) {
+        rating = if (original == null || product.productCategory != ProductCategory.VEGETABLES) {
             EmissionCalculator.rate(this)
         } else {
             EmissionCalculator.rateAlternative(original, this)

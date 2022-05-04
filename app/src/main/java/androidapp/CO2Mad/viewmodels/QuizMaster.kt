@@ -1,7 +1,11 @@
-package androidapp.CO2Mad.models.tools.quiz
+package androidapp.CO2Mad.viewmodels
 
 import android.content.Context
 import androidapp.CO2Mad.repositories.VariablesRepository
+import androidapp.CO2Mad.tools.quiz.Question.Question
+import androidapp.CO2Mad.tools.quiz.Question.QuestionFactory
+import androidapp.CO2Mad.tools.quiz.Question.QuestionType
+import androidapp.CO2Mad.tools.quiz.QuestionVariant.QuestionAnswer
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

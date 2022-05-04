@@ -3,10 +3,10 @@ package androidapp.CO2Mad.models.daos
 import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
-import androidapp.CO2Mad.models.tools.DBManager
-import androidapp.CO2Mad.models.tools.EmissionCalculator
+import androidapp.CO2Mad.tools.DBManager
+import androidapp.CO2Mad.tools.EmissionCalculator
 import androidapp.CO2Mad.models.StoreItem
-import androidapp.CO2Mad.models.enums.PRODUCT_CATEGORY
+import androidapp.CO2Mad.tools.enums.ProductCategory
 import java.util.*
 
 class StoreItemDao(private val dbManager: DBManager) {
@@ -182,7 +182,7 @@ class StoreItemDao(private val dbManager: DBManager) {
     }
 
     fun loadAltEmissions(storeItem: StoreItem, numberOfAlternatives: Int) {
-        if (storeItem.product.productCategory == PRODUCT_CATEGORY.VEGETABLES) {
+        if (storeItem.product.productCategory == ProductCategory.VEGETABLES) {
             loadAltEmissionsForProduct(storeItem)
         } else {
             loadAltEmissionsForCategory(storeItem, numberOfAlternatives)
@@ -224,14 +224,14 @@ class StoreItemDao(private val dbManager: DBManager) {
 
     private fun loadNonVeganAlternativeEmissions(storeItem: StoreItem): List<Pair<Int, Double>> {
         val query =
-            if (storeItem.product.productCategory == PRODUCT_CATEGORY.GRAINLEGUME) {
-                "${generateQuery("${ProductDao.TABLE}.${ProductDao.COLUMN_PRODUCT_CATEGORY} NOT IN (${PRODUCT_CATEGORY.VEGETABLES.ordinal}, ${PRODUCT_CATEGORY.GRAINLEGUME.ordinal}) ${PRODUCT_CATEGORY.VEGETABLES.ordinal} AND EMISSION < ${storeItem.emissionPerKg}")} " +
+            if (storeItem.product.productCategory == ProductCategory.GRAINLEGUME) {
+                "${generateQuery("${ProductDao.TABLE}.${ProductDao.COLUMN_PRODUCT_CATEGORY} NOT IN (${ProductCategory.VEGETABLES.ordinal}, ${ProductCategory.GRAINLEGUME.ordinal}) ${ProductCategory.VEGETABLES.ordinal} AND EMISSION < ${storeItem.emissionPerKg}")} " +
                 "UNION " +
-                "${generateQuery("${ProductDao.TABLE}.${ProductDao.COLUMN_PRODUCT_CATEGORY} != ${PRODUCT_CATEGORY.VEGETABLES.ordinal} AND EMISSION < ${storeItem.emissionPerKg}")};"
+                "${generateQuery("${ProductDao.TABLE}.${ProductDao.COLUMN_PRODUCT_CATEGORY} != ${ProductCategory.VEGETABLES.ordinal} AND EMISSION < ${storeItem.emissionPerKg}")};"
             } else {
                 "${generateQuery("${ProductDao.TABLE}.${ProductDao.COLUMN_PRODUCT_CATEGORY} = ${storeItem.product.productCategory.ordinal} AND EMISSION < ${storeItem.emissionPerKg}")} " +
                 "UNION " +
-                "${generateQuery("${ProductDao.TABLE}.${ProductDao.COLUMN_PRODUCT_CATEGORY} NOT IN (${storeItem.product.productCategory.ordinal}, ${PRODUCT_CATEGORY.VEGETABLES.ordinal}, ${PRODUCT_CATEGORY.GRAINLEGUME.ordinal}) AND EMISSION < ${storeItem.emissionPerKg}")};"
+                "${generateQuery("${ProductDao.TABLE}.${ProductDao.COLUMN_PRODUCT_CATEGORY} NOT IN (${storeItem.product.productCategory.ordinal}, ${ProductCategory.VEGETABLES.ordinal}, ${ProductCategory.GRAINLEGUME.ordinal}) AND EMISSION < ${storeItem.emissionPerKg}")};"
             }
 
         return dbManager.selectMultiple(query) {
@@ -240,7 +240,7 @@ class StoreItemDao(private val dbManager: DBManager) {
     }
 
     private fun loadVeganAlternativeEmissions(storeItem: StoreItem, limit: Int): List<Pair<Int, Double>> {
-        val query = "${generateQuery("${ProductDao.TABLE}.${ProductDao.COLUMN_PRODUCT_CATEGORY} = ${PRODUCT_CATEGORY.GRAINLEGUME.ordinal} AND EMISSION < ${storeItem.emissionPerKg} ", limit)};"
+        val query = "${generateQuery("${ProductDao.TABLE}.${ProductDao.COLUMN_PRODUCT_CATEGORY} = ${ProductCategory.GRAINLEGUME.ordinal} AND EMISSION < ${storeItem.emissionPerKg} ", limit)};"
         return dbManager.selectMultiple(query) {
             Pair(it.getInt(COLUMN_ID_POSITION), it.getDouble(COLUMN_COUNT))
         }

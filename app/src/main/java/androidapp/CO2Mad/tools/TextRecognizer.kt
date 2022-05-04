@@ -1,11 +1,8 @@
-package androidapp.CO2Mad.models.tools
+package androidapp.CO2Mad.tools
 
-import android.content.Context
 import android.graphics.BitmapFactory
-import android.media.AudioDeviceCallback
 import android.media.ExifInterface
 import android.util.Log
-import androidapp.CO2Mad.repositories.PurchaseRepository
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.Text
 import com.google.mlkit.vision.text.TextRecognition

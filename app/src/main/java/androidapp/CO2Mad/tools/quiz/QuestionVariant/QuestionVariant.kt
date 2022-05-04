@@ -1,5 +1,6 @@
-package androidapp.CO2Mad.models.tools.quiz
+package androidapp.CO2Mad.tools.quiz.QuestionVariant
 
+import androidapp.CO2Mad.tools.quiz.Question.QuestionType
 import kotlin.random.Random
 
 interface QuestionVariant {
@@ -9,7 +10,6 @@ interface QuestionVariant {
     val actualValueStr: String
     val quizValueStr: String
     val roundToNearest: Int
-    val iconStr: String
     var hasBeenAsked: Boolean
     var result: Boolean?
 

@@ -9,8 +9,12 @@ import android.os.Bundle
 import android.view.*
 import android.widget.*
 import androidapp.CO2Mad.R
-import androidapp.CO2Mad.models.tools.quiz.*
+import androidapp.CO2Mad.tools.quiz.Question.Question
+import androidapp.CO2Mad.tools.quiz.Question.QuestionType
+import androidapp.CO2Mad.tools.quiz.QuestionVariant.QuestionVariant
+import androidapp.CO2Mad.tools.quiz.QuestionVariant.QuestionVariantType
 import androidapp.CO2Mad.viewmodels.EmissionViewModel
+import androidapp.CO2Mad.viewmodels.QuizMaster
 import androidapp.CO2Mad.views.GameView
 import androidapp.CO2Mad.views.MainView
 import androidapp.CO2Mad.views.ScannerView
@@ -45,6 +49,8 @@ class OverviewView : Fragment() {
     ): View? {
         val rootView = inflater.inflate(R.layout.fragment_overview, container, false)
 
+        QuizMaster.initiate(requireContext())
+        viewModel.initiate(requireContext())
 
         scanButton = rootView.findViewById(R.id.ScanButton)
         totalEmissionTV = rootView.findViewById(R.id.totalEmission)

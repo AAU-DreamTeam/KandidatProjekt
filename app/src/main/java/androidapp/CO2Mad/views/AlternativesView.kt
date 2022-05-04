@@ -4,15 +4,11 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidapp.CO2Mad.R
-import androidapp.CO2Mad.models.StoreItem
-import androidapp.CO2Mad.models.enums.PRODUCT_CATEGORY
+import androidapp.CO2Mad.tools.enums.ProductCategory
 import androidapp.CO2Mad.viewmodels.AlternativesViewModel
 import androidapp.CO2Mad.views.adapters.AlternativesAdapter
-import androidapp.CO2Mad.views.adapters.TripListAdapter
 import com.google.android.material.button.MaterialButton
 import kotlinx.android.synthetic.main.activity_alternatives_view.*
-import kotlinx.android.synthetic.main.fragment_purchase_view.*
-import kotlinx.android.synthetic.main.purchase_list_item.*
 
 class AlternativesView : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,7 +17,7 @@ class AlternativesView : AppCompatActivity() {
 
         btnBack.setOnClickListener { finish() }
 
-        if(AlternativesViewModel.storeItem!!.product.productCategory == PRODUCT_CATEGORY.VEGETABLES){
+        if(AlternativesViewModel.storeItem!!.product.productCategory == ProductCategory.VEGETABLES){
             refresh_Btn.visibility = MaterialButton.GONE
         }
 

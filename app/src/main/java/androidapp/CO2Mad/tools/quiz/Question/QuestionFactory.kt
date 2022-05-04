@@ -1,4 +1,4 @@
-package androidapp.CO2Mad.models.tools.quiz
+package androidapp.CO2Mad.tools.quiz.Question
 
 class QuestionFactory {
     fun getQuestion(type: QuestionType, emission: Double) : Question {

@@ -1,5 +1,6 @@
 package androidapp.CO2Mad.views.adapters
 
+import android.content.DialogInterface
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
@@ -10,11 +11,13 @@ import androidx.recyclerview.widget.RecyclerView
 import androidapp.CO2Mad.R
 import androidapp.CO2Mad.models.Purchase
 import androidapp.CO2Mad.viewmodels.AlternativesViewModel
+import androidapp.CO2Mad.viewmodels.EmissionViewModel
 import androidapp.CO2Mad.views.AlternativesView
+import androidx.appcompat.app.AlertDialog
 import com.google.android.material.button.MaterialButton
 import kotlinx.android.synthetic.main.purchase_list_item.view.*
 
-class PurchaseListAdapter(val context: AppCompatActivity, var purchases: List<Purchase>):  RecyclerView.Adapter<PurchaseListAdapter.ViewHolder>(){
+class PurchaseListAdapter(val context: AppCompatActivity, val viewModel: EmissionViewModel, val parent: TripListAdapter, val parentHolder: TripListAdapter.ViewHolder, var purchases: List<Purchase>):  RecyclerView.Adapter<PurchaseListAdapter.ViewHolder>(){
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
             LayoutInflater.from(context).inflate(
@@ -48,7 +51,24 @@ class PurchaseListAdapter(val context: AppCompatActivity, var purchases: List<Pu
                 AlternativesViewModel.storeItem = purchase.storeItem
                 it.context.startActivity(Intent(context, AlternativesView::class.java))
             }
+        }
 
+        holder.btnDeletePurchase.setOnClickListener{
+            AlertDialog.Builder(context)
+                .setTitle("Slet indkøb")
+                .setMessage("Er du sikker på at du vil slette dette indkøb?")
+                .setPositiveButton(android.R.string.yes) { dialog, which ->
+                    val tripPosition = parentHolder.bindingAdapterPosition
+
+                    if (viewModel.onDeletePurchase(tripPosition, purchases[holder.bindingAdapterPosition])) {
+                        parent.notifyItemRemoved(tripPosition)
+                    }
+
+                    notifyItemRemoved(holder.bindingAdapterPosition)
+                }
+                .setNegativeButton(android.R.string.no,null)
+                .create()
+                .show()
         }
     }
 
@@ -67,5 +87,6 @@ class PurchaseListAdapter(val context: AppCompatActivity, var purchases: List<Pu
         val weightTV: TextView = view.weightTV
         val buttonAlternatives: MaterialButton = view.btnAlternatives
         val ratingIV: MaterialButton = view.ratingIV
+        val btnDeletePurchase: MaterialButton = view.btnDeletePurchase
     }
 }

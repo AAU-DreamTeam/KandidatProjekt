@@ -9,8 +9,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
 import androidapp.CO2Mad.R
-import androidapp.CO2Mad.models.enums.COMPLETED
-import androidapp.CO2Mad.models.tools.quiz.QuizMaster
+import androidapp.CO2Mad.tools.enums.Completed
 import androidapp.CO2Mad.viewmodels.ScannerViewModel
 import androidapp.CO2Mad.views.adapters.ScannerAdapter
 import androidx.activity.result.contract.ActivityResultContracts
@@ -179,10 +178,10 @@ class ScannerView : AppCompatActivity() {
         recyclerView2.layoutManager = LinearLayoutManager(this)
 
         viewModel.completedPurchases.observe(this) {
-            recyclerView2.adapter = ScannerAdapter(it, viewModel.products.value!!, viewModel.countries.value!!, viewModel,this.resources,COMPLETED.COMPLETED)
+            recyclerView2.adapter = ScannerAdapter(it, viewModel.products.value!!, viewModel.countries.value!!, viewModel,this.resources,Completed.COMPLETED)
         }
         viewModel.missingPurchases.observe(this) {
-            recyclerView.adapter = ScannerAdapter(it, viewModel.products.value!!, viewModel.countries.value!!, viewModel,this.resources,COMPLETED.MISSING)
+            recyclerView.adapter = ScannerAdapter(it, viewModel.products.value!!, viewModel.countries.value!!, viewModel,this.resources,Completed.MISSING)
         }
     }
 

@@ -1,6 +1,9 @@
-package androidapp.CO2Mad.models.tools.quiz
+package androidapp.CO2Mad.tools.quiz.Question
 
 import androidapp.CO2Mad.R
+import androidapp.CO2Mad.tools.quiz.QuestionVariant.QuestionVariant
+import androidapp.CO2Mad.tools.quiz.QuestionVariant.QuestionVariantFactory
+import androidapp.CO2Mad.tools.quiz.QuestionVariant.QuestionVariantType
 
 class TreeQuestion(emission: Double, type: QuestionType): Question {
     override val iconId = R.drawable.ic_park_black_24dp

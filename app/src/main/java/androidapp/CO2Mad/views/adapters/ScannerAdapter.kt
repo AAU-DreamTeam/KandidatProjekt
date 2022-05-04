@@ -1,9 +1,7 @@
 package androidapp.CO2Mad.views.adapters
 
-import android.content.Context
 import android.content.res.Resources
 import android.graphics.Color
-import android.opengl.Visibility
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -16,11 +14,10 @@ import android.widget.Toast
 import androidapp.CO2Mad.models.Country
 import androidapp.CO2Mad.models.Product
 import androidapp.CO2Mad.models.Purchase
-import androidapp.CO2Mad.models.enums.COMPLETED
+import androidapp.CO2Mad.tools.enums.Completed
 import androidapp.CO2Mad.viewmodels.ScannerViewModel
 import com.google.android.material.button.MaterialButtonToggleGroup
 import com.google.android.material.textfield.TextInputEditText
-import kotlinx.android.synthetic.main.activity_scanner.view.*
 import kotlinx.android.synthetic.main.card_layout_alt.view.*
 
 
@@ -30,7 +27,7 @@ class ScannerAdapter(
     val countries: List<Country>,
     private val viewModel: ScannerViewModel,
     val resources: Resources,
-    val currentList: COMPLETED
+    val currentList: Completed
 ) : RecyclerView.Adapter<ScannerAdapter.ViewHolder>() {
     val defaultTextColor = resources.getColor(R.color.defaultValue)
 
@@ -77,7 +74,7 @@ class ScannerAdapter(
             Toast.LENGTH_SHORT
         )
 
-        if (currentList == COMPLETED.COMPLETED) {
+        if (currentList == Completed.COMPLETED) {
             holder.acceptButton.visibility = Button.GONE
         }
         holder.deleteButton.setOnClickListener {

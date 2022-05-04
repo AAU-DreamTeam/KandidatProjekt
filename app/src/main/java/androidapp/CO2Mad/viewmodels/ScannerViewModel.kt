@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidapp.CO2Mad.models.Country
 import androidapp.CO2Mad.models.Product
 import androidapp.CO2Mad.models.Purchase
-import androidapp.CO2Mad.models.enums.COMPLETED
+import androidapp.CO2Mad.tools.enums.Completed
 import androidapp.CO2Mad.repositories.CountryRepository
 import androidapp.CO2Mad.repositories.ProductRepository
 import androidapp.CO2Mad.repositories.PurchaseRepository
@@ -61,8 +61,8 @@ class ScannerViewModel: ViewModel() {
         _countries.value = countryRepository!!.loadCountries()
     }
 
-    fun onDeletePurchase(index: Int, currentList: COMPLETED){
-        if (currentList == COMPLETED.COMPLETED){
+    fun onDeletePurchase(index: Int, currentList: Completed){
+        if (currentList == Completed.COMPLETED){
             _completedPurchases.value!!.removeAt(index)
             _completedPurchases.value = _completedPurchases.value!!
 
@@ -71,6 +71,7 @@ class ScannerViewModel: ViewModel() {
             _missingPurchases.value = _missingPurchases.value!!
         }
     }
+
     fun onCompletedChange(index: Int){
         _completedPurchases.value!!.add(_missingPurchases.value!![index])
         _missingPurchases.value!!.removeAt(index)
@@ -78,8 +79,8 @@ class ScannerViewModel: ViewModel() {
         _completedPurchases.value =_completedPurchases.value!!
     }
 
-    fun onOrganicChanged(index: Int, value: Boolean,currentList: COMPLETED) {
-        if (currentList == COMPLETED.COMPLETED){
+    fun onOrganicChanged(index: Int, value: Boolean,currentList: Completed) {
+        if (currentList == Completed.COMPLETED){
             _completedPurchases.value!![index].storeItem.organic = value
 
         }else{
@@ -87,8 +88,8 @@ class ScannerViewModel: ViewModel() {
         }
     }
 
-    fun onPackagedChanged(index: Int, value: Boolean, currentList: COMPLETED) {
-        if (currentList == COMPLETED.COMPLETED){
+    fun onPackagedChanged(index: Int, value: Boolean, currentList: Completed) {
+        if (currentList == Completed.COMPLETED){
             _completedPurchases.value!![index].storeItem.packaged = value
 
         }else{
@@ -96,8 +97,8 @@ class ScannerViewModel: ViewModel() {
         }
     }
 
-    fun onReceiptTextChanged(index: Int, value: String,currentList: COMPLETED){
-        if (currentList == COMPLETED.COMPLETED){
+    fun onReceiptTextChanged(index: Int, value: String,currentList: Completed){
+        if (currentList == Completed.COMPLETED){
             _completedPurchases.value!![index].storeItem.receiptText = value
 
         }else{
@@ -105,8 +106,8 @@ class ScannerViewModel: ViewModel() {
         }
     }
 
-    fun onCountryChanged(index: Int, value: Country,currentList: COMPLETED){
-        if (currentList == COMPLETED.COMPLETED){
+    fun onCountryChanged(index: Int, value: Country,currentList: Completed){
+        if (currentList == Completed.COMPLETED){
             _completedPurchases.value!![index].storeItem.country = value
             _completedPurchases.value!![index].storeItem.countryDefault = false
 
@@ -115,8 +116,9 @@ class ScannerViewModel: ViewModel() {
             _missingPurchases.value!![index].storeItem.countryDefault = false
         }
     }
-    fun onCountryDefaultChanged(index: Int, value: Boolean,currentList: COMPLETED){
-        if (currentList == COMPLETED.COMPLETED){
+
+    fun onCountryDefaultChanged(index: Int, value: Boolean,currentList: Completed){
+        if (currentList == Completed.COMPLETED){
             _completedPurchases.value!![index].storeItem.countryDefault = value
 
         }else{
@@ -124,33 +126,33 @@ class ScannerViewModel: ViewModel() {
         }
     }
 
-    fun onProductChanged(index: Int, value: Product,currentList: COMPLETED){
-        if (currentList == COMPLETED.COMPLETED){
+    fun onProductChanged(index: Int, value: Product,currentList: Completed){
+        if (currentList == Completed.COMPLETED){
             _completedPurchases.value!![index].storeItem.product = value
 
         }else{
             _missingPurchases.value!![index].storeItem.product = value
         }
     }
-    fun getPurchase(index: Int,currentList: COMPLETED): Purchase {
-        if (currentList == COMPLETED.COMPLETED){
-           return _completedPurchases.value!![index]
 
+    fun getPurchase(index: Int,currentList: Completed): Purchase {
+        if (currentList == Completed.COMPLETED){
+           return _completedPurchases.value!![index]
         }else{
            return _missingPurchases.value!![index]
         }
     }
 
-    fun onQuantityChanged(index: Int, value: Int,currentList: COMPLETED){
-        if (currentList == COMPLETED.COMPLETED){
+    fun onQuantityChanged(index: Int, value: Int,currentList: Completed){
+        if (currentList == Completed.COMPLETED){
             _completedPurchases.value!![index].quantity = value
 
         }else{
             _missingPurchases.value!![index].quantity = value
         }
     }
-    fun onQuantityDefaultChanged(index: Int,value: Boolean,currentList: COMPLETED){
-        if (currentList == COMPLETED.COMPLETED){
+    fun onQuantityDefaultChanged(index: Int,value: Boolean,currentList: Completed){
+        if (currentList == Completed.COMPLETED){
             _completedPurchases.value!![index].quantityDefault = value
 
         }else{
@@ -158,16 +160,16 @@ class ScannerViewModel: ViewModel() {
         }
     }
 
-    fun onWeightChanged(index: Int, value: Double,currentList: COMPLETED){
-        if (currentList == COMPLETED.COMPLETED){
+    fun onWeightChanged(index: Int, value: Double,currentList: Completed){
+        if (currentList == Completed.COMPLETED){
             _completedPurchases.value!![index].storeItem.weight = value
 
         }else{
             _missingPurchases.value!![index].storeItem.weight = value
         }
     }
-    fun onWeightDefaultChanged(index: Int,value: Boolean,currentList: COMPLETED){
-        if (currentList == COMPLETED.COMPLETED){
+    fun onWeightDefaultChanged(index: Int,value: Boolean,currentList: Completed){
+        if (currentList == Completed.COMPLETED){
             _completedPurchases.value!![index].storeItem.weightDefault = value
 
         }else{

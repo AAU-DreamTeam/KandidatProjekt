@@ -8,7 +8,7 @@ import androidx.core.text.HtmlCompat
 import androidx.recyclerview.widget.RecyclerView
 import androidapp.CO2Mad.R
 import androidapp.CO2Mad.models.StoreItem
-import androidapp.CO2Mad.models.enums.PRODUCT_CATEGORY
+import androidapp.CO2Mad.tools.enums.ProductCategory
 import com.google.android.material.button.MaterialButton
 import kotlinx.android.synthetic.main.alternative_list_item.view.*
 
@@ -36,7 +36,7 @@ class AlternativesAdapter(val context: Context, val storeItem: StoreItem, var al
         val item = alternatives[position]
         val emission = HtmlCompat.fromHtml("%.2f ".format(item.emissionPerKg).replace('.', ',') + "kg CO<sub><small><small>2</small></small></sub> pr. kg", HtmlCompat.FROM_HTML_MODE_LEGACY)
 
-        if (storeItem.product.productCategory ==  PRODUCT_CATEGORY.VEGETABLES) {
+        if (storeItem.product.productCategory ==  ProductCategory.VEGETABLES) {
             holder.productTV.visibility = View.GONE
         } else {
             holder.productTV.text = item.product.name

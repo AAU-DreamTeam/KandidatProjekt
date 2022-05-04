@@ -2,9 +2,9 @@ package androidapp.CO2Mad.models.daos
 
 import android.content.Context
 import android.database.Cursor
-import androidapp.CO2Mad.models.tools.DBManager
+import androidapp.CO2Mad.tools.DBManager
 import androidapp.CO2Mad.models.Product
-import androidapp.CO2Mad.models.enums.PRODUCT_CATEGORY
+import androidapp.CO2Mad.tools.enums.ProductCategory
 
 class ProductDao(private val dbManager: DBManager) {
     constructor(context: Context): this(DBManager(context))
@@ -86,7 +86,7 @@ class ProductDao(private val dbManager: DBManager) {
             return Product(
                     cursor.getInt(startIndex + COLUMN_ID_POSITION),
                     cursor.getString(startIndex + COLUMN_NAME_POSITION),
-                    PRODUCT_CATEGORY.values()[cursor.getInt(startIndex + COLUMN_PRODUCT_CATEGORY_POSITION)],
+                    ProductCategory.values()[cursor.getInt(startIndex + COLUMN_PRODUCT_CATEGORY_POSITION)],
                     cursor.getDouble(startIndex + COLUMN_CULTIVATION_POSITION),
                     cursor.getDouble(startIndex + COLUMN_ILUC_POSITION),
                     cursor.getDouble(startIndex + COLUMN_PROCESSING_POSITION),

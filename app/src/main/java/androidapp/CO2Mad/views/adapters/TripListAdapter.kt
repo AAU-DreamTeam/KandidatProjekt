@@ -14,9 +14,10 @@ import androidx.recyclerview.widget.RecyclerView
 import androidapp.CO2Mad.R
 import androidapp.CO2Mad.models.Purchase
 import androidapp.CO2Mad.models.Trip
+import androidapp.CO2Mad.viewmodels.EmissionViewModel
 import kotlinx.android.synthetic.main.trip_list_item.view.*
 
-class TripListAdapter(val context: AppCompatActivity, var trips: List<Trip>):  RecyclerView.Adapter<TripListAdapter.ViewHolder>(){
+class TripListAdapter(val context: AppCompatActivity, val viewModel: EmissionViewModel, var trips: List<Trip>):  RecyclerView.Adapter<TripListAdapter.ViewHolder>(){
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
             LayoutInflater.from(context).inflate(
@@ -30,19 +31,37 @@ class TripListAdapter(val context: AppCompatActivity, var trips: List<Trip>):  R
         holder.tripHeader.text = trips[position].prettyTimestamp()
 
         if (position == 0) {
-            holder.setUpPurchases(context, trips[position].purchases)
-            holder.showPurchases()
+            setUpPurchases(holder, context, trips[position].purchases)
+            showPurchases(holder)
         } else {
-            holder.hidePurchases()
+            hidePurchases(holder)
         }
 
         holder.tripCard.setOnClickListener {
             if (holder.purchaseListRV.isVisible) {
-                holder.hidePurchases()
+                hidePurchases(holder)
             } else {
-                holder.setUpPurchases(context, trips[position].purchases)
-                holder.showPurchases()
+                setUpPurchases(holder, context, trips[holder.bindingAdapterPosition].purchases)
+                showPurchases(holder)
             }
+        }
+    }
+
+    private fun hidePurchases(holder: ViewHolder){
+        holder.purchaseListRV.visibility = View.GONE
+        holder.collapseIcon.setImageResource(R.drawable.ic_expand_more_black_24dp)
+    }
+
+    private fun showPurchases(holder: ViewHolder){
+        holder.purchaseListRV.visibility = View.VISIBLE
+        holder.collapseIcon.setImageResource(R.drawable.ic_expand_less_black_24dp)
+    }
+
+    private fun setUpPurchases(holder: ViewHolder, context: AppCompatActivity, purchases: List<Purchase>){
+        if (!holder.purchasesLoaded) {
+            holder.purchaseListRV.layoutManager = LinearLayoutManager(context)
+            holder.purchaseListRV.adapter = PurchaseListAdapter(context, viewModel, this, holder, purchases)
+            holder.purchasesLoaded = true
         }
     }
 
@@ -56,23 +75,5 @@ class TripListAdapter(val context: AppCompatActivity, var trips: List<Trip>):  R
         val purchaseListRV: RecyclerView = view.purchaseListRV
         val collapseIcon: ImageView = view.collapseIcon
         var purchasesLoaded = false
-
-        fun hidePurchases(){
-            purchaseListRV.visibility = View.GONE
-            collapseIcon.setImageResource(R.drawable.ic_expand_more_black_24dp)
-        }
-
-        fun showPurchases(){
-            purchaseListRV.visibility = View.VISIBLE
-            collapseIcon.setImageResource(R.drawable.ic_expand_less_black_24dp)
-        }
-
-        fun setUpPurchases(context: AppCompatActivity, purchases: List<Purchase>){
-            if (!purchasesLoaded) {
-                purchaseListRV.layoutManager = LinearLayoutManager(context)
-                purchaseListRV.adapter = PurchaseListAdapter(context, purchases)
-                purchasesLoaded = true
-            }
-        }
     }
 }

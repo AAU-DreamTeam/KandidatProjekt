@@ -2,7 +2,7 @@ package androidapp.CO2Mad.models.daos
 
 import android.content.ContentValues
 import android.content.Context
-import androidapp.CO2Mad.models.tools.DBManager
+import androidapp.CO2Mad.tools.DBManager
 
 class VariablesDao(private val dbManager: DBManager){
     constructor(context: Context): this(DBManager(context))

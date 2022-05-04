@@ -2,7 +2,7 @@ package androidapp.CO2Mad.models.daos
 
 import android.content.Context
 import android.database.Cursor
-import androidapp.CO2Mad.models.tools.DBManager
+import androidapp.CO2Mad.tools.DBManager
 import androidapp.CO2Mad.models.Country
 
 class CountryDao(private val dbManager: DBManager) {

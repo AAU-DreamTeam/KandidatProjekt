@@ -1,4 +1,8 @@
-package androidapp.CO2Mad.models.tools.quiz
+package androidapp.CO2Mad.tools.quiz.Question
+
+import androidapp.CO2Mad.tools.quiz.QuestionVariant.QuestionAnswer
+import androidapp.CO2Mad.tools.quiz.QuestionVariant.QuestionVariant
+import androidapp.CO2Mad.tools.quiz.QuestionVariant.QuestionVariantType
 
 interface Question {
     val CO2Str: String get() = "CO<sub><small><small>2</small></small></sub>"

@@ -1,8 +1,8 @@
-package androidapp.CO2Mad.models.enums
+package androidapp.CO2Mad.tools.enums
 
 import androidapp.CO2Mad.R
 
-enum class RATING(val iconId: Int, val colorId: Int) {
+enum class Rating(val iconId: Int, val colorId: Int) {
     VERY_BAD(R.drawable.ic_face_angry_solid, R.color.very_bad),
     BAD(R.drawable.ic_face_frown_solid, R.color.bad),
     OK(R.drawable.ic_face_meh_solid, R.color.ok),

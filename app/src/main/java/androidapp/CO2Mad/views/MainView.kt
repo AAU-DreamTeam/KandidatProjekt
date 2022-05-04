@@ -8,13 +8,12 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import androidapp.CO2Mad.R
-import androidapp.CO2Mad.models.tools.quiz.QuizMaster
+import androidapp.CO2Mad.viewmodels.QuizMaster
 import androidapp.CO2Mad.viewmodels.EmissionViewModel
 import androidapp.CO2Mad.views.adapters.MainAdapter
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import androidx.fragment.app.activityViewModels
 import com.google.android.material.tabs.TabLayout
 
 

@@ -16,7 +16,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidapp.CO2Mad.R
 import androidapp.CO2Mad.models.Purchase
-import androidapp.CO2Mad.models.enums.PRODUCT_CATEGORY
+import androidapp.CO2Mad.tools.enums.ProductCategory
 import androidapp.CO2Mad.viewmodels.EmissionViewModel
 import androidapp.CO2Mad.views.AxisRenderers.ImageXAxisRenderer
 import com.github.mikephil.charting.charts.BarChart
@@ -67,7 +67,6 @@ class GraphView : Fragment() {
         personsBox = rootView.findViewById(R.id.number_of_people_input)
         imageList = getImages()
 
-        setupGraphs()
         setupDropDown()
 
 
@@ -75,6 +74,7 @@ class GraphView : Fragment() {
     }
     override fun onResume(){
         super.onResume()
+        setupGraphs()
         updateGraphs()
 
     }
@@ -228,7 +228,7 @@ class GraphView : Fragment() {
         val currentDay = Calendar.getInstance()
         val newList : MutableList<BarEntry> = mutableListOf()
         var newYear =0
-        for(k in PRODUCT_CATEGORY.values().indices){
+        for(k in ProductCategory.values().indices){
             var purchaseList = mutableListOf<Purchase>()
             for (i in 0..maxDataPoints-1){
                 var weekOfYear = currentDay.get(Calendar.WEEK_OF_YEAR)-i
@@ -239,7 +239,7 @@ class GraphView : Fragment() {
                 purchaseList.addAll(purchases.filter {
                     it.calendar.get(Calendar.YEAR) == currentDay.get(Calendar.YEAR)-newYear &&
                             it.calendar.get(Calendar.WEEK_OF_YEAR) == weekOfYear &&
-                            it.storeItem.product.productCategory == PRODUCT_CATEGORY.values()[k]
+                            it.storeItem.product.productCategory == ProductCategory.values()[k]
                 })
             }
             newList.add(BarEntry(k.toFloat(),summerizePurchaesList(purchaseList)))
@@ -248,9 +248,9 @@ class GraphView : Fragment() {
     }
     private fun extractConsumptionDataWeekly(purchaseList: List<Purchase>): MutableList<BarEntry> {
         val newList : MutableList<BarEntry> = mutableListOf()
-        for (i in PRODUCT_CATEGORY.values().indices) {
+        for (i in ProductCategory.values().indices) {
             var sum = 0.0
-            for (purchase in purchaseList.filter { it.storeItem.product.productCategory == PRODUCT_CATEGORY.values()[i] }) {
+            for (purchase in purchaseList.filter { it.storeItem.product.productCategory == ProductCategory.values()[i] }) {
                 sum += purchase.emission
             }
             newList.add(BarEntry(i.toFloat(),sum.toFloat()))

@@ -1,8 +1,9 @@
-package androidapp.CO2Mad.models.tools.quiz
+package androidapp.CO2Mad.tools.quiz.QuestionVariant
 
+import androidapp.CO2Mad.tools.quiz.Question.QuestionType
 import kotlin.math.roundToInt
 
-class EmissionHoursVariant(emission: Double, questionType: QuestionType): QuestionVariant {
+class EmissionTimeVariant(emission: Double, questionType: QuestionType): QuestionVariant {
     private val emissionPerKM = getEffectPerUnit(questionType)
     private val emissionPerSecond = emissionPerKM * getVelocity(questionType)
     private val unitSingular: String
@@ -13,7 +14,6 @@ class EmissionHoursVariant(emission: Double, questionType: QuestionType): Questi
     override var result: Boolean? = null
     override val quizValue: Int
     override val quizEffect: Double
-    override val iconStr = " timer"
     override val actualValueStr get() = if (!hasBeenAsked) valueToString(-1) else valueToString(actualValue)
     override val quizValueStr: String
 
@@ -24,21 +24,24 @@ class EmissionHoursVariant(emission: Double, questionType: QuestionType): Questi
         val actualValueMinutes = actualValueSeconds / secondsPerMinute
         val actualValueHours = actualValueSeconds / secondsPerHour
 
-        if(actualValueHours >= 1) {
+        when {
+            actualValueHours >= 1 -> {
                 unitSingular = "time"
                 unitPlural = "timer"
                 roundToNearest = 2
                 actualValue = actualValueHours
                 quizValue = calcQuizValue()
                 quizEffect = emissionPerSecond * secondsPerHour * quizValue
-            }else if(actualValueMinutes >= 1){
+            }
+            actualValueMinutes >= 1 -> {
                 unitSingular = "minut"
                 unitPlural = "minutter"
                 roundToNearest = 5
                 actualValue = actualValueMinutes
                 quizValue = calcQuizValue()
                 quizEffect = emissionPerSecond * secondsPerMinute * quizValue
-            }else{
+            }
+            else -> {
                 unitSingular = "sekunder"
                 unitPlural = "sekunder"
                 roundToNearest = 5
@@ -46,6 +49,7 @@ class EmissionHoursVariant(emission: Double, questionType: QuestionType): Questi
                 quizValue = calcQuizValue()
                 quizEffect = emissionPerSecond * quizValue
             }
+        }
 
         quizValueStr = valueToString(quizValue)
     }

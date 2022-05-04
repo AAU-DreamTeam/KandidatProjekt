@@ -1,12 +1,12 @@
-package androidapp.CO2Mad.models.tools
+package androidapp.CO2Mad.tools
 
 import androidapp.CO2Mad.models.StoreItem
 import androidapp.CO2Mad.models.daos.CountryDao
 import androidapp.CO2Mad.models.daos.ProductDao
 import androidapp.CO2Mad.models.daos.PurchaseDao
 import androidapp.CO2Mad.models.daos.StoreItemDao
-import androidapp.CO2Mad.models.enums.PRODUCT_CATEGORY
-import androidapp.CO2Mad.models.enums.RATING
+import androidapp.CO2Mad.tools.enums.ProductCategory
+import androidapp.CO2Mad.tools.enums.Rating
 
 class EmissionCalculator {
     companion object {
@@ -55,44 +55,44 @@ class EmissionCalculator {
             return "((${sqlEmissionPerKgFormula()}) * ${StoreItemDao.TABLE}.${StoreItemDao.COLUMN_WEIGHT} * ${PurchaseDao.TABLE}.${PurchaseDao.COLUMN_QUANTITY})"
         }
 
-        fun rate(storeItem: StoreItem): RATING {
-            if (storeItem.product.productCategory == PRODUCT_CATEGORY.VEGETABLES) {
+        fun rate(storeItem: StoreItem): Rating {
+            if (storeItem.product.productCategory == ProductCategory.VEGETABLES) {
                 return if (storeItem.altEmissions!!.isEmpty()) {
-                    RATING.VERY_GOOD
+                    Rating.VERY_GOOD
                 } else {
                     val emission = storeItem.emissionPerKg
                     val difference = (emission - storeItem.altEmissions!!.first().second) / emission
                     when {
-                        difference > 0.8 -> RATING.VERY_BAD
-                        difference > 0.6 -> RATING.BAD
-                        difference > 0.4 -> RATING.OK
-                        difference > 0.2 -> RATING.GOOD
-                        else -> RATING.VERY_GOOD
+                        difference > 0.8 -> Rating.VERY_BAD
+                        difference > 0.6 -> Rating.BAD
+                        difference > 0.4 -> Rating.OK
+                        difference > 0.2 -> Rating.GOOD
+                        else -> Rating.VERY_GOOD
                     }
                 }
             } else {
                 val emission = storeItem.emissionPerKg
 
                 return when {
-                    emission >= 47.8 -> RATING.VERY_BAD
-                    emission >= 30.5 -> RATING.BAD
-                    emission >= 15.5 -> RATING.OK
-                    emission >= 3.1 -> RATING.GOOD
-                    else -> RATING.VERY_GOOD
+                    emission >= 47.8 -> Rating.VERY_BAD
+                    emission >= 30.5 -> Rating.BAD
+                    emission >= 15.5 -> Rating.OK
+                    emission >= 3.1 -> Rating.GOOD
+                    else -> Rating.VERY_GOOD
                 }
             }
         }
 
-        fun rateAlternative(original: StoreItem, alternative: StoreItem): RATING {
+        fun rateAlternative(original: StoreItem, alternative: StoreItem): Rating {
             val emissionOriginal = original.emissionPerKg
             val originalRatingOrdinal = original.rating!!.ordinal
             val difference = (emissionOriginal - alternative.emissionPerKg) / emissionOriginal
 
             return when {
-                difference > 0.8 -> RATING.VERY_GOOD
-                difference > 0.6 -> RATING.values()[originalRatingOrdinal + 3]
-                difference > 0.4 -> RATING.values()[originalRatingOrdinal + 2]
-                difference > 0.2 -> RATING.values()[originalRatingOrdinal + 1]
+                difference > 0.8 -> Rating.VERY_GOOD
+                difference > 0.6 -> Rating.values()[originalRatingOrdinal + 3]
+                difference > 0.4 -> Rating.values()[originalRatingOrdinal + 2]
+                difference > 0.2 -> Rating.values()[originalRatingOrdinal + 1]
                 else -> original.rating!!
             }
         }

@@ -1,6 +1,9 @@
-package androidapp.CO2Mad.models.tools.quiz
+package androidapp.CO2Mad.tools.quiz.Question
 
 import androidapp.CO2Mad.R
+import androidapp.CO2Mad.tools.quiz.QuestionVariant.QuestionVariant
+import androidapp.CO2Mad.tools.quiz.QuestionVariant.QuestionVariantFactory
+import androidapp.CO2Mad.tools.quiz.QuestionVariant.QuestionVariantType
 
 class CarQuestion(emission: Double, type: QuestionType): Question {
     override val iconId = R.drawable.ic_directions_car_black_24dp
@@ -15,7 +18,10 @@ class CarQuestion(emission: Double, type: QuestionType): Question {
     private val quizEmission: Double get() = variants[currentIndex].quizEffect
     init {
         val qvFactory = QuestionVariantFactory()
-        val variantTypes = mutableListOf(QuestionVariantType.EMISSION_KILOMETERS, QuestionVariantType.EMISSION_HOURS)
+        val variantTypes = mutableListOf(
+            QuestionVariantType.EMISSION_KILOMETERS,
+            QuestionVariantType.EMISSION_HOURS
+        )
 
         for ((index, variantType) in variantTypes.withIndex()) {
             variants.add(index, qvFactory.getQuestionVariant(variantType, emission, type))
