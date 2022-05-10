@@ -16,6 +16,7 @@ class EmissionViewModel: ViewModel()  {
     private val emissionList = mutableListOf<Double>()
     private var position = 0
     private val calendar: Calendar = Calendar.getInstance(TimeZone.getTimeZone("Europe/Copenhagen"))
+    private var dbUpdated = false
 
     private val _emission = MutableLiveData<Double>(null)
     val emission: LiveData<Double> get() = _emission
@@ -35,6 +36,10 @@ class EmissionViewModel: ViewModel()  {
             storeItemRepository = StoreItemRepository(context)
         }
 
+        if (!dbUpdated) {
+            storeItemRepository!!.updateMissingCountries()
+            dbUpdated = true
+        }
         loadData()
     }
 

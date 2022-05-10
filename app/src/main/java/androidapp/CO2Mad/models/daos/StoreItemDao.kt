@@ -12,6 +12,21 @@ import java.util.*
 class StoreItemDao(private val dbManager: DBManager) {
     constructor(context: Context) : this(DBManager(context))
 
+    fun updateMissingCountries() {
+        updateCountryId("Hakket lammekød", 15)
+        updateCountryId("Lammekød", 15)
+        updateCountryId("Lammekølle", 15)
+        updateCountryId("Mango", 14)
+        updateCountryId("Tofu",38)
+    }
+
+    private fun updateCountryId(productName: String, newId: Int) {
+        val contentValues = ContentValues()
+
+        contentValues.put(ProductDao.COLUMN_COUNTRYID, newId)
+        dbManager.update(ProductDao.TABLE, contentValues, ProductDao.COLUMN_NAME, productName)
+    }
+
     fun loadAlternatives(storeItem: StoreItem): List<StoreItem> {
         val ids = buildString {
             var first = true

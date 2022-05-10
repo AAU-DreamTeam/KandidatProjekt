@@ -764,8 +764,8 @@ class DBManager(context: Context?) : SQLiteOpenHelper(context, "FoodEmission.db"
         return writableDatabase.insert(table, null, contentValues)
     }
 
-    fun update(table: String, contentValues: ContentValues, idName: String, id: String): Int {
-        return writableDatabase.update(table, contentValues, "$idName = ?", arrayOf(id))
+    fun update(table: String, contentValues: ContentValues, columnName: String, columnValue: String): Int {
+        return writableDatabase.update(table, contentValues, "$columnName = ?", arrayOf(columnValue))
     }
 
     fun delete(table: String, idName: String, id: String): Int {

@@ -1,7 +1,9 @@
 package androidapp.CO2Mad.repositories
 
+import android.content.ContentValues
 import android.content.Context
 import androidapp.CO2Mad.models.StoreItem
+import androidapp.CO2Mad.models.daos.ProductDao
 import androidapp.CO2Mad.models.daos.StoreItemDao
 
 class StoreItemRepository(context: Context){
@@ -16,5 +18,9 @@ class StoreItemRepository(context: Context){
 
     fun close(){
         storeItemDao.close()
+    }
+
+    fun updateMissingCountries() {
+        storeItemDao.updateMissingCountries()
     }
 }
