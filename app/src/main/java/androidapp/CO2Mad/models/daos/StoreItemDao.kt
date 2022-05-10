@@ -225,7 +225,7 @@ class StoreItemDao(private val dbManager: DBManager) {
     private fun loadNonVeganAlternativeEmissions(storeItem: StoreItem): List<Pair<Int, Double>> {
         val query =
             if (storeItem.product.productCategory == ProductCategory.GRAINLEGUME) {
-                "${generateQuery("${ProductDao.TABLE}.${ProductDao.COLUMN_PRODUCT_CATEGORY} NOT IN (${ProductCategory.VEGETABLES.ordinal}, ${ProductCategory.GRAINLEGUME.ordinal}) ${ProductCategory.VEGETABLES.ordinal} AND EMISSION < ${storeItem.emissionPerKg}")} " +
+                "${generateQuery("${ProductDao.TABLE}.${ProductDao.COLUMN_PRODUCT_CATEGORY} NOT IN (${ProductCategory.VEGETABLES.ordinal}, ${ProductCategory.GRAINLEGUME.ordinal}) AND EMISSION < ${storeItem.emissionPerKg}")} " +
                 "UNION " +
                 "${generateQuery("${ProductDao.TABLE}.${ProductDao.COLUMN_PRODUCT_CATEGORY} != ${ProductCategory.VEGETABLES.ordinal} AND EMISSION < ${storeItem.emissionPerKg}")};"
             } else {
