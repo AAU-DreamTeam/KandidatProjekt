@@ -215,7 +215,7 @@ class OverviewView : Fragment() {
         scanButton.setOnClickListener{
             if (!hasPermissions()) {
                 ActivityCompat.requestPermissions(
-                    parentFragment?.activity as Activity,
+                    requireActivity(),
                     arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE),
                     1
                 )
