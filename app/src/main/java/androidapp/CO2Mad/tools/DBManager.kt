@@ -130,7 +130,7 @@ class DBManager(context: Context?) : SQLiteOpenHelper(context, "FoodEmission.db"
         insertProduct(db, "Gulerod", ProductCategory.VEGETABLES, 0.11, 0.02, 0.00, 0.06, 0.01, false,4,1000.0)
         insertProduct(db, "Gås", ProductCategory.POULTRY, 1.60, 0.43, 0.00, 0.14, 0.00, false,4,2500.0)
         insertProduct(db, "Hakket kylling", ProductCategory.POULTRY, 2.96, 0.73, -0.22, 0.14, 0.00, false,4,400.0)
-        insertProduct(db, "Hakket lammekød", ProductCategory.POULTRY, 24.01, 6.26, -4.22, 0.14, 0.00, false,15,500.0)
+        insertProduct(db, "Hakket lammekød", ProductCategory.LAMB, 24.01, 6.26, -4.22, 0.14, 0.00, false,15,500.0)
         insertProduct(db, "Hindbær", ProductCategory.VEGETABLES, 0.27, 0.11, 0.00, 0.14, 0.01, false,2,250.0)
         insertProduct(db, "Honningmelon", ProductCategory.VEGETABLES, 0.10, 0.02, 0.00, 0.00, 0.01,false,17,800.0)
         insertProduct(db, "Hvidkål", ProductCategory.VEGETABLES, 0.10, 0.02, 0.00, 0.06, 0.01, false,4,1000.0)
