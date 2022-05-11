@@ -14,6 +14,7 @@ class StoreItemDao(private val dbManager: DBManager) {
 
     fun updateMissingCountries() {
         updateCountryId("Hakket lammekød", 15)
+        updateProductCategory("Hakket lammekød", ProductCategory.LAMB.ordinal)
         updateCountryId("Lammekød", 15)
         updateCountryId("Lammekølle", 15)
         updateCountryId("Mango", 14)
@@ -26,6 +27,14 @@ class StoreItemDao(private val dbManager: DBManager) {
         contentValues.put(ProductDao.COLUMN_COUNTRYID, newId)
         dbManager.update(ProductDao.TABLE, contentValues, ProductDao.COLUMN_NAME, productName)
     }
+
+    private fun updateProductCategory(productName: String, newCategory: Int) {
+        val contentValues = ContentValues()
+
+        contentValues.put(ProductDao.COLUMN_PRODUCT_CATEGORY, newCategory)
+        dbManager.update(ProductDao.TABLE, contentValues, ProductDao.COLUMN_NAME, productName)
+    }
+
 
     fun loadAlternatives(storeItem: StoreItem): List<StoreItem> {
         val ids = buildString {
